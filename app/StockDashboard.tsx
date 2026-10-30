@@ -1,0 +1,948 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
+type DailyQuote = {
+  tradeDate: string;
+  open: number;
+  close: number;
+  low: number;
+  high: number;
+  volume: number;
+};
+
+type DividendSource = {
+  label: string;
+  url: string;
+};
+
+type StockSummary = {
+  symbol: string;
+  name: string;
+  code: string;
+  market: string;
+  mark: string;
+  annualDividend: number;
+  dividendBasis: string;
+  dividendAsOf: string;
+  dividendSources: DividendSource[];
+  latestClose: number | null;
+  changePercent: number | null;
+  currentDividendYield: number | null;
+};
+
+type QuoteResponse = StockSummary & {
+  currency: string;
+  source: string;
+  sourceStatus: "fresh" | "cached";
+  sourceMessage: string | null;
+  syncedAt: string;
+  stocks: StockSummary[];
+  quotes: DailyQuote[];
+};
+
+type QuoteDataset = {
+  currency: string;
+  source: string;
+  sourceStatus: "fresh" | "cached";
+  sourceMessage: string | null;
+  syncedAt: string;
+  stocks: StockSummary[];
+  quotesBySymbol: Record<string, DailyQuote[]>;
+};
+
+const FALLBACK_STOCKS: StockSummary[] = [
+  {
+    symbol: "601318.SH",
+    name: "中国平安",
+    code: "601318",
+    market: "上交所",
+    mark: "平",
+    annualDividend: 2.7,
+    dividendBasis: "2025 年中期 0.95 元 + 末期 1.75 元",
+    dividendAsOf: "2025 年度",
+    dividendSources: [],
+    latestClose: null,
+    changePercent: null,
+    currentDividendYield: null,
+  },
+  {
+    symbol: "000538.SZ",
+    name: "云南白药",
+    code: "000538",
+    market: "深交所",
+    mark: "云",
+    annualDividend: 2.602,
+    dividendBasis: "2025 年特别分红 1.019 元 + 年度分红 1.583 元",
+    dividendAsOf: "2025 年度合计",
+    dividendSources: [],
+    latestClose: null,
+    changePercent: null,
+    currentDividendYield: null,
+  },
+];
+
+const DIVIDEND_YIELD_TIERS = [6.5, 6, 5.5, 5, 4.5, 4];
+const DATA_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/quotes.json`;
+
+const numberFormatter = new Intl.NumberFormat("zh-CN", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+const dividendFormatter = new Intl.NumberFormat("zh-CN", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 3,
+});
+
+const compactFormatter = new Intl.NumberFormat("zh-CN", {
+  notation: "compact",
+  maximumFractionDigits: 1,
+});
+
+export default function StockDashboard() {
+  const [selectedSymbol, setSelectedSymbol] = useState("601318.SH");
+  const [stocks, setStocks] = useState<StockSummary[]>(FALLBACK_STOCKS);
+  const [data, setData] = useState<QuoteResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const loadQuotes = useCallback(async (manual = false) => {
+    if (manual) setIsRefreshing(true);
+
+    try {
+      const response = await fetch(
+        `${DATA_URL}${manual ? `?t=${Date.now()}` : ""}`,
+        { cache: "no-store" },
+      );
+      const payload = (await response.json()) as QuoteDataset & {
+        message?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(payload.message ?? "行情数据加载失败");
+      }
+
+      const selectedStock = payload.stocks.find(
+        (stock) => stock.symbol === selectedSymbol,
+      );
+      const quotes = payload.quotesBySymbol[selectedSymbol] ?? [];
+
+      if (!selectedStock || quotes.length === 0) {
+        throw new Error("暂时没有可展示的行情数据");
+      }
+
+      setData({
+        ...selectedStock,
+        currency: payload.currency,
+        source: payload.source,
+        sourceStatus: payload.sourceStatus,
+        sourceMessage: payload.sourceMessage,
+        syncedAt: payload.syncedAt,
+        stocks: payload.stocks,
+        quotes,
+      });
+      setStocks(payload.stocks);
+      setError(null);
+    } catch (loadError) {
+      setError(
+        loadError instanceof Error ? loadError.message : "行情数据加载失败",
+      );
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [selectedSymbol]);
+
+  useEffect(() => {
+    setData(null);
+    setError(null);
+    void loadQuotes();
+    const timer = window.setInterval(() => void loadQuotes(), 5 * 60 * 1000);
+    return () => window.clearInterval(timer);
+  }, [loadQuotes]);
+
+  const selectedStock =
+    stocks.find((stock) => stock.symbol === selectedSymbol) ?? stocks[0];
+  const latest = data?.quotes[0];
+  const previous = data?.quotes[1];
+  const change = latest && previous ? latest.close - previous.close : 0;
+  const changePercent = previous ? (change / previous.close) * 100 : 0;
+  const direction = change > 0 ? "up" : change < 0 ? "down" : "flat";
+  const rangePosition = latest
+    ? ((latest.close - latest.low) / Math.max(latest.high - latest.low, 0.01)) *
+      100
+    : 0;
+  const annualDividend = data?.annualDividend ?? selectedStock.annualDividend;
+  const currentDividendYield = latest
+    ? (annualDividend / latest.close) * 100
+    : null;
+  const nearestYieldTier = currentDividendYield
+    ? DIVIDEND_YIELD_TIERS.reduce((nearest, value) =>
+        Math.abs(value - currentDividendYield) <
+        Math.abs(nearest - currentDividendYield)
+          ? value
+          : nearest,
+      )
+    : null;
+
+  const chartQuotes = useMemo(
+    () => data?.quotes.slice(0, 30).reverse() ?? [],
+    [data],
+  );
+  const recentDays = useMemo(
+    () => buildRecentDays(data?.quotes ?? []),
+    [data],
+  );
+  const recentQuotes = recentDays
+    .map((day) => day.quote)
+    .filter((quote): quote is DailyQuote => Boolean(quote));
+  const periodStart = recentQuotes.at(-1);
+  const periodEnd = recentQuotes[0];
+  const periodChange =
+    periodStart && periodEnd ? periodEnd.close - periodStart.close : 0;
+  const periodChangePercent = periodStart
+    ? (periodChange / periodStart.close) * 100
+    : 0;
+
+  return (
+    <main className="site-shell">
+      <div className="ambient ambient-one" />
+      <div className="ambient ambient-two" />
+
+      <header className="topbar">
+        <a className="brand" href="#top" aria-label="返回页面顶部">
+          <span className="brand-mark">股</span>
+          <span>
+            <strong>A股价值看板</strong>
+            <small>A-SHARE VALUE BOARD</small>
+          </span>
+        </a>
+        <div className="topbar-meta">
+          <span
+            className={`live-dot ${data?.sourceStatus === "cached" ? "is-cached" : ""}`}
+          />
+          {data?.sourceStatus === "cached" ? "缓存数据" : "自动更新中"}
+        </div>
+      </header>
+
+      <section className="dashboard-layout">
+        <aside className="stock-rail" aria-label="股票列表">
+          <div className="stock-rail-heading">
+            <div>
+              <span className="section-kicker">股票清单</span>
+              <h2>已收录 {stocks.length} 只</h2>
+            </div>
+            <span className="stock-count">{String(stocks.length).padStart(2, "0")}</span>
+          </div>
+          <div className="stock-list" role="tablist" aria-label="选择股票">
+            {stocks.map((stock) => (
+              <button
+                type="button"
+                role="tab"
+                aria-selected={selectedSymbol === stock.symbol}
+                className={selectedSymbol === stock.symbol ? "is-active" : ""}
+                onClick={() => setSelectedSymbol(stock.symbol)}
+                key={stock.symbol}
+              >
+                <span className="stock-mark">{stock.mark}</span>
+                <span className="stock-identity">
+                  <strong>{stock.name}</strong>
+                  <small>{stock.symbol}</small>
+                </span>
+                <span className="stock-list-price">
+                  <strong>
+                    {stock.latestClose === null
+                      ? "—"
+                      : `¥${numberFormatter.format(stock.latestClose)}`}
+                  </strong>
+                  <small
+                    className={
+                      stock.changePercent === null
+                        ? ""
+                        : stock.changePercent >= 0
+                          ? "positive"
+                          : "negative"
+                    }
+                  >
+                    {stock.currentDividendYield === null
+                      ? "股息率 —"
+                      : `股息率 ${stock.currentDividendYield.toFixed(2)}%`}
+                  </small>
+                </span>
+              </button>
+            ))}
+          </div>
+          <p className="stock-rail-note">
+            后续新增股票时会继续排列在此处，列表可独立滚动。
+          </p>
+        </aside>
+
+        <div className="dashboard-main" id="top">
+          <section className="hero">
+            <div className="hero-copy">
+              <div className="eyebrow">
+                <span>{selectedStock.market}</span>
+                <span>{selectedStock.code}</span>
+                <span>A 股</span>
+              </div>
+              <h1>{data?.name ?? selectedStock.name}</h1>
+              <p>行情、K线与股息价，一页看清。</p>
+            </div>
+
+            <div className="quote-hero" aria-live="polite">
+              <div className="quote-heading">
+                <span>
+                  {latest ? formatTradeDate(latest.tradeDate) : "正在获取交易日"}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => void loadQuotes(true)}
+                  disabled={isRefreshing}
+                  className="refresh-button"
+                >
+                  <span
+                    className={
+                      isRefreshing ? "refresh-icon spinning" : "refresh-icon"
+                    }
+                  >
+                    ↻
+                  </span>
+                  {isRefreshing ? "更新中" : "刷新"}
+                </button>
+              </div>
+
+              {latest ? (
+                <>
+                  <div className="price-line">
+                    <span className="currency">¥</span>
+                    <strong>{numberFormatter.format(latest.close)}</strong>
+                    <span className={`change-pill ${direction}`}>
+                      {change >= 0 ? "+" : ""}
+                      {numberFormatter.format(change)}&nbsp;&nbsp;
+                      {changePercent >= 0 ? "+" : ""}
+                      {changePercent.toFixed(2)}%
+                    </span>
+                  </div>
+                  <div className="range-summary">
+                    <span>今日区间</span>
+                    <div className="range-track" aria-hidden="true">
+                      <i
+                        style={{
+                          left: `${Math.min(100, Math.max(0, rangePosition))}%`,
+                        }}
+                      />
+                    </div>
+                    <span>{numberFormatter.format(latest.low)}</span>
+                    <span>{numberFormatter.format(latest.high)}</span>
+                  </div>
+                </>
+              ) : (
+                <div className="hero-skeleton">
+                  <Skeleton
+                    height={72}
+                    borderRadius={16}
+                    baseColor="#172139"
+                    highlightColor="#24314d"
+                  />
+                </div>
+              )}
+            </div>
+          </section>
+
+          {error && !data ? (
+            <section className="error-panel" role="alert">
+              <span>!</span>
+              <div>
+                <strong>暂时没有拿到行情</strong>
+                <p>{error}</p>
+              </div>
+              <button type="button" onClick={() => void loadQuotes(true)}>
+                重新获取
+              </button>
+            </section>
+          ) : (
+            <>
+              <section className="price-grid" aria-label="当日四价">
+                <PriceCard label="开盘价" value={latest?.open} accent="amber" index="01" />
+                <PriceCard label="最高价" value={latest?.high} accent="coral" index="02" />
+                <PriceCard label="最低价" value={latest?.low} accent="blue" index="03" />
+                <PriceCard label="收盘价" value={latest?.close} accent="lime" index="04" />
+              </section>
+
+              <section className="insight-grid">
+                <article className="trend-card kline-card">
+                  <div className="section-heading">
+                    <div>
+                      <span className="section-kicker">30 个交易日</span>
+                      <h2>K 线走势</h2>
+                    </div>
+                    {chartQuotes.length > 0 && (
+                      <div className="trend-range">
+                        <span>区间</span>
+                        <strong>
+                          {numberFormatter.format(
+                            Math.min(...chartQuotes.map((item) => item.low)),
+                          )}{" "}
+                          —{" "}
+                          {numberFormatter.format(
+                            Math.max(...chartQuotes.map((item) => item.high)),
+                          )}
+                        </strong>
+                      </div>
+                    )}
+                  </div>
+                  <KLineChart quotes={chartQuotes} />
+                  <div className="kline-legend" aria-label="K线颜色说明">
+                    <span><i className="up" />红涨</span>
+                    <span><i className="down" />绿跌</span>
+                    <small>每根K线上方为最高价，下方为最低价</small>
+                  </div>
+                </article>
+
+                <aside className="status-card">
+                  <div>
+                    <span className="section-kicker">数据状态</span>
+                    <h2>每天收盘后更新</h2>
+                  </div>
+                  <div className="status-list">
+                    <div>
+                      <span>最新交易日</span>
+                      <strong>{latest?.tradeDate ?? "获取中"}</strong>
+                    </div>
+                    <div>
+                      <span>成交量</span>
+                      <strong>
+                        {latest ? `${compactFormatter.format(latest.volume)} 股` : "—"}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>计算用每股分红</span>
+                      <strong>¥{dividendFormatter.format(annualDividend)}</strong>
+                    </div>
+                    <div>
+                      <span>当前静态股息率</span>
+                      <strong>
+                        {currentDividendYield
+                          ? `${currentDividendYield.toFixed(2)}%`
+                          : "—"}
+                      </strong>
+                    </div>
+                  </div>
+                  <p className="sync-note">
+                    {data
+                      ? `最近检查：${formatSyncTime(data.syncedAt)}`
+                      : "正在连接行情服务…"}
+                  </p>
+                </aside>
+              </section>
+
+              <section className="dividend-section" aria-label="股息率参考价格">
+                <div className="dividend-heading">
+                  <div>
+                    <span className="section-kicker">股息估值</span>
+                    <h2>目标股息率对应价格</h2>
+                    <p>
+                      按每股税前现金分红 ¥{dividendFormatter.format(annualDividend)} 计算
+                    </p>
+                  </div>
+                  <div className="dividend-current">
+                    <span>现价静态股息率</span>
+                    <strong>
+                      {currentDividendYield
+                        ? `${currentDividendYield.toFixed(2)}%`
+                        : "—"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="yield-grid">
+                  {DIVIDEND_YIELD_TIERS.map((yieldRate) => {
+                    const targetPrice = annualDividend / (yieldRate / 100);
+                    const priceGap = latest
+                      ? ((targetPrice - latest.close) / latest.close) * 100
+                      : null;
+                    const isNearest = nearestYieldTier === yieldRate;
+
+                    return (
+                      <article
+                        className={`yield-card ${isNearest ? "is-nearest" : ""}`}
+                        key={yieldRate}
+                      >
+                        <div>
+                          <span>目标股息率</span>
+                          {isNearest && <small>最接近现价</small>}
+                        </div>
+                        <strong>{yieldRate.toFixed(1)}%</strong>
+                        <p>¥{numberFormatter.format(targetPrice)}</p>
+                        <span className="yield-gap">
+                          {priceGap === null
+                            ? "等待现价"
+                            : `较现价 ${priceGap >= 0 ? "+" : ""}${priceGap.toFixed(1)}%`}
+                        </span>
+                      </article>
+                    );
+                  })}
+                </div>
+
+                <div className="dividend-note">
+                  <p>
+                    计算公式：参考价格 = 当前采用的每股现金分红 ÷ 目标股息率。分红可能调整，结果仅作静态比较。
+                  </p>
+                  <div className="dividend-sources">
+                    <span>{data?.dividendBasis ?? selectedStock.dividendBasis}</span>
+                    {(data?.dividendSources ?? selectedStock.dividendSources).map(
+                      (source) => (
+                        <a
+                          href={source.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          key={source.url}
+                        >
+                          {source.label} ↗
+                        </a>
+                      ),
+                    )}
+                  </div>
+                </div>
+              </section>
+
+              <section className="week-section" aria-label="最近七天行情统计">
+                <div className="section-heading week-heading">
+                  <div>
+                    <span className="section-kicker">含今天 · 自然日</span>
+                    <h2>最近 7 天</h2>
+                  </div>
+                  <span className="table-caption">
+                    非交易日标记为休市，不补造价格
+                  </span>
+                </div>
+
+                <div className="week-summary">
+                  <div>
+                    <span>交易日</span>
+                    <strong>{recentQuotes.length}<small> / 7 天</small></strong>
+                  </div>
+                  <div>
+                    <span>区间最高</span>
+                    <strong>
+                      {recentQuotes.length
+                        ? `¥${numberFormatter.format(Math.max(...recentQuotes.map((quote) => quote.high)))}`
+                        : "—"}
+                    </strong>
+                  </div>
+                  <div>
+                    <span>区间最低</span>
+                    <strong>
+                      {recentQuotes.length
+                        ? `¥${numberFormatter.format(Math.min(...recentQuotes.map((quote) => quote.low)))}`
+                        : "—"}
+                    </strong>
+                  </div>
+                  <div>
+                    <span>首尾收盘变化</span>
+                    <strong className={periodChange > 0 ? "positive" : periodChange < 0 ? "negative" : ""}>
+                      {periodStart && periodEnd
+                        ? `${periodChange >= 0 ? "+" : ""}${numberFormatter.format(periodChange)} · ${periodChangePercent >= 0 ? "+" : ""}${periodChangePercent.toFixed(2)}%`
+                        : "—"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="week-days">
+                  {recentDays.map((day) => (
+                    <article
+                      className={`week-day ${day.isToday ? "is-today" : ""} ${day.quote ? "" : "is-closed"}`}
+                      key={day.date}
+                    >
+                      <div className="week-day-heading">
+                        <span>{day.date.slice(5).replace("-", ".")}</span>
+                        <small>{day.isToday ? "今天" : formatWeekday(day.date)}</small>
+                      </div>
+                      {day.quote ? (
+                        <>
+                          <strong>¥{numberFormatter.format(day.quote.close)}</strong>
+                          <dl>
+                            <div><dt>开</dt><dd>{numberFormatter.format(day.quote.open)}</dd></div>
+                            <div><dt>高</dt><dd>{numberFormatter.format(day.quote.high)}</dd></div>
+                            <div><dt>低</dt><dd>{numberFormatter.format(day.quote.low)}</dd></div>
+                            <div><dt>振幅</dt><dd>{formatAmplitude(day.quote, data?.quotes ?? [])}</dd></div>
+                          </dl>
+                        </>
+                      ) : (
+                        <div className="closed-state">
+                          <span>—</span>
+                          <strong>休市</strong>
+                        </div>
+                      )}
+                    </article>
+                  ))}
+                </div>
+              </section>
+
+              <section className="history-section">
+                <div className="section-heading history-heading">
+                  <div>
+                    <span className="section-kicker">历史记录</span>
+                    <h2>最近交易日</h2>
+                  </div>
+                  <span className="table-caption">价格单位：人民币</span>
+                </div>
+
+                <div className="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>日期</th>
+                        <th>开盘</th>
+                        <th>最高</th>
+                        <th>最低</th>
+                        <th>收盘</th>
+                        <th>日内振幅</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data?.quotes.slice(0, 12).map((quote, index) => (
+                        <tr key={quote.tradeDate}>
+                          <td>
+                            <span className="date-cell">{formatTableDate(quote.tradeDate)}</span>
+                            {index === 0 && <small>最新</small>}
+                          </td>
+                          <td>{numberFormatter.format(quote.open)}</td>
+                          <td className="high-cell">{numberFormatter.format(quote.high)}</td>
+                          <td className="low-cell">{numberFormatter.format(quote.low)}</td>
+                          <td><strong>{numberFormatter.format(quote.close)}</strong></td>
+                          <td>{formatAmplitude(quote, data.quotes)}</td>
+                        </tr>
+                      )) ??
+                        Array.from({ length: 6 }).map((_, index) => (
+                          <tr key={index}>
+                            {Array.from({ length: 6 }).map((__, cell) => (
+                              <td key={cell}><Skeleton baseColor="#f0f1eb" highlightColor="#ffffff" /></td>
+                            ))}
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </>
+          )}
+        </div>
+      </section>
+
+      <footer>
+        <p>行情与股息测算仅供信息展示，不构成任何投资建议。</p>
+        <span>{data?.symbol ?? selectedStock.symbol} · A-SHARE MARKET</span>
+      </footer>
+    </main>
+  );
+}
+
+function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
+  if (quotes.length === 0) {
+    return (
+      <div className="kline-loading" aria-label="K线数据加载中">
+        <Skeleton height={320} borderRadius={14} baseColor="#f0f1eb" highlightColor="#ffffff" />
+      </div>
+    );
+  }
+
+  const width = 900;
+  const height = 360;
+  const padding = { top: 18, right: 66, bottom: 42, left: 12 };
+  const plotWidth = width - padding.left - padding.right;
+  const plotHeight = height - padding.top - padding.bottom;
+  const rawMin = Math.min(...quotes.map((quote) => quote.low));
+  const rawMax = Math.max(...quotes.map((quote) => quote.high));
+  const paddingValue = Math.max((rawMax - rawMin) * 0.08, 0.5);
+  const chartMin = rawMin - paddingValue;
+  const chartMax = rawMax + paddingValue;
+  const priceRange = chartMax - chartMin;
+  const step = plotWidth / quotes.length;
+  const candleWidth = Math.min(18, Math.max(5, step * 0.56));
+  const toY = (value: number) =>
+    padding.top + ((chartMax - value) / priceRange) * plotHeight;
+  const gridLines = Array.from({ length: 5 }, (_, index) => {
+    const value = chartMax - (priceRange / 4) * index;
+    return { value, y: toY(value) };
+  });
+  const labelIndexes = Array.from(
+    new Set([0, Math.floor((quotes.length - 1) / 2), quotes.length - 1]),
+  );
+  const highestIndex = quotes.reduce(
+    (highest, quote, index) =>
+      quote.high > quotes[highest].high ? index : highest,
+    0,
+  );
+  const lowestIndex = quotes.reduce(
+    (lowest, quote, index) =>
+      quote.low < quotes[lowest].low ? index : lowest,
+    0,
+  );
+  const extremeMarkers = [
+    {
+      kind: "high",
+      index: highestIndex,
+      label: "最高",
+      value: quotes[highestIndex].high,
+    },
+    {
+      kind: "low",
+      index: lowestIndex,
+      label: "最低",
+      value: quotes[lowestIndex].low,
+    },
+  ] as const;
+
+  return (
+    <div className="kline-scroll">
+      <svg
+        className="kline-chart"
+        viewBox={`0 0 ${width} ${height}`}
+        role="img"
+        aria-label="近30个交易日K线图，红色上涨，绿色下跌"
+      >
+        {gridLines.map((line) => (
+          <g key={line.value}>
+            <line
+              className="kline-grid-line"
+              x1={padding.left}
+              y1={line.y}
+              x2={padding.left + plotWidth}
+              y2={line.y}
+            />
+            <text
+              className="kline-price-label"
+              x={padding.left + plotWidth + 10}
+              y={line.y + 4}
+            >
+              {line.value.toFixed(2)}
+            </text>
+          </g>
+        ))}
+
+        {quotes.map((quote, index) => {
+          const centerX = padding.left + step * index + step / 2;
+          const openY = toY(quote.open);
+          const closeY = toY(quote.close);
+          const bodyY = Math.min(openY, closeY);
+          const bodyHeight = Math.max(Math.abs(closeY - openY), 2);
+          const labelOffset = index % 2 === 0 ? 0 : 7;
+          const highLabelY = Math.max(
+            padding.top + 8,
+            toY(quote.high) - 6 - labelOffset,
+          );
+          const lowLabelY = Math.min(
+            padding.top + plotHeight - 2,
+            toY(quote.low) + 12 + labelOffset,
+          );
+          const direction =
+            quote.close > quote.open
+              ? "candle-up"
+              : quote.close < quote.open
+                ? "candle-down"
+                : "candle-flat";
+
+          return (
+            <g
+              className={`kline-candle ${direction}`}
+              tabIndex={0}
+              aria-label={`${quote.tradeDate}，开盘 ${quote.open}，最高 ${quote.high}，最低 ${quote.low}，收盘 ${quote.close}`}
+              key={quote.tradeDate}
+            >
+              <title>
+                {`${quote.tradeDate}  开 ${quote.open.toFixed(2)}  高 ${quote.high.toFixed(2)}  低 ${quote.low.toFixed(2)}  收 ${quote.close.toFixed(2)}`}
+              </title>
+              <line
+                className="candle-wick"
+                x1={centerX}
+                y1={toY(quote.high)}
+                x2={centerX}
+                y2={toY(quote.low)}
+              />
+              <rect
+                className="candle-body"
+                x={centerX - candleWidth / 2}
+                y={bodyY}
+                width={candleWidth}
+                height={bodyHeight}
+                rx={1}
+              />
+              {index !== highestIndex && (
+                <text
+                  className="candle-price-label high"
+                  x={centerX}
+                  y={highLabelY}
+                  textAnchor="middle"
+                  aria-hidden="true"
+                >
+                  {quote.high.toFixed(2)}
+                </text>
+              )}
+              {index !== lowestIndex && (
+                <text
+                  className="candle-price-label low"
+                  x={centerX}
+                  y={lowLabelY}
+                  textAnchor="middle"
+                  aria-hidden="true"
+                >
+                  {quote.low.toFixed(2)}
+                </text>
+              )}
+            </g>
+          );
+        })}
+
+        {extremeMarkers.map((marker) => {
+          const centerX =
+            padding.left + step * marker.index + step / 2;
+          const pointY = toY(marker.value);
+          const extendRight = centerX < padding.left + plotWidth * 0.64;
+          const lineEndX = centerX + (extendRight ? 48 : -48);
+          const textX = lineEndX + (extendRight ? 6 : -6);
+          const textY =
+            marker.kind === "high"
+              ? Math.max(padding.top + 11, pointY - 9)
+              : Math.min(padding.top + plotHeight - 2, pointY + 18);
+
+          return (
+            <g
+              className={`kline-extreme-marker ${marker.kind}`}
+              aria-label={`区间${marker.label}价 ${marker.value.toFixed(2)}`}
+              key={marker.kind}
+            >
+              <circle cx={centerX} cy={pointY} r={3.2} />
+              <line
+                x1={centerX}
+                y1={pointY}
+                x2={lineEndX}
+                y2={pointY}
+              />
+              <text
+                x={textX}
+                y={textY}
+                textAnchor={extendRight ? "start" : "end"}
+              >
+                {marker.label} {marker.value.toFixed(2)}
+              </text>
+            </g>
+          );
+        })}
+
+        {labelIndexes.map((index) => {
+          const quote = quotes[index];
+          const x = padding.left + step * index + step / 2;
+          return (
+            <text
+              className="kline-date-label"
+              textAnchor={index === 0 ? "start" : index === quotes.length - 1 ? "end" : "middle"}
+              x={x}
+              y={height - 10}
+              key={quote.tradeDate}
+            >
+              {quote.tradeDate.slice(5).replace("-", ".")}
+            </text>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+function PriceCard({
+  label,
+  value,
+  accent,
+  index,
+}: {
+  label: string;
+  value?: number;
+  accent: "amber" | "coral" | "blue" | "lime";
+  index: string;
+}) {
+  return (
+    <article className={`price-card ${accent}`}>
+      <div>
+        <span className="card-index">{index}</span>
+        <span className="card-label">{label}</span>
+      </div>
+      <p>
+        <span>¥</span>
+        {value === undefined ? (
+          <Skeleton width={108} baseColor="#e9ebe4" highlightColor="#ffffff" />
+        ) : (
+          <strong>{numberFormatter.format(value)}</strong>
+        )}
+      </p>
+    </article>
+  );
+}
+
+function formatTradeDate(value: string) {
+  return new Intl.DateTimeFormat("zh-CN", {
+    month: "long",
+    day: "numeric",
+    weekday: "short",
+    timeZone: "Asia/Shanghai",
+  }).format(new Date(`${value}T12:00:00+08:00`));
+}
+
+function formatTableDate(value: string) {
+  const [, month, day] = value.split("-");
+  return `${month}.${day}`;
+}
+
+function formatSyncTime(value: string) {
+  return new Intl.DateTimeFormat("zh-CN", {
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Asia/Shanghai",
+  }).format(new Date(value));
+}
+
+function buildRecentDays(quotes: DailyQuote[]) {
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  const [year, month, day] = today.split("-").map(Number);
+  const quoteMap = new Map(quotes.map((quote) => [quote.tradeDate, quote]));
+
+  return Array.from({ length: 7 }, (_, offset) => {
+    const date = new Date(Date.UTC(year, month - 1, day - offset))
+      .toISOString()
+      .slice(0, 10);
+
+    return {
+      date,
+      isToday: offset === 0,
+      quote: quoteMap.get(date),
+    };
+  });
+}
+
+function formatWeekday(value: string) {
+  return new Intl.DateTimeFormat("zh-CN", {
+    weekday: "short",
+    timeZone: "Asia/Shanghai",
+  }).format(new Date(`${value}T12:00:00+08:00`));
+}
+
+function formatAmplitude(quote: DailyQuote, quotes: DailyQuote[]) {
+  const quoteIndex = quotes.findIndex(
+    (item) => item.tradeDate === quote.tradeDate,
+  );
+  const previousClose = quotes[quoteIndex + 1]?.close;
+
+  if (!previousClose) return "—";
+
+  return `${(((quote.high - quote.low) / previousClose) * 100).toFixed(2)}%`;
+}
