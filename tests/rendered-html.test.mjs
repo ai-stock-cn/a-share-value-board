@@ -40,6 +40,8 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /近三年年报/);
   assert.match(dashboard, /不良贷款率/);
   assert.match(dashboard, /拨备覆盖率/);
+  assert.match(dashboard, /每股净资产同比/);
+  assert.match(dashboard, /不再按普通企业资产负债率扣分/);
   assert.match(dashboard, /基本面综合评分/);
   assert.match(dashboard, /SCORE_DIMENSIONS/);
   assert.match(dashboard, /分红回报/);
@@ -114,6 +116,7 @@ test("includes the GitHub Pages update workflow", async () => {
   assert.match(updater, /mergeDividendRecords/);
   assert.match(updater, /calculateTrailingDividend/);
   assert.match(updater, /calculateFundamentalScore/);
+  assert.match(updater, /BPSTZ/);
   assert.match(updater, /calculateDividendYearCount/);
   assert.match(updater, /NONPERLOAN/);
   assert.match(updater, /BLDKBBL/);

@@ -30,6 +30,7 @@ type FinancialReport = {
   eps: number | null;
   roe: number | null;
   bookValuePerShare: number | null;
+  bookValueGrowth: number | null;
   debtRatio: number | null;
   nonPerformingLoanRatio: number | null;
   provisionCoverageRatio: number | null;
@@ -287,9 +288,10 @@ export default function StockDashboard() {
   const latestFinancialReport = financialReports[0];
   const scoreBreakdown = data?.scoreBreakdown ?? selectedStock.scoreBreakdown;
   const isBank = selectedStock.category === "银行";
+  const isFinancial = selectedStock.category === "金融";
   const fundamentalInsights = buildFundamentalInsights(
     financialReports,
-    isBank,
+    selectedStock.category,
   );
   const currentDividendYield = latest
     ? (annualDividend / latest.close) * 100
@@ -781,10 +783,14 @@ export default function StockDashboard() {
                     </div>
                     <p className="score-method-note">
                       评分满分 100：盈利 25、成长 20、分红 25、财务质量 20、稳定性 10。
-                      盈利按最新报告年化 ROE；成长按营收与净利润同比；分红按当前股息率（6.5% 为满档）及近三年持续分红；稳定性按各报告期增长为正的比例计算。
+                      盈利和成长采用最新报告与近三年年报加权，降低单季波动；分红按当前股息率（6.5% 为满档）及近三年持续分红；稳定性按各报告期增长为正的比例计算。
                       {isBank
                         ? "银行的财务质量分由不良贷款率与拨备覆盖率共同计算。"
-                        : "非银行公司的财务质量分由净利率与资产负债率共同计算。"}
+                        : isFinancial
+                          ? "保险金融公司的财务质量分由净利率与每股净资产增长共同计算，不再按普通企业资产负债率扣分。"
+                          : selectedStock.category === "电力" || selectedStock.category === "运营商"
+                            ? "资本密集型行业按行业化净利率与负债率区间计算财务质量。"
+                            : "普通企业的财务质量分由净利率与资产负债率共同计算。"}
                     </p>
                     <div className="fundamental-summary">
                       <FinancialMetric
@@ -826,6 +832,21 @@ export default function StockDashboard() {
                       </div>
                     )}
 
+                    {isFinancial && (
+                      <div className="bank-risk-summary" aria-label="保险资本质量指标">
+                        <FinancialMetric
+                          label="每股净资产同比"
+                          value={formatSignedPercent(latestFinancialReport.bookValueGrowth)}
+                          period={`${latestFinancialReport.year} ${latestFinancialReport.reportType}`}
+                        />
+                        <FinancialMetric
+                          label="每股净资产"
+                          value={latestFinancialReport.bookValuePerShare === null ? "—" : `¥${latestFinancialReport.bookValuePerShare.toFixed(2)}`}
+                          period={`${latestFinancialReport.year} ${latestFinancialReport.reportType}`}
+                        />
+                      </div>
+                    )}
+
                     <div className="fundamental-insights" aria-label="基本面观察">
                       {fundamentalInsights.map((insight, index) => (
                         <article className={`fundamental-insight ${insight.tone}`} key={insight.label}>
@@ -854,6 +875,7 @@ export default function StockDashboard() {
                             {isBank && <th>不良贷款率</th>}
                             {isBank && <th>拨备覆盖率</th>}
                             <th>每股净资产</th>
+                            {isFinancial && <th>每股净资产同比</th>}
                             <th>资产负债率</th>
                           </tr>
                         </thead>
@@ -877,6 +899,7 @@ export default function StockDashboard() {
                               {isBank && <td>{formatFinancialPercent(report.nonPerformingLoanRatio)}</td>}
                               {isBank && <td>{formatFinancialPercent(report.provisionCoverageRatio)}</td>}
                               <td>{report.bookValuePerShare === null ? "—" : `¥${report.bookValuePerShare.toFixed(2)}`}</td>
+                              {isFinancial && <td className={financialChangeClass(report.bookValueGrowth)}>{formatSignedPercent(report.bookValueGrowth)}</td>}
                               <td>{formatFinancialPercent(report.debtRatio)}</td>
                             </tr>
                           ))}
@@ -1458,7 +1481,7 @@ function financialChangeClass(value: number | null) {
 
 function buildFundamentalInsights(
   reports: FinancialReport[],
-  isBank: boolean,
+  category: StockCategory,
 ) {
   const latestReport = reports[0];
   const annualReports = reports.filter(
@@ -1484,7 +1507,7 @@ function buildFundamentalInsights(
     latestAnnualReport.roe === null || oldestAnnualReport.roe === null
       ? null
       : latestAnnualReport.roe - oldestAnnualReport.roe;
-  const qualityInsight = isBank
+  const qualityInsight = category === "银行"
     ? {
         label: "资产质量",
         title:
@@ -1501,7 +1524,17 @@ function buildFundamentalInsights(
                 ? "negative"
                 : "neutral",
       }
-    : {
+    : category === "金融"
+      ? {
+          label: "资本积累",
+          title:
+            latestReport.bookValueGrowth === null
+              ? "净资产增速数据不足"
+              : `每股净资产同比 ${formatSignedPercent(latestReport.bookValueGrowth)}`,
+          description: `最新每股净资产 ${latestReport.bookValuePerShare === null ? "—" : `¥${latestReport.bookValuePerShare.toFixed(2)}`}；保险金融公司不使用普通企业资产负债率直接扣分。`,
+          tone: trendTone(latestReport.bookValueGrowth),
+        }
+      : {
         label: "财务结构",
         title:
           latestReport.debtRatio === null
@@ -1509,7 +1542,7 @@ function buildFundamentalInsights(
             : `资产负债率 ${latestReport.debtRatio.toFixed(2)}%`,
         description: `最新每股净资产 ${latestReport.bookValuePerShare === null ? "—" : `¥${latestReport.bookValuePerShare.toFixed(2)}`}，资产负债率需结合行业经营模式解读。`,
         tone: "neutral",
-      };
+        };
 
   return [
     {
