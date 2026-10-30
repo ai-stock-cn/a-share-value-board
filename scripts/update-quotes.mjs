@@ -18,6 +18,7 @@ const STOCKS = [
     category: "金融",
     mark: "平",
     score: 100,
+    watchPrice: 53,
   },
   {
     symbol: "600941.SH",

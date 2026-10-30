@@ -122,7 +122,7 @@ const FALLBACK_STOCKS: StockSummary[] = [
     latestClose: null,
     changePercent: null,
     currentDividendYield: null,
-    watchPrice: null,
+    watchPrice: 53,
     dailyDropAlertPercent: null,
     turnoverRate: null,
     financialReports: [],
@@ -707,20 +707,20 @@ export default function StockDashboard() {
                   {(watchPrice !== null || dailyDropAlertPercent !== null) && (
                     <div className="quote-alert-panel">
                       <div className="quote-alert-heading">
-                        <span>关注提醒</span>
+                        <span>建仓起点提醒</span>
                         <small>每日收盘后检查</small>
                       </div>
                       <div className="quote-alert-rules">
                         {watchPrice !== null && (
                           <div>
-                            <span>关注价</span>
+                            <span>建仓起点</span>
                             <strong>≤ ¥{numberFormatter.format(watchPrice)}</strong>
                             <small>
                               {watchPriceDistancePercent === null
                                 ? "等待行情"
                                 : watchPriceDistancePercent <= 0
-                                  ? "已进入关注区间"
-                                  : `距关注价还需下跌 ${watchPriceDistancePercent.toFixed(2)}%`}
+                                  ? "已进入建仓观察区间"
+                                  : `距建仓起点还需下跌 ${watchPriceDistancePercent.toFixed(2)}%`}
                             </small>
                           </div>
                         )}

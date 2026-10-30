@@ -6,7 +6,7 @@ import {
   formatShanghaiDate,
 } from "../scripts/alerts.mjs";
 
-test("价格进入关注区间时触发提醒", () => {
+test("价格达到建仓起点时触发提醒", () => {
   const alerts = evaluateStockAlerts([
     {
       name: "中国移动",
@@ -20,7 +20,7 @@ test("价格进入关注区间时触发提醒", () => {
   ]);
 
   assert.equal(alerts.length, 1);
-  assert.match(alerts[0].reasons[0], /进入关注价/);
+  assert.match(alerts[0].reasons[0], /达到建仓起点/);
 });
 
 test("达到单日跌幅阈值时触发提醒", () => {

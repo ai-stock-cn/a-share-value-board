@@ -12,7 +12,7 @@ export function evaluateStockAlerts(stocks) {
       watchPrice > 0 &&
       latestClose <= watchPrice
     ) {
-      reasons.push(`收盘价 ¥${latestClose.toFixed(2)} 已进入关注价 ¥${watchPrice.toFixed(2)}`);
+      reasons.push(`收盘价 ¥${latestClose.toFixed(2)} 已达到建仓起点 ¥${watchPrice.toFixed(2)}`);
     }
 
     if (
@@ -39,7 +39,7 @@ export function formatAlertMessage(alerts, siteUrl) {
   ]);
 
   return {
-    title: `A股关注提醒：${alerts.length} 只股票触发`,
+    title: `A股建仓提醒：${alerts.length} 只股票触发`,
     description: [
       ...body,
       `[打开 A股价值看板](${siteUrl})`,

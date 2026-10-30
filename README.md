@@ -19,7 +19,7 @@ npm run pages:preview
 
 ## 微信价格提醒
 
-- 当前规则：中国移动收盘价不高于 90 元、云南白药收盘价不高于 50 元，或任一股票当日跌幅达到 3% 时提醒。
+- 当前建仓起点：中国平安 53 元、中国移动 90 元、云南白药 50 元；达到起点时提醒。中国移动和云南白药当日跌幅达到 3% 时也会提醒。
 - GitHub Actions 在交易日收盘更新后自动检查，通过 Server酱推送到微信。
 - 在 [Server酱 SendKey 页面](https://sct.ftqq.com/sendkey/)微信扫码登录并复制 SendKey。
 - 打开仓库 `Settings → Secrets and variables → Actions`，新增名为 `SERVERCHAN_SENDKEY` 的 Repository secret。

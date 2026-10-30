@@ -3,7 +3,7 @@
   "source": "新浪财经公开行情及分红 · 东方财富公开财务及分红数据 · GitHub 每日更新",
   "sourceStatus": "fresh",
   "sourceMessage": null,
-  "syncedAt": "2026-10-30T23:20:03.305Z",
+  "syncedAt": "2026-10-30T23:41:53.192Z",
   "stocks": [
     {
       "symbol": "000423.SZ",
@@ -2113,7 +2113,7 @@
       "category": "金融",
       "mark": "平",
       "score": 64,
-      "watchPrice": null,
+      "watchPrice": 53,
       "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 18.4,
