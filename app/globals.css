@@ -383,8 +383,7 @@ footer {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
-  padding-top: 12px;
-  border-top: 1px solid rgba(10, 18, 34, 0.1);
+  padding-top: 10px;
 }
 
 .quote-session > div {
@@ -427,11 +426,6 @@ footer {
 .quote-metrics-table td {
   padding: 13px 10px;
   vertical-align: middle;
-}
-
-.quote-metrics-table tr + tr th,
-.quote-metrics-table tr + tr td {
-  border-top: 1px solid rgba(10, 18, 34, 0.1);
 }
 
 .quote-metrics-table th {
