@@ -1,9 +1,9 @@
 {
   "currency": "CNY",
-  "source": "新浪财经公开行情 · 东方财富公开财务及分红数据 · GitHub 每日更新",
+  "source": "新浪财经公开行情及分红 · 东方财富公开财务及分红数据 · GitHub 每日更新",
   "sourceStatus": "fresh",
   "sourceMessage": null,
-  "syncedAt": "2026-10-30T22:35:01.373Z",
+  "syncedAt": "2026-10-30T22:43:51.564Z",
   "stocks": [
     {
       "symbol": "000423.SZ",
@@ -12,26 +12,30 @@
       "market": "深交所",
       "category": "中药",
       "mark": "胶",
-      "score": 84,
+      "score": 86,
       "scoreBreakdown": {
         "profitability": 21.2,
         "growth": 10.1,
-        "dividend": 22.8,
+        "dividend": 25,
         "quality": 20,
         "stability": 10
       },
-      "annualDividend": 2.7803014,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
+      "annualDividend": 5.5606013999999995,
+      "dividendBasis": "近12个月已实施现金分红 4 次，税前合计",
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/000423.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/000423.html"
         }
       ],
       "latestClose": 47.93,
       "changePercent": 1.2676949080921223,
-      "currentDividendYield": 5.800754016273733,
+      "currentDividendYield": 11.601505111621114,
       "turnoverRate": 0.7186470791238544,
       "financialReports": [
         {
@@ -120,7 +124,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601838.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601838.html"
         }
       ],
@@ -215,7 +223,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600919.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600919.html"
         }
       ],
@@ -310,7 +322,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601009.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601009.html"
         }
       ],
@@ -386,6 +402,105 @@
       ]
     },
     {
+      "symbol": "000538.SZ",
+      "name": "云南白药",
+      "code": "000538",
+      "market": "深交所",
+      "category": "中药",
+      "mark": "云",
+      "score": 77,
+      "scoreBreakdown": {
+        "profitability": 19.7,
+        "growth": 9.6,
+        "dividend": 20,
+        "quality": 17.5,
+        "stability": 10
+      },
+      "annualDividend": 2.621,
+      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "截至 2026-10-30",
+      "dividendSources": [
+        {
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/000538.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
+          "url": "https://data.eastmoney.com/yjfp/detail/000538.html"
+        }
+      ],
+      "latestClose": 53.71,
+      "changePercent": 1.4736444360476122,
+      "currentDividendYield": 4.87991063116738,
+      "turnoverRate": 0.609783222516716,
+      "financialReports": [
+        {
+          "year": "2026",
+          "reportType": "三季报",
+          "reportDate": "2026-09-30",
+          "noticeDate": "2026-10-30",
+          "revenue": 32257063315.53,
+          "revenueGrowth": 5.228805069317,
+          "netProfit": 4822353319.2,
+          "netProfitGrowth": 0.946881488708,
+          "eps": 2.7,
+          "roe": 11.79,
+          "bookValuePerShare": 22.569351615156,
+          "debtRatio": 26.494006505,
+          "nonPerformingLoanRatio": 0,
+          "provisionCoverageRatio": 0
+        },
+        {
+          "year": "2025",
+          "reportType": "年报",
+          "reportDate": "2025-12-31",
+          "noticeDate": "2026-04-01",
+          "revenue": 41186999090.31,
+          "revenueGrowth": 2.881846493072,
+          "netProfit": 5153486838.91,
+          "netProfitGrowth": 8.507811948613,
+          "eps": 2.89,
+          "roe": 13.02,
+          "bookValuePerShare": 22.44291775051,
+          "debtRatio": 26.0207287697,
+          "nonPerformingLoanRatio": 0,
+          "provisionCoverageRatio": 0
+        },
+        {
+          "year": "2024",
+          "reportType": "年报",
+          "reportDate": "2024-12-31",
+          "noticeDate": "2025-04-01",
+          "revenue": 40033300814.72,
+          "revenueGrowth": 2.357397590042,
+          "netProfit": 4749415499.55,
+          "netProfitGrowth": 16.015347511798,
+          "eps": 2.66,
+          "roe": 11.99,
+          "bookValuePerShare": 21.763582535003,
+          "debtRatio": 26.5488313659,
+          "nonPerformingLoanRatio": 0,
+          "provisionCoverageRatio": 0
+        },
+        {
+          "year": "2023",
+          "reportType": "年报",
+          "reportDate": "2023-12-31",
+          "noticeDate": "2024-03-30",
+          "revenue": 39111292156,
+          "revenueGrowth": 7.18837074881,
+          "netProfit": 4093782074.02,
+          "netProfitGrowth": 36.408209037123,
+          "eps": 2.29,
+          "roe": 10.51,
+          "bookValuePerShare": 22.193752134076,
+          "debtRatio": 25.8048065338,
+          "nonPerformingLoanRatio": 0,
+          "provisionCoverageRatio": 0
+        }
+      ]
+    },
+    {
       "symbol": "600750.SH",
       "name": "华润江中",
       "code": "600750",
@@ -405,7 +520,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600750.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600750.html"
         }
       ],
@@ -500,7 +619,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/002142.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/002142.html"
         }
       ],
@@ -595,7 +718,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/000333.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/000333.html"
         }
       ],
@@ -671,6 +798,105 @@
       ]
     },
     {
+      "symbol": "603288.SH",
+      "name": "海天味业",
+      "code": "603288",
+      "market": "上交所",
+      "category": "消费",
+      "mark": "海",
+      "score": 74,
+      "scoreBreakdown": {
+        "profitability": 22.2,
+        "growth": 9.4,
+        "dividend": 14.7,
+        "quality": 20,
+        "stability": 7.5
+      },
+      "annualDividend": 1.1,
+      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "截至 2026-10-30",
+      "dividendSources": [
+        {
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/603288.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
+          "url": "https://data.eastmoney.com/yjfp/detail/603288.html"
+        }
+      ],
+      "latestClose": 34.86,
+      "changePercent": 0.9556907037358768,
+      "currentDividendYield": 3.1554790590935173,
+      "turnoverRate": 0.3923229074581637,
+      "financialReports": [
+        {
+          "year": "2026",
+          "reportType": "三季报",
+          "reportDate": "2026-09-30",
+          "noticeDate": "2026-10-30",
+          "revenue": 22552931085,
+          "revenueGrowth": 4.266217231965,
+          "netProfit": 5379828889.33,
+          "netProfitGrowth": 1.16597023679,
+          "eps": 0.92,
+          "roe": 13.29,
+          "bookValuePerShare": 6.734946972071,
+          "debtRatio": 17.4475437679,
+          "nonPerformingLoanRatio": 0,
+          "provisionCoverageRatio": 0
+        },
+        {
+          "year": "2025",
+          "reportType": "年报",
+          "reportDate": "2025-12-31",
+          "noticeDate": "2026-03-27",
+          "revenue": 28873380466.76,
+          "revenueGrowth": 7.31799855744,
+          "netProfit": 7038465194.15,
+          "netProfitGrowth": 10.95333560451,
+          "eps": 1.23,
+          "roe": 19.59,
+          "bookValuePerShare": 7.062679566117,
+          "debtRatio": 19.8227018196,
+          "nonPerformingLoanRatio": 0,
+          "provisionCoverageRatio": 0
+        },
+        {
+          "year": "2024",
+          "reportType": "年报",
+          "reportDate": "2024-12-31",
+          "noticeDate": "2025-04-03",
+          "revenue": 26904508894.01,
+          "revenueGrowth": 9.549113197344,
+          "netProfit": 6343626494.69,
+          "netProfitGrowth": 12.742990044127,
+          "eps": 1.14,
+          "roe": 21.77,
+          "bookValuePerShare": 5.556127906031,
+          "debtRatio": 23.190310631,
+          "nonPerformingLoanRatio": 0,
+          "provisionCoverageRatio": 0
+        },
+        {
+          "year": "2023",
+          "reportType": "年报",
+          "reportDate": "2023-12-31",
+          "noticeDate": "2024-04-27",
+          "revenue": 24559312356.59,
+          "revenueGrowth": -4.101341187421,
+          "netProfit": 5626626091.97,
+          "netProfitGrowth": -9.214535884591,
+          "eps": 1.01,
+          "roe": 20.72,
+          "bookValuePerShare": 5.130850851647,
+          "debtRatio": 24.4395703547,
+          "nonPerformingLoanRatio": 0,
+          "provisionCoverageRatio": 0
+        }
+      ]
+    },
+    {
       "symbol": "600036.SH",
       "name": "招商银行",
       "code": "600036",
@@ -690,7 +916,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600036.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600036.html"
         }
       ],
@@ -785,7 +1015,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601288.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601288.html"
         }
       ],
@@ -861,196 +1095,6 @@
       ]
     },
     {
-      "symbol": "000538.SZ",
-      "name": "云南白药",
-      "code": "000538",
-      "market": "深交所",
-      "category": "中药",
-      "mark": "云",
-      "score": 71,
-      "scoreBreakdown": {
-        "profitability": 19.7,
-        "growth": 9.6,
-        "dividend": 14.1,
-        "quality": 17.5,
-        "stability": 10
-      },
-      "annualDividend": 1.583,
-      "dividendBasis": "近12个月已实施现金分红 1 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
-      "dividendSources": [
-        {
-          "label": "分红记录",
-          "url": "https://data.eastmoney.com/yjfp/detail/000538.html"
-        }
-      ],
-      "latestClose": 53.71,
-      "changePercent": 1.4736444360476122,
-      "currentDividendYield": 2.947309625768013,
-      "turnoverRate": 0.609783222516716,
-      "financialReports": [
-        {
-          "year": "2026",
-          "reportType": "三季报",
-          "reportDate": "2026-09-30",
-          "noticeDate": "2026-10-30",
-          "revenue": 32257063315.53,
-          "revenueGrowth": 5.228805069317,
-          "netProfit": 4822353319.2,
-          "netProfitGrowth": 0.946881488708,
-          "eps": 2.7,
-          "roe": 11.79,
-          "bookValuePerShare": 22.569351615156,
-          "debtRatio": 26.494006505,
-          "nonPerformingLoanRatio": 0,
-          "provisionCoverageRatio": 0
-        },
-        {
-          "year": "2025",
-          "reportType": "年报",
-          "reportDate": "2025-12-31",
-          "noticeDate": "2026-04-01",
-          "revenue": 41186999090.31,
-          "revenueGrowth": 2.881846493072,
-          "netProfit": 5153486838.91,
-          "netProfitGrowth": 8.507811948613,
-          "eps": 2.89,
-          "roe": 13.02,
-          "bookValuePerShare": 22.44291775051,
-          "debtRatio": 26.0207287697,
-          "nonPerformingLoanRatio": 0,
-          "provisionCoverageRatio": 0
-        },
-        {
-          "year": "2024",
-          "reportType": "年报",
-          "reportDate": "2024-12-31",
-          "noticeDate": "2025-04-01",
-          "revenue": 40033300814.72,
-          "revenueGrowth": 2.357397590042,
-          "netProfit": 4749415499.55,
-          "netProfitGrowth": 16.015347511798,
-          "eps": 2.66,
-          "roe": 11.99,
-          "bookValuePerShare": 21.763582535003,
-          "debtRatio": 26.5488313659,
-          "nonPerformingLoanRatio": 0,
-          "provisionCoverageRatio": 0
-        },
-        {
-          "year": "2023",
-          "reportType": "年报",
-          "reportDate": "2023-12-31",
-          "noticeDate": "2024-03-30",
-          "revenue": 39111292156,
-          "revenueGrowth": 7.18837074881,
-          "netProfit": 4093782074.02,
-          "netProfitGrowth": 36.408209037123,
-          "eps": 2.29,
-          "roe": 10.51,
-          "bookValuePerShare": 22.193752134076,
-          "debtRatio": 25.8048065338,
-          "nonPerformingLoanRatio": 0,
-          "provisionCoverageRatio": 0
-        }
-      ]
-    },
-    {
-      "symbol": "603288.SH",
-      "name": "海天味业",
-      "code": "603288",
-      "market": "上交所",
-      "category": "消费",
-      "mark": "海",
-      "score": 71,
-      "scoreBreakdown": {
-        "profitability": 22.2,
-        "growth": 9.4,
-        "dividend": 12.1,
-        "quality": 20,
-        "stability": 7.5
-      },
-      "annualDividend": 0.8,
-      "dividendBasis": "近12个月已实施现金分红 1 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
-      "dividendSources": [
-        {
-          "label": "分红记录",
-          "url": "https://data.eastmoney.com/yjfp/detail/603288.html"
-        }
-      ],
-      "latestClose": 34.86,
-      "changePercent": 0.9556907037358768,
-      "currentDividendYield": 2.2948938611589216,
-      "turnoverRate": 0.3923229074581637,
-      "financialReports": [
-        {
-          "year": "2026",
-          "reportType": "三季报",
-          "reportDate": "2026-09-30",
-          "noticeDate": "2026-10-30",
-          "revenue": 22552931085,
-          "revenueGrowth": 4.266217231965,
-          "netProfit": 5379828889.33,
-          "netProfitGrowth": 1.16597023679,
-          "eps": 0.92,
-          "roe": 13.29,
-          "bookValuePerShare": 6.734946972071,
-          "debtRatio": 17.4475437679,
-          "nonPerformingLoanRatio": 0,
-          "provisionCoverageRatio": 0
-        },
-        {
-          "year": "2025",
-          "reportType": "年报",
-          "reportDate": "2025-12-31",
-          "noticeDate": "2026-03-27",
-          "revenue": 28873380466.76,
-          "revenueGrowth": 7.31799855744,
-          "netProfit": 7038465194.15,
-          "netProfitGrowth": 10.95333560451,
-          "eps": 1.23,
-          "roe": 19.59,
-          "bookValuePerShare": 7.062679566117,
-          "debtRatio": 19.8227018196,
-          "nonPerformingLoanRatio": 0,
-          "provisionCoverageRatio": 0
-        },
-        {
-          "year": "2024",
-          "reportType": "年报",
-          "reportDate": "2024-12-31",
-          "noticeDate": "2025-04-03",
-          "revenue": 26904508894.01,
-          "revenueGrowth": 9.549113197344,
-          "netProfit": 6343626494.69,
-          "netProfitGrowth": 12.742990044127,
-          "eps": 1.14,
-          "roe": 21.77,
-          "bookValuePerShare": 5.556127906031,
-          "debtRatio": 23.190310631,
-          "nonPerformingLoanRatio": 0,
-          "provisionCoverageRatio": 0
-        },
-        {
-          "year": "2023",
-          "reportType": "年报",
-          "reportDate": "2023-12-31",
-          "noticeDate": "2024-04-27",
-          "revenue": 24559312356.59,
-          "revenueGrowth": -4.101341187421,
-          "netProfit": 5626626091.97,
-          "netProfitGrowth": -9.214535884591,
-          "eps": 1.01,
-          "roe": 20.72,
-          "bookValuePerShare": 5.130850851647,
-          "debtRatio": 24.4395703547,
-          "nonPerformingLoanRatio": 0,
-          "provisionCoverageRatio": 0
-        }
-      ]
-    },
-    {
       "symbol": "002032.SZ",
       "name": "苏泊尔",
       "code": "002032",
@@ -1070,7 +1114,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/002032.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/002032.html"
         }
       ],
@@ -1165,7 +1213,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600406.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600406.html"
         }
       ],
@@ -1260,7 +1312,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600887.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600887.html"
         }
       ],
@@ -1355,7 +1411,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601398.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601398.html"
         }
       ],
@@ -1450,7 +1510,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600900.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600900.html"
         }
       ],
@@ -1545,7 +1609,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600690.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600690.html"
         }
       ],
@@ -1640,7 +1708,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/000651.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/000651.html"
         }
       ],
@@ -1735,7 +1807,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/000001.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/000001.html"
         }
       ],
@@ -1830,7 +1906,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601939.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601939.html"
         }
       ],
@@ -1925,7 +2005,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600941.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600941.html"
         }
       ],
@@ -2020,7 +2104,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601166.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601166.html"
         }
       ],
@@ -2115,7 +2203,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601328.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601328.html"
         }
       ],
@@ -2210,7 +2302,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601998.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601998.html"
         }
       ],
@@ -2305,7 +2401,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/000895.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/000895.html"
         }
       ],
@@ -2400,7 +2500,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601988.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601988.html"
         }
       ],
@@ -2495,7 +2599,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/002508.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/002508.html"
         }
       ],
@@ -2590,7 +2698,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600863.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600863.html"
         }
       ],
@@ -2685,7 +2797,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600886.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600886.html"
         }
       ],
@@ -2780,7 +2896,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600011.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600011.html"
         }
       ],
@@ -2875,7 +2995,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601318.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601318.html"
         }
       ],
@@ -2970,7 +3094,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601728.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601728.html"
         }
       ],
@@ -3065,7 +3193,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601985.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/601985.html"
         }
       ],
@@ -3160,7 +3292,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600050.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600050.html"
         }
       ],
@@ -3255,7 +3391,11 @@
       "dividendAsOf": "截至 2026-10-30",
       "dividendSources": [
         {
-          "label": "分红记录",
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600795.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
           "url": "https://data.eastmoney.com/yjfp/detail/600795.html"
         }
       ],

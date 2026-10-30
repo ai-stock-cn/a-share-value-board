@@ -109,6 +109,9 @@ test("includes the GitHub Pages update workflow", async () => {
   assert.match(updater, /工商银行/);
   assert.match(updater, /建设银行/);
   assert.match(updater, /RPT_SHAREBONUS_DET/);
+  assert.match(updater, /SINA_DIVIDEND_URL/);
+  assert.match(updater, /fetchSinaDividendRecords/);
+  assert.match(updater, /mergeDividendRecords/);
   assert.match(updater, /calculateTrailingDividend/);
   assert.match(updater, /calculateFundamentalScore/);
   assert.match(updater, /calculateDividendYearCount/);

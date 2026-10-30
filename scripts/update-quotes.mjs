@@ -359,6 +359,8 @@ const SOURCE_URL =
   "https://quotes.sina.cn/cn/api/openapi.php/CN_MarketDataService.getKLineData";
 const EASTMONEY_FINANCE_URL =
   "https://datacenter-web.eastmoney.com/api/data/v1/get";
+const SINA_DIVIDEND_URL =
+  "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid";
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const outputPath = resolve(projectRoot, "public/data/quotes.json");
 
@@ -407,7 +409,11 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
     dividendAsOf: latestQuote ? `截至 ${latestQuote.tradeDate}` : "等待行情",
     dividendSources: [
       {
-        label: "分红记录",
+        label: "新浪分红记录",
+        url: `${SINA_DIVIDEND_URL}/${stock.code}.phtml`,
+      },
+      {
+        label: "东方财富分红记录",
         url: `https://data.eastmoney.com/yjfp/detail/${stock.code}.html`,
       },
     ],
@@ -423,7 +429,7 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
 
 const payload = {
   currency: "CNY",
-  source: "新浪财经公开行情 · 东方财富公开财务及分红数据 · GitHub 每日更新",
+  source: "新浪财经公开行情及分红 · 东方财富公开财务及分红数据 · GitHub 每日更新",
   sourceStatus: "fresh",
   sourceMessage: null,
   syncedAt,
@@ -588,6 +594,64 @@ async function fetchFinancialData(stock) {
 }
 
 async function fetchDividendRecords(stock) {
+  const results = await Promise.allSettled([
+    fetchSinaDividendRecords(stock),
+    fetchEastmoneyDividendRecords(stock),
+  ]);
+  const records = mergeDividendRecords(
+    ...results
+      .filter((result) => result.status === "fulfilled")
+      .map((result) => result.value),
+  );
+
+  if (records.length === 0) {
+    throw new Error(`${stock.name}没有可用分红数据`);
+  }
+
+  return records;
+}
+
+async function fetchSinaDividendRecords(stock) {
+  const response = await fetchWithRetry(
+    `${SINA_DIVIDEND_URL}/${stock.code}.phtml`,
+    {
+      headers: {
+        Accept: "text/html",
+        Referer: "https://money.finance.sina.com.cn/",
+        "User-Agent": "Mozilla/5.0 A-Share-Daily-Quote-Dashboard/1.0",
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`${stock.name}新浪分红源返回异常状态：${response.status}`);
+  }
+
+  const html = new TextDecoder("gb18030").decode(
+    await response.arrayBuffer(),
+  );
+  const table = html.match(
+    /<table[^>]*id=["']sharebonus_1["'][^>]*>([\s\S]*?)<\/table>/i,
+  )?.[1];
+
+  if (!table) return [];
+
+  return [...table.matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/gi)]
+    .map((row) =>
+      [...row[1].matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi)].map(
+        (cell) => stripHtml(cell[1]),
+      ),
+    )
+    .filter((cells) => cells.length >= 7 && /^\d{4}-\d{2}-\d{2}$/.test(cells[0]))
+    .map((cells) => ({
+      REPORT_DATE: cells[0],
+      PRETAX_BONUS_RMB: Number(cells[3]),
+      ASSIGN_PROGRESS: cells[4],
+      EX_DIVIDEND_DATE: cells[5],
+    }));
+}
+
+async function fetchEastmoneyDividendRecords(stock) {
   const url = new URL(EASTMONEY_FINANCE_URL);
   url.search = new URLSearchParams({
     reportName: "RPT_SHAREBONUS_DET",
@@ -613,6 +677,38 @@ async function fetchDividendRecords(stock) {
 
   const payload = await response.json();
   return Array.isArray(payload.result?.data) ? payload.result.data : [];
+}
+
+function mergeDividendRecords(...recordGroups) {
+  const seen = new Set();
+
+  return recordGroups
+    .flat()
+    .filter((record) => {
+      const exDividendDate = String(record.EX_DIVIDEND_DATE ?? "").slice(0, 10);
+      const pretaxBonus = Number(record.PRETAX_BONUS_RMB);
+      const key = `${exDividendDate}|${pretaxBonus.toFixed(6)}`;
+
+      if (!exDividendDate || !Number.isFinite(pretaxBonus) || seen.has(key)) {
+        return false;
+      }
+
+      seen.add(key);
+      return true;
+    })
+    .sort((left, right) =>
+      String(right.EX_DIVIDEND_DATE).localeCompare(
+        String(left.EX_DIVIDEND_DATE),
+      ),
+    );
+}
+
+function stripHtml(value) {
+  return value
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;|&#160;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .trim();
 }
 
 function toFiniteNumber(value) {
