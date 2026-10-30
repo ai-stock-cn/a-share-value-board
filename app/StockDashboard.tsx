@@ -201,7 +201,8 @@ export default function StockDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [marketFilter, setMarketFilter] = useState<MarketFilter>("all");
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all");
-  const stockSelectorRef = useRef<HTMLDetailsElement>(null);
+  const [showAllStocks, setShowAllStocks] = useState(false);
+  const initialRankSelectionRef = useRef(false);
 
   const loadQuotes = useCallback(async (manual = false) => {
     if (manual) setIsRefreshing(true);
@@ -219,10 +220,23 @@ export default function StockDashboard() {
         throw new Error(payload.message ?? "行情数据加载失败");
       }
 
+      let effectiveSymbol = selectedSymbol;
+      if (!initialRankSelectionRef.current && payload.stocks.length > 0) {
+        effectiveSymbol = [...payload.stocks].sort(
+          (left, right) =>
+            right.score - left.score ||
+            left.name.localeCompare(right.name, "zh-CN"),
+        )[0].symbol;
+        initialRankSelectionRef.current = true;
+        if (effectiveSymbol !== selectedSymbol) {
+          setSelectedSymbol(effectiveSymbol);
+        }
+      }
+
       const selectedStock = payload.stocks.find(
-        (stock) => stock.symbol === selectedSymbol,
+        (stock) => stock.symbol === effectiveSymbol,
       );
-      const quotes = payload.quotesBySymbol[selectedSymbol] ?? [];
+      const quotes = payload.quotesBySymbol[effectiveSymbol] ?? [];
 
       if (!selectedStock || quotes.length === 0) {
         throw new Error("暂时没有可展示的行情数据");
@@ -276,6 +290,10 @@ export default function StockDashboard() {
           (categoryFilter === "all" || stock.category === categoryFilter),
       ),
     [categoryFilter, marketFilter, rankedStocks],
+  );
+  const visibleStocks = useMemo(
+    () => (showAllStocks ? filteredStocks : filteredStocks.slice(0, 5)),
+    [filteredStocks, showAllStocks],
   );
   const latest = data?.quotes[0];
   const previous = data?.quotes[1];
@@ -393,7 +411,7 @@ export default function StockDashboard() {
                       );
                     }
                     if (firstMatch) setSelectedSymbol(firstMatch.symbol);
-                    if (stockSelectorRef.current) stockSelectorRef.current.open = false;
+                    setShowAllStocks(false);
                   }}
                 >
                   {MARKET_FILTERS.map((filter) => {
@@ -435,7 +453,7 @@ export default function StockDashboard() {
                       );
                     }
                     if (firstMatch) setSelectedSymbol(firstMatch.symbol);
-                    if (stockSelectorRef.current) stockSelectorRef.current.open = false;
+                    setShowAllStocks(false);
                   }}
                 >
                   {CATEGORY_FILTERS.map((filter) => {
@@ -456,101 +474,76 @@ export default function StockDashboard() {
               </span>
             </label>
           </div>
-          <details className="stock-selector" ref={stockSelectorRef}>
-            <summary className="stock-selector-current">
-              <span className="stock-mark">{selectedStock.mark}</span>
-              <span className="stock-identity">
-                <strong>{selectedStock.name}</strong>
-                <small>
-                  {selectedStock.category} · {formatMarketName(selectedStock.market)} ·{" "}
-                  {selectedStock.symbol}
-                </small>
-              </span>
-              <span className="stock-list-price">
-                <strong>
-                  {selectedStock.latestClose === null
-                    ? "—"
-                    : `¥${numberFormatter.format(selectedStock.latestClose)}`}
-                </strong>
-                <small>
-                  {selectedStock.currentDividendYield === null
-                    ? "股息率 —"
-                    : `股息率 ${selectedStock.currentDividendYield.toFixed(2)}%`}
-                </small>
-              </span>
-              <span className="stock-score">
-                <small>评分</small>
-                <strong>{selectedStock.score}</strong>
-                <i className="selector-chevron" aria-hidden="true">
-                  ⌄
-                </i>
-              </span>
-            </summary>
-            <div className="stock-options">
-              <div
-                className="stock-option-list"
-                role="listbox"
-                aria-label="按评分选择股票"
-              >
-                {filteredStocks.map((stock) => {
-                  const rank = rankedStocks.indexOf(stock) + 1;
+          <div className="stock-selector">
+            <div
+              className="stock-option-list"
+              role="listbox"
+              aria-label="按评分选择股票"
+            >
+              {visibleStocks.map((stock) => {
+                const rank = rankedStocks.indexOf(stock) + 1;
 
-                  return (
-                    <button
-                      type="button"
-                      role="option"
-                      aria-selected={selectedSymbol === stock.symbol}
-                      className={`stock-option ${
-                        selectedSymbol === stock.symbol ? "is-active" : ""
-                      }`}
-                      onClick={() => {
-                        setSelectedSymbol(stock.symbol);
-                        if (stockSelectorRef.current) {
-                          stockSelectorRef.current.open = false;
+                return (
+                  <button
+                    type="button"
+                    role="option"
+                    aria-selected={selectedSymbol === stock.symbol}
+                    className={`stock-option ${
+                      selectedSymbol === stock.symbol ? "is-active" : ""
+                    }`}
+                    onClick={() => setSelectedSymbol(stock.symbol)}
+                    key={stock.symbol}
+                  >
+                    <span className="stock-mark">{stock.mark}</span>
+                    <span className="stock-identity">
+                      <strong>{stock.name}</strong>
+                      <small>
+                        #{String(rank).padStart(2, "0")} · {stock.category} ·{" "}
+                        {formatMarketName(stock.market)} · {stock.symbol}
+                      </small>
+                    </span>
+                    <span className="stock-list-price">
+                      <strong>
+                        {stock.latestClose === null
+                          ? "—"
+                          : `¥${numberFormatter.format(stock.latestClose)}`}
+                      </strong>
+                      <small
+                        className={
+                          stock.changePercent === null
+                            ? ""
+                            : stock.changePercent >= 0
+                              ? "positive"
+                              : "negative"
                         }
-                      }}
-                      key={stock.symbol}
-                    >
-                      <span className="stock-mark">{stock.mark}</span>
-                      <span className="stock-identity">
-                        <strong>{stock.name}</strong>
-                        <small>
-                          #{String(rank).padStart(2, "0")} · {stock.category} ·{" "}
-                          {formatMarketName(stock.market)} · {stock.symbol}
-                        </small>
-                      </span>
-                      <span className="stock-list-price">
-                        <strong>
-                          {stock.latestClose === null
-                            ? "—"
-                            : `¥${numberFormatter.format(stock.latestClose)}`}
-                        </strong>
-                        <small
-                          className={
-                            stock.changePercent === null
-                              ? ""
-                              : stock.changePercent >= 0
-                                ? "positive"
-                                : "negative"
-                          }
-                        >
-                          {stock.currentDividendYield === null
-                            ? "股息率 —"
-                            : `股息率 ${stock.currentDividendYield.toFixed(2)}%`}
-                        </small>
-                      </span>
-                      <span className="stock-score">
-                        <small>评分</small>
-                        <strong>{stock.score}</strong>
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
+                      >
+                        {stock.currentDividendYield === null
+                          ? "股息率 —"
+                          : `股息率 ${stock.currentDividendYield.toFixed(2)}%`}
+                      </small>
+                    </span>
+                    <span className="stock-score">
+                      <small>评分</small>
+                      <strong>{stock.score}</strong>
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-          </details>
+            {filteredStocks.length > 5 && (
+              <button
+                type="button"
+                className="stock-list-toggle"
+                onClick={() => setShowAllStocks((current) => !current)}
+              >
+                {showAllStocks
+                  ? "收起至评分前 5 名"
+                  : `查看全部 ${filteredStocks.length} 只`}
+              </button>
+            )}
+          </div>
           <p className="stock-rail-note">
-            可按市场和分类筛选；评分越高越靠前。
+            默认显示评分前 5 名；可按市场和分类筛选。
           </p>
         </aside>
 
