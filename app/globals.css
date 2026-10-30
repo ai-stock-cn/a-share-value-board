@@ -412,19 +412,20 @@ footer {
 .quote-metrics-table {
   width: 100%;
   min-width: 190px;
+  table-layout: fixed;
   border: 1px solid rgba(10, 18, 34, 0.08);
   border-collapse: separate;
   border-spacing: 0;
   border-radius: 14px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.7);
-  box-shadow: 0 12px 30px rgba(70, 98, 133, 0.1);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 14px 34px rgba(70, 98, 133, 0.09);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .quote-metrics-table th,
 .quote-metrics-table td {
-  padding: 11px 13px;
+  padding: 13px 10px;
   vertical-align: middle;
 }
 
@@ -438,6 +439,19 @@ footer {
   font-size: 9px;
   font-weight: 700;
   text-align: left;
+  white-space: nowrap;
+}
+
+.quote-metric-label-column {
+  width: 45%;
+}
+
+.quote-metric-value-column {
+  width: 27%;
+}
+
+.quote-metric-detail-column {
+  width: 28%;
 }
 
 .quote-metrics-table td {
@@ -447,17 +461,28 @@ footer {
 
 .quote-metric-change td strong {
   display: block;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .quote-metric-change td small {
-  display: block;
-  margin-top: 2px;
-  font-size: 10px;
+  display: inline-flex;
+  margin-top: 3px;
+  padding: 3px 5px;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 800;
 }
 
 .quote-metric-dividend {
-  background: rgba(215, 255, 99, 0.82);
+  background: linear-gradient(
+    90deg,
+    rgba(215, 255, 99, 0.12),
+    rgba(215, 255, 99, 0.32)
+  );
+}
+
+.quote-metric-dividend th {
+  border-left: 3px solid #b9ee3e;
 }
 
 .quote-metric-dividend th span,
@@ -473,7 +498,8 @@ footer {
 }
 
 .quote-metric-dividend td strong {
-  font-size: 22px;
+  color: #17210c;
+  font-size: 20px;
   letter-spacing: -0.04em;
 }
 
@@ -485,13 +511,19 @@ footer {
 }
 
 .quote-metric-change.up {
-  background: rgba(255, 125, 103, 0.16);
   color: #b84635;
 }
 
 .quote-metric-change.down {
-  background: rgba(121, 168, 255, 0.2);
   color: #3568bf;
+}
+
+.quote-metric-change.up td small {
+  background: rgba(255, 125, 103, 0.14);
+}
+
+.quote-metric-change.down td small {
+  background: rgba(121, 168, 255, 0.16);
 }
 
 .quote-metric-change.flat {
@@ -922,6 +954,44 @@ footer {
   align-items: flex-start;
 }
 
+.fundamentals-meta {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.fundamental-score {
+  min-width: 136px;
+  padding: 12px 15px;
+  border-radius: 13px;
+  background: #111a2b;
+  color: white;
+  text-align: right;
+}
+
+.fundamental-score span,
+.fundamental-score strong {
+  display: block;
+}
+
+.fundamental-score span {
+  color: #aeb7c8;
+  font-size: 9px;
+}
+
+.fundamental-score strong {
+  margin-top: 3px;
+  color: var(--lime);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 24px;
+}
+
+.fundamental-score small {
+  margin-left: 3px;
+  color: #96a2b7;
+  font-size: 9px;
+}
+
 .fundamentals-source {
   min-width: 170px;
   padding: 12px 15px;
@@ -934,6 +1004,55 @@ footer {
 .fundamentals-source span,
 .fundamentals-source strong {
   display: block;
+}
+
+.score-breakdown {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin-top: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(10, 18, 34, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.score-breakdown > div {
+  padding: 14px 16px;
+  border-right: 1px solid rgba(10, 18, 34, 0.1);
+}
+
+.score-breakdown > div:last-child {
+  border-right: 0;
+}
+
+.score-breakdown span {
+  display: block;
+  color: #7c8799;
+  font-size: 9px;
+}
+
+.score-breakdown strong,
+.score-breakdown small {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.score-breakdown strong {
+  display: inline-block;
+  margin-top: 7px;
+  font-size: 18px;
+}
+
+.score-breakdown small {
+  margin-left: 4px;
+  color: #98a2b3;
+  font-size: 9px;
+}
+
+.score-method-note {
+  margin: 9px 2px 0;
+  color: #7c8799;
+  font-size: 9px;
+  line-height: 1.65;
 }
 
 .fundamentals-source span {
@@ -951,7 +1070,23 @@ footer {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
-  margin-top: 26px;
+  margin-top: 18px;
+}
+
+.bank-risk-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.bank-risk-summary .financial-metric {
+  min-height: 118px;
+  background: linear-gradient(135deg, #eef5ff, #f8fbff);
+}
+
+.bank-risk-summary .financial-metric strong {
+  margin-top: 17px;
 }
 
 .financial-metric {
@@ -1089,6 +1224,10 @@ footer {
 
 .fundamental-table-wrap table {
   min-width: 1040px;
+}
+
+.fundamental-table-wrap .bank-financial-table {
+  min-width: 1240px;
 }
 
 .fundamentals-note {
@@ -1453,6 +1592,28 @@ footer span {
     padding: 10px 12px;
   }
 
+  .fundamental-score {
+    min-width: 120px;
+    padding: 10px 12px;
+  }
+
+  .score-breakdown {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .score-breakdown > div {
+    border-bottom: 1px solid rgba(10, 18, 34, 0.1);
+  }
+
+  .score-breakdown > div:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .score-breakdown > div:last-child {
+    grid-column: 1 / -1;
+    border-bottom: 0;
+  }
+
   .financial-metric,
   .fundamental-insight {
     min-height: 136px;
@@ -1529,9 +1690,36 @@ footer span {
     display: block;
   }
 
-  .fundamentals-source {
+  .fundamentals-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     margin-top: 16px;
+  }
+
+  .fundamentals-source {
+    margin-top: 0;
     text-align: left;
+  }
+
+  .fundamental-score {
+    text-align: left;
+  }
+
+  .score-breakdown {
+    grid-template-columns: 1fr;
+  }
+
+  .score-breakdown > div,
+  .score-breakdown > div:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .score-breakdown > div:last-child {
+    grid-column: auto;
+  }
+
+  .bank-risk-summary {
+    grid-template-columns: 1fr;
   }
 
   .price-grid-heading {

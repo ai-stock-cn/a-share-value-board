@@ -36,8 +36,13 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /当前股息率/);
   assert.match(dashboard, /换手率/);
   assert.match(dashboard, /基本面分析/);
-  assert.match(dashboard, /最近三年年报/);
-  assert.match(dashboard, /近三年核心财务指标/);
+  assert.match(dashboard, /2026 最新报告/);
+  assert.match(dashboard, /近三年年报/);
+  assert.match(dashboard, /不良贷款率/);
+  assert.match(dashboard, /拨备覆盖率/);
+  assert.match(dashboard, /基本面综合评分/);
+  assert.match(dashboard, /SCORE_DIMENSIONS/);
+  assert.match(dashboard, /分红回报/);
   assert.match(dashboard, /fundamental-insights/);
   assert.match(dashboard, /quote-metrics-table/);
   assert.match(dashboard, /价格与股息摘要/);
@@ -105,7 +110,10 @@ test("includes the GitHub Pages update workflow", async () => {
   assert.match(updater, /建设银行/);
   assert.match(updater, /RPT_SHAREBONUS_DET/);
   assert.match(updater, /calculateTrailingDividend/);
-  assert.match(updater, /score:\s*100/);
+  assert.match(updater, /calculateFundamentalScore/);
+  assert.match(updater, /calculateDividendYearCount/);
+  assert.match(updater, /NONPERLOAN/);
+  assert.match(updater, /BLDKBBL/);
   assert.match(updater, /right\.score - left\.score/);
   assert.match(updater, /RPT_F10_FINANCE_MAINFINADATA/);
   assert.match(updater, /A_FREE_SHARE/);

@@ -18,8 +18,9 @@ type DividendSource = {
   url: string;
 };
 
-type AnnualReport = {
+type FinancialReport = {
   year: string;
+  reportType: string;
   reportDate: string;
   noticeDate: string;
   revenue: number | null;
@@ -30,6 +31,16 @@ type AnnualReport = {
   roe: number | null;
   bookValuePerShare: number | null;
   debtRatio: number | null;
+  nonPerformingLoanRatio: number | null;
+  provisionCoverageRatio: number | null;
+};
+
+type ScoreBreakdown = {
+  profitability: number;
+  growth: number;
+  dividend: number;
+  quality: number;
+  stability: number;
 };
 
 type StockCategory =
@@ -49,6 +60,7 @@ type StockSummary = {
   category: StockCategory;
   mark: string;
   score: number;
+  scoreBreakdown: ScoreBreakdown;
   annualDividend: number;
   dividendBasis: string;
   dividendAsOf: string;
@@ -57,7 +69,7 @@ type StockSummary = {
   changePercent: number | null;
   currentDividendYield: number | null;
   turnoverRate: number | null;
-  annualReports: AnnualReport[];
+  financialReports: FinancialReport[];
 };
 
 type MarketFilter = "all" | "上交所" | "深交所";
@@ -92,6 +104,13 @@ const FALLBACK_STOCKS: StockSummary[] = [
     category: "金融",
     mark: "平",
     score: 100,
+    scoreBreakdown: {
+      profitability: 0,
+      growth: 0,
+      dividend: 0,
+      quality: 0,
+      stability: 0,
+    },
     annualDividend: 2.7,
     dividendBasis: "2025 年中期 0.95 元 + 末期 1.75 元",
     dividendAsOf: "2025 年度",
@@ -100,7 +119,7 @@ const FALLBACK_STOCKS: StockSummary[] = [
     changePercent: null,
     currentDividendYield: null,
     turnoverRate: null,
-    annualReports: [],
+    financialReports: [],
   },
   {
     symbol: "000538.SZ",
@@ -110,6 +129,13 @@ const FALLBACK_STOCKS: StockSummary[] = [
     category: "中药",
     mark: "云",
     score: 90,
+    scoreBreakdown: {
+      profitability: 0,
+      growth: 0,
+      dividend: 0,
+      quality: 0,
+      stability: 0,
+    },
     annualDividend: 2.602,
     dividendBasis: "2025 年特别分红 1.019 元 + 年度分红 1.583 元",
     dividendAsOf: "2025 年度合计",
@@ -118,11 +144,22 @@ const FALLBACK_STOCKS: StockSummary[] = [
     changePercent: null,
     currentDividendYield: null,
     turnoverRate: null,
-    annualReports: [],
+    financialReports: [],
   },
 ];
 
 const DIVIDEND_YIELD_TIERS = [6.5, 6, 5.5, 5, 4.5, 4];
+const SCORE_DIMENSIONS: Array<{
+  key: keyof ScoreBreakdown;
+  label: string;
+  max: number;
+}> = [
+  { key: "profitability", label: "盈利能力", max: 25 },
+  { key: "growth", label: "成长表现", max: 20 },
+  { key: "dividend", label: "分红回报", max: 25 },
+  { key: "quality", label: "财务质量", max: 20 },
+  { key: "stability", label: "经营稳定", max: 10 },
+];
 const MARKET_FILTERS: Array<{ value: MarketFilter; label: string }> = [
   { value: "all", label: "全部" },
   { value: "上交所", label: "沪市" },
@@ -245,9 +282,15 @@ export default function StockDashboard() {
   const changePercent = previous ? (change / previous.close) * 100 : 0;
   const direction = change > 0 ? "up" : change < 0 ? "down" : "flat";
   const annualDividend = data?.annualDividend ?? selectedStock.annualDividend;
-  const annualReports = data?.annualReports ?? selectedStock.annualReports;
-  const latestAnnualReport = annualReports[0];
-  const fundamentalInsights = buildFundamentalInsights(annualReports);
+  const financialReports =
+    data?.financialReports ?? selectedStock.financialReports;
+  const latestFinancialReport = financialReports[0];
+  const scoreBreakdown = data?.scoreBreakdown ?? selectedStock.scoreBreakdown;
+  const isBank = selectedStock.category === "银行";
+  const fundamentalInsights = buildFundamentalInsights(
+    financialReports,
+    isBank,
+  );
   const currentDividendYield = latest
     ? (annualDividend / latest.close) * 100
     : null;
@@ -564,10 +607,15 @@ export default function StockDashboard() {
                     className="quote-metrics-table"
                     aria-label="价格与股息摘要"
                   >
+                    <colgroup>
+                      <col className="quote-metric-label-column" />
+                      <col className="quote-metric-value-column" />
+                      <col className="quote-metric-detail-column" />
+                    </colgroup>
                     <tbody>
                       <tr className={`quote-metric-change ${direction}`}>
                         <th scope="row">较前收</th>
-                        <td>
+                        <td colSpan={2}>
                           <strong>
                             {change >= 0 ? "+" : ""}
                             {numberFormatter.format(change)}
@@ -585,7 +633,7 @@ export default function StockDashboard() {
                             每股股息 ¥{dividendFormatter.format(annualDividend)}
                           </small>
                         </th>
-                        <td>
+                        <td colSpan={2}>
                           <strong>
                             {currentDividendYield?.toFixed(2) ?? "—"}%
                           </strong>
@@ -702,43 +750,83 @@ export default function StockDashboard() {
               <section className="history-section fundamentals-section" aria-label="基本面分析">
                 <div className="section-heading fundamentals-heading">
                   <div>
-                    <span className="section-kicker">最近三年年报</span>
+                    <span className="section-kicker">2026 最新报告 · 近三年年报</span>
                     <h2>基本面分析</h2>
                   </div>
-                  <div className="fundamentals-source">
-                    <span>公开财务数据</span>
-                    <strong>{annualReports.length ? `${annualReports.at(-1)?.year}—${annualReports[0]?.year}` : "等待数据"}</strong>
+                  <div className="fundamentals-meta">
+                    <div className="fundamental-score">
+                      <span>基本面综合评分</span>
+                      <strong>
+                        {data?.score ?? selectedStock.score}
+                        <small>/100</small>
+                      </strong>
+                    </div>
+                    <div className="fundamentals-source">
+                      <span>公开财务数据</span>
+                      <strong>{financialReports.length ? `${financialReports.at(-1)?.year}—${financialReports[0]?.year}` : "等待数据"}</strong>
+                    </div>
                   </div>
                 </div>
 
-                {latestAnnualReport ? (
+                {latestFinancialReport ? (
                   <>
+                    <div className="score-breakdown" aria-label="基本面评分构成">
+                      {SCORE_DIMENSIONS.map((dimension) => (
+                        <div key={dimension.key}>
+                          <span>{dimension.label}</span>
+                          <strong>{scoreBreakdown[dimension.key].toFixed(1)}</strong>
+                          <small>/ {dimension.max}</small>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="score-method-note">
+                      评分满分 100：盈利 25、成长 20、分红 25、财务质量 20、稳定性 10。
+                      盈利按最新报告年化 ROE；成长按营收与净利润同比；分红按当前股息率（6.5% 为满档）及近三年持续分红；稳定性按各报告期增长为正的比例计算。
+                      {isBank
+                        ? "银行的财务质量分由不良贷款率与拨备覆盖率共同计算。"
+                        : "非银行公司的财务质量分由净利率与资产负债率共同计算。"}
+                    </p>
                     <div className="fundamental-summary">
                       <FinancialMetric
                         label="营业总收入"
-                        value={formatFinancialAmount(latestAnnualReport.revenue)}
-                        change={latestAnnualReport.revenueGrowth}
-                        year={latestAnnualReport.year}
+                        value={formatFinancialAmount(latestFinancialReport.revenue)}
+                        change={latestFinancialReport.revenueGrowth}
+                        period={`${latestFinancialReport.year} ${latestFinancialReport.reportType}`}
                       />
                       <FinancialMetric
                         label="归母净利润"
-                        value={formatFinancialAmount(latestAnnualReport.netProfit)}
-                        change={latestAnnualReport.netProfitGrowth}
-                        year={latestAnnualReport.year}
+                        value={formatFinancialAmount(latestFinancialReport.netProfit)}
+                        change={latestFinancialReport.netProfitGrowth}
+                        period={`${latestFinancialReport.year} ${latestFinancialReport.reportType}`}
                       />
                       <FinancialMetric
                         label="净资产收益率"
-                        value={formatFinancialPercent(latestAnnualReport.roe)}
-                        year={latestAnnualReport.year}
+                        value={formatFinancialPercent(latestFinancialReport.roe)}
+                        period={`${latestFinancialReport.year} ${latestFinancialReport.reportType}`}
                       />
                       <FinancialMetric
                         label="基本每股收益"
-                        value={latestAnnualReport.eps === null ? "—" : `¥${latestAnnualReport.eps.toFixed(2)}`}
-                        year={latestAnnualReport.year}
+                        value={latestFinancialReport.eps === null ? "—" : `¥${latestFinancialReport.eps.toFixed(2)}`}
+                        period={`${latestFinancialReport.year} ${latestFinancialReport.reportType}`}
                       />
                     </div>
 
-                    <div className="fundamental-insights" aria-label="三年基本面观察">
+                    {isBank && (
+                      <div className="bank-risk-summary" aria-label="银行资产质量指标">
+                        <FinancialMetric
+                          label="不良贷款率"
+                          value={formatFinancialPercent(latestFinancialReport.nonPerformingLoanRatio)}
+                          period={`${latestFinancialReport.year} ${latestFinancialReport.reportType}`}
+                        />
+                        <FinancialMetric
+                          label="拨备覆盖率"
+                          value={formatFinancialPercent(latestFinancialReport.provisionCoverageRatio)}
+                          period={`${latestFinancialReport.year} ${latestFinancialReport.reportType}`}
+                        />
+                      </div>
+                    )}
+
+                    <div className="fundamental-insights" aria-label="基本面观察">
                       {fundamentalInsights.map((insight, index) => (
                         <article className={`fundamental-insight ${insight.tone}`} key={insight.label}>
                           <span>{String(index + 1).padStart(2, "0")} · {insight.label}</span>
@@ -749,28 +837,33 @@ export default function StockDashboard() {
                     </div>
 
                     <div className="fundamental-table-heading">
-                      <strong>近三年核心财务指标</strong>
+                      <strong>2026 最新报告与近三年年报</strong>
                       <span>金额单位：人民币</span>
                     </div>
                     <div className="table-wrap fundamental-table-wrap">
-                      <table>
+                      <table className={isBank ? "bank-financial-table" : undefined}>
                         <thead>
                           <tr>
-                            <th>年度</th>
+                            <th>报告期</th>
                             <th>营业总收入</th>
                             <th>营收同比</th>
                             <th>归母净利润</th>
                             <th>净利润同比</th>
                             <th>基本EPS</th>
                             <th>ROE</th>
+                            {isBank && <th>不良贷款率</th>}
+                            {isBank && <th>拨备覆盖率</th>}
                             <th>每股净资产</th>
                             <th>资产负债率</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {annualReports.map((report) => (
-                            <tr key={report.year}>
-                              <td><strong>{report.year}</strong></td>
+                          {financialReports.map((report) => (
+                            <tr key={report.reportDate}>
+                              <td>
+                                <strong>{report.year}</strong>
+                                <small>{report.reportType}</small>
+                              </td>
                               <td>{formatFinancialAmount(report.revenue)}</td>
                               <td className={financialChangeClass(report.revenueGrowth)}>
                                 {formatSignedPercent(report.revenueGrowth)}
@@ -781,6 +874,8 @@ export default function StockDashboard() {
                               </td>
                               <td>{report.eps === null ? "—" : `¥${report.eps.toFixed(2)}`}</td>
                               <td>{formatFinancialPercent(report.roe)}</td>
+                              {isBank && <td>{formatFinancialPercent(report.nonPerformingLoanRatio)}</td>}
+                              {isBank && <td>{formatFinancialPercent(report.provisionCoverageRatio)}</td>}
                               <td>{report.bookValuePerShare === null ? "—" : `¥${report.bookValuePerShare.toFixed(2)}`}</td>
                               <td>{formatFinancialPercent(report.debtRatio)}</td>
                             </tr>
@@ -789,7 +884,7 @@ export default function StockDashboard() {
                       </table>
                     </div>
                     <p className="fundamentals-note">
-                      数据为年度报告口径，来源于东方财富公开财务数据。同比和趋势仅用于快速比较，不构成投资建议。
+                      2026 数据为最新已披露的季度或中期报告，另列最近三年年报；数据来源于东方财富公开财务数据。评分与趋势仅用于快速比较，不构成投资建议。
                     </p>
                   </>
                 ) : (
@@ -1189,18 +1284,18 @@ function FinancialMetric({
   label,
   value,
   change,
-  year,
+  period,
 }: {
   label: string;
   value: string;
   change?: number | null;
-  year: string;
+  period: string;
 }) {
   return (
     <article className="financial-metric">
       <div>
         <span>{label}</span>
-        <small>{year} 年</small>
+        <small>{period}</small>
       </div>
       <strong>{value}</strong>
       {change !== undefined && (
@@ -1361,39 +1456,72 @@ function financialChangeClass(value: number | null) {
   return value > 0 ? "financial-positive" : "financial-negative";
 }
 
-function buildFundamentalInsights(reports: AnnualReport[]) {
+function buildFundamentalInsights(
+  reports: FinancialReport[],
+  isBank: boolean,
+) {
   const latestReport = reports[0];
-  const oldestReport = reports.at(-1);
+  const annualReports = reports.filter(
+    (report) => report.reportType === "年报",
+  );
+  const latestAnnualReport = annualReports[0];
+  const oldestAnnualReport = annualReports.at(-1);
 
-  if (!latestReport || !oldestReport) return [];
+  if (!latestReport || !latestAnnualReport || !oldestAnnualReport) return [];
 
-  const periods = Math.max(reports.length - 1, 1);
+  const periods = Math.max(annualReports.length - 1, 1);
   const revenueCagr = calculateCompoundGrowth(
-    latestReport.revenue,
-    oldestReport.revenue,
+    latestAnnualReport.revenue,
+    oldestAnnualReport.revenue,
     periods,
   );
   const profitCagr = calculateCompoundGrowth(
-    latestReport.netProfit,
-    oldestReport.netProfit,
+    latestAnnualReport.netProfit,
+    oldestAnnualReport.netProfit,
     periods,
   );
   const roeChange =
-    latestReport.roe === null || oldestReport.roe === null
+    latestAnnualReport.roe === null || oldestAnnualReport.roe === null
       ? null
-      : latestReport.roe - oldestReport.roe;
+      : latestAnnualReport.roe - oldestAnnualReport.roe;
+  const qualityInsight = isBank
+    ? {
+        label: "资产质量",
+        title:
+          latestReport.nonPerformingLoanRatio === null
+            ? "不良率数据不足"
+            : `不良率 ${latestReport.nonPerformingLoanRatio.toFixed(2)}%`,
+        description: `最新拨备覆盖率 ${formatFinancialPercent(latestReport.provisionCoverageRatio)}；不良率越低、拨备覆盖率越高通常代表风险缓冲更充分。`,
+        tone:
+          latestReport.nonPerformingLoanRatio === null
+            ? "neutral"
+            : latestReport.nonPerformingLoanRatio <= 1
+              ? "positive"
+              : latestReport.nonPerformingLoanRatio >= 1.5
+                ? "negative"
+                : "neutral",
+      }
+    : {
+        label: "财务结构",
+        title:
+          latestReport.debtRatio === null
+            ? "负债率数据不足"
+            : `资产负债率 ${latestReport.debtRatio.toFixed(2)}%`,
+        description: `最新每股净资产 ${latestReport.bookValuePerShare === null ? "—" : `¥${latestReport.bookValuePerShare.toFixed(2)}`}，资产负债率需结合行业经营模式解读。`,
+        tone: "neutral",
+      };
 
   return [
     {
       label: "营收趋势",
       title: formatCompoundTrend(revenueCagr),
-      description: `${oldestReport.year}—${latestReport.year} 年，营业总收入由 ${formatFinancialAmount(oldestReport.revenue)} 变为 ${formatFinancialAmount(latestReport.revenue)}。`,
+      description: `${oldestAnnualReport.year}—${latestAnnualReport.year} 年，营业总收入由 ${formatFinancialAmount(oldestAnnualReport.revenue)} 变为 ${formatFinancialAmount(latestAnnualReport.revenue)}。`,
       tone: trendTone(revenueCagr),
     },
     {
       label: "利润趋势",
       title: formatCompoundTrend(profitCagr),
-      description: `${oldestReport.year}—${latestReport.year} 年，归母净利润由 ${formatFinancialAmount(oldestReport.netProfit)} 变为 ${formatFinancialAmount(latestReport.netProfit)}。`,
+      description: `${oldestAnnualReport.year}—${latestAnnualReport.year} 年，归母净利润由 ${formatFinancialAmount(oldestAnnualReport.netProfit)} 变为 ${formatFinancialAmount(latestAnnualReport.netProfit)}。`,
       tone: trendTone(profitCagr),
     },
     {
@@ -1402,15 +1530,10 @@ function buildFundamentalInsights(reports: AnnualReport[]) {
       description:
         roeChange === null
           ? "暂时无法比较三年前后的净资产收益率。"
-          : `较 ${oldestReport.year} 年${roeChange >= 0 ? "提升" : "下降"} ${Math.abs(roeChange).toFixed(2)} 个百分点。`,
+          : `${oldestAnnualReport.year}—${latestAnnualReport.year} 年报 ROE ${roeChange >= 0 ? "提升" : "下降"} ${Math.abs(roeChange).toFixed(2)} 个百分点。`,
       tone: trendTone(roeChange),
     },
-    {
-      label: "财务结构",
-      title: latestReport.debtRatio === null ? "负债率数据不足" : `资产负债率 ${latestReport.debtRatio.toFixed(2)}%`,
-      description: `最新每股净资产 ${latestReport.bookValuePerShare === null ? "—" : `¥${latestReport.bookValuePerShare.toFixed(2)}`}，资产负债率需结合行业经营模式解读。`,
-      tone: "neutral",
-    },
+    qualityInsight,
   ];
 }
 

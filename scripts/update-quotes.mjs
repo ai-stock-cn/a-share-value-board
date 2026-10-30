@@ -382,9 +382,11 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
   const {
     quotes,
     turnoverRate,
-    annualReports,
+    financialReports,
     annualDividend,
     dividendCount,
+    score,
+    scoreBreakdown,
   } = stockDataBySymbol[stock.symbol];
   const latestQuote = quotes[0];
   const previousQuote = quotes[1];
@@ -395,6 +397,8 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
 
   return {
     ...stock,
+    score,
+    scoreBreakdown,
     annualDividend,
     dividendBasis:
       dividendCount > 0
@@ -413,7 +417,7 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
       ? (annualDividend / latestQuote.close) * 100
       : null,
     turnoverRate,
-    annualReports,
+    financialReports,
   };
 }).sort((left, right) => right.score - left.score);
 
@@ -433,7 +437,7 @@ console.log(`Updated ${stocks.length} stocks at ${syncedAt}`);
 
 async function fetchStockData(stock) {
   const quotes = await fetchRecentQuotes(stock);
-  const [{ annualReports, freeFloatShares }, dividendRecords] =
+  const [{ financialReports, freeFloatShares }, dividendRecords] =
     await Promise.all([
       fetchFinancialData(stock),
       fetchDividendRecords(stock),
@@ -443,15 +447,28 @@ async function fetchStockData(stock) {
     dividendRecords,
     quotes[0].tradeDate,
   );
+  const dividendYearCount = calculateDividendYearCount(
+    dividendRecords,
+    quotes[0].tradeDate,
+  );
+  const currentDividendYield = (annualDividend / quotes[0].close) * 100;
+  const fundamentalScore = calculateFundamentalScore({
+    category: stock.category,
+    reports: financialReports,
+    currentDividendYield,
+    dividendYearCount,
+  });
 
   return [
     stock.symbol,
     {
       quotes,
       turnoverRate,
-      annualReports,
+      financialReports,
       annualDividend,
       dividendCount,
+      score: fundamentalScore.total,
+      scoreBreakdown: fundamentalScore.breakdown,
     },
   ];
 }
@@ -529,14 +546,23 @@ async function fetchFinancialData(stock) {
   const reports = payload.result?.data;
 
   if (!Array.isArray(reports) || reports.length === 0) {
-    throw new Error(`${stock.name}没有可用年报数据`);
+    throw new Error(`${stock.name}没有可用财报数据`);
   }
 
+  const latestReport = reports[0];
   const annualReports = reports
     .filter((report) => report.REPORT_TYPE === "年报")
-    .slice(0, 3)
+    .slice(0, 3);
+  const selectedReports = [latestReport, ...annualReports].filter(
+    (report, index, allReports) =>
+      allReports.findIndex(
+        (candidate) => candidate.REPORT_DATE === report.REPORT_DATE,
+      ) === index,
+  );
+  const financialReports = selectedReports
     .map((report) => ({
       year: String(report.REPORT_YEAR ?? ""),
+      reportType: String(report.REPORT_TYPE ?? "财报"),
       reportDate: String(report.REPORT_DATE ?? "").split(" ")[0],
       noticeDate: String(report.NOTICE_DATE ?? "").split(" ")[0],
       revenue: toFiniteNumber(report.TOTALOPERATEREVE),
@@ -547,14 +573,16 @@ async function fetchFinancialData(stock) {
       roe: toFiniteNumber(report.ROEJQ),
       bookValuePerShare: toFiniteNumber(report.BPS),
       debtRatio: toFiniteNumber(report.ZCFZL),
+      nonPerformingLoanRatio: toFiniteNumber(report.NONPERLOAN),
+      provisionCoverageRatio: toFiniteNumber(report.BLDKBBL),
     }));
 
-  if (annualReports.length === 0) {
-    throw new Error(`${stock.name}没有可用年报数据`);
+  if (financialReports.length === 0) {
+    throw new Error(`${stock.name}没有可用财报数据`);
   }
 
   return {
-    annualReports,
+    financialReports,
     freeFloatShares: toFiniteNumber(reports[0]?.A_FREE_SHARE),
   };
 }
@@ -626,6 +654,125 @@ function calculateTrailingDividend(records, tradeDate) {
       ),
     dividendCount: implementedRecords.length,
   };
+}
+
+function calculateDividendYearCount(records, tradeDate) {
+  const endDate = new Date(`${tradeDate}T12:00:00Z`);
+  const startDate = new Date(endDate);
+  startDate.setUTCFullYear(startDate.getUTCFullYear() - 3);
+
+  return new Set(
+    records
+      .filter((record) => {
+        const exDividendDate = new Date(
+          `${String(record.EX_DIVIDEND_DATE ?? "").split(" ")[0]}T12:00:00Z`,
+        );
+        const pretaxBonus = Number(record.PRETAX_BONUS_RMB);
+
+        return (
+          String(record.ASSIGN_PROGRESS ?? "").includes("实施") &&
+          Number.isFinite(pretaxBonus) &&
+          pretaxBonus > 0 &&
+          !Number.isNaN(exDividendDate.getTime()) &&
+          exDividendDate > startDate &&
+          exDividendDate <= endDate
+        );
+      })
+      .map((record) =>
+        String(record.EX_DIVIDEND_DATE ?? "").slice(0, 4),
+      ),
+  ).size;
+}
+
+function calculateFundamentalScore({
+  category,
+  reports,
+  currentDividendYield,
+  dividendYearCount,
+}) {
+  const latestReport = reports[0];
+  const annualizedRoe = annualizeYearToDate(
+    latestReport.roe,
+    latestReport.reportDate,
+  );
+  const profitability = scaleScore(annualizedRoe, 0, 20, 25);
+  const growth =
+    scaleScore(latestReport.revenueGrowth, -10, 20, 8) +
+    scaleScore(latestReport.netProfitGrowth, -20, 25, 12);
+  const dividend =
+    scaleScore(currentDividendYield, 0, 6.5, 20) +
+    scaleScore(dividendYearCount, 0, 3, 5);
+  const quality = calculateQualityScore(category, latestReport);
+  const stability =
+    calculatePositiveShareScore(reports, "revenueGrowth", 4) +
+    calculatePositiveShareScore(reports, "netProfitGrowth", 6);
+  const total = Math.round(
+    profitability + growth + dividend + quality + stability,
+  );
+
+  return {
+    total,
+    breakdown: {
+      profitability: roundScore(profitability),
+      growth: roundScore(growth),
+      dividend: roundScore(dividend),
+      quality: roundScore(quality),
+      stability: roundScore(stability),
+    },
+  };
+}
+
+function calculateQualityScore(category, report) {
+  if (category === "银行") {
+    return (
+      inverseScaleScore(report.nonPerformingLoanRatio, 0.8, 2, 10) +
+      scaleScore(report.provisionCoverageRatio, 100, 300, 10)
+    );
+  }
+
+  const netProfitMargin =
+    report.revenue && report.netProfit !== null
+      ? (report.netProfit / report.revenue) * 100
+      : null;
+
+  return (
+    scaleScore(netProfitMargin, 0, 20, 10) +
+    inverseScaleScore(report.debtRatio, 35, 90, 10)
+  );
+}
+
+function calculatePositiveShareScore(reports, key, maxPoints) {
+  const values = reports
+    .map((report) => report[key])
+    .filter((value) => value !== null);
+
+  if (values.length === 0) return 0;
+  return (
+    (values.filter((value) => value >= 0).length / values.length) * maxPoints
+  );
+}
+
+function annualizeYearToDate(value, reportDate) {
+  if (value === null) return null;
+  const month = Number(String(reportDate).slice(5, 7));
+  if (![3, 6, 9].includes(month)) return value;
+  return value * (12 / month);
+}
+
+function scaleScore(value, low, high, maxPoints) {
+  if (value === null || high <= low) return 0;
+  const ratio = Math.min(Math.max((value - low) / (high - low), 0), 1);
+  return ratio * maxPoints;
+}
+
+function inverseScaleScore(value, best, worst, maxPoints) {
+  if (value === null || worst <= best) return 0;
+  const ratio = Math.min(Math.max((worst - value) / (worst - best), 0), 1);
+  return ratio * maxPoints;
+}
+
+function roundScore(value) {
+  return Math.round(value * 10) / 10;
 }
 
 async function fetchWithRetry(url, options, attempts = 3) {
