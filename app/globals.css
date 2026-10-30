@@ -408,29 +408,25 @@ footer {
   font-size: 12px;
 }
 
-.quote-metrics-table {
+.quote-metrics {
+  display: grid;
+  gap: 12px;
   width: 100%;
   min-width: 190px;
-  table-layout: fixed;
-  border: 1px solid rgba(10, 18, 34, 0.08);
-  border-collapse: separate;
-  border-spacing: 0;
-  border-radius: 14px;
-  overflow: hidden;
-  background: linear-gradient(
-    108deg,
-    rgba(226, 237, 252, 0.9) 0%,
-    rgba(255, 255, 255, 0.92) 49%,
-    rgba(230, 255, 167, 0.78) 100%
-  );
-  box-shadow: 0 14px 34px rgba(70, 98, 133, 0.09);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-.quote-metrics-table td {
-  width: 50%;
-  padding: 13px 12px;
-  vertical-align: top;
+.quote-metric {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 2px;
+}
+
+.quote-metric + .quote-metric {
+  padding-top: 13px;
+  border-top: 1px solid rgba(10, 18, 34, 0.12);
 }
 
 .quote-metric-title {
@@ -444,9 +440,8 @@ footer {
 .quote-metric-value {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 5px;
-  margin-top: 8px;
 }
 
 .quote-metric-change strong {
@@ -462,17 +457,15 @@ footer {
 }
 
 .quote-metric-dividend strong {
-  display: block;
-  margin-top: 5px;
   color: #17210c;
-  font-size: 20px;
+  font-size: 24px;
   letter-spacing: -0.04em;
   line-height: 1;
 }
 
 .quote-metric-dividend small {
   display: block;
-  margin-top: 7px;
+  margin-top: 5px;
   color: rgba(10, 18, 34, 0.68);
   font-size: 8px;
   font-weight: 700;
@@ -496,7 +489,6 @@ footer {
 }
 
 .quote-metric-change.flat {
-  background: rgba(255, 255, 255, 0.68);
   color: #526176;
 }
 
@@ -1523,7 +1515,7 @@ footer span {
     font-size: 52px;
   }
 
-  .quote-metrics-table {
+  .quote-metrics {
     min-width: 0;
   }
 
@@ -1642,7 +1634,7 @@ footer span {
     gap: 18px;
   }
 
-  .quote-metrics-table {
+  .quote-metrics {
     min-width: 0;
   }
 
