@@ -69,6 +69,8 @@ type StockSummary = {
   latestClose: number | null;
   changePercent: number | null;
   currentDividendYield: number | null;
+  watchPrice: number | null;
+  dailyDropAlertPercent: number | null;
   turnoverRate: number | null;
   financialReports: FinancialReport[];
 };
@@ -120,6 +122,8 @@ const FALLBACK_STOCKS: StockSummary[] = [
     latestClose: null,
     changePercent: null,
     currentDividendYield: null,
+    watchPrice: null,
+    dailyDropAlertPercent: null,
     turnoverRate: null,
     financialReports: [],
   },
@@ -145,6 +149,8 @@ const FALLBACK_STOCKS: StockSummary[] = [
     latestClose: null,
     changePercent: null,
     currentDividendYield: null,
+    watchPrice: 50,
+    dailyDropAlertPercent: -3,
     turnoverRate: null,
     financialReports: [],
   },
@@ -325,6 +331,13 @@ export default function StockDashboard() {
   const currentDividendYield = latest
     ? (annualDividend / latest.close) * 100
     : null;
+  const watchPrice = data?.watchPrice ?? selectedStock.watchPrice;
+  const dailyDropAlertPercent =
+    data?.dailyDropAlertPercent ?? selectedStock.dailyDropAlertPercent;
+  const watchPriceDistancePercent =
+    latest && watchPrice
+      ? ((latest.close - watchPrice) / latest.close) * 100
+      : null;
   const nearestYieldTier = currentDividendYield
     ? DIVIDEND_YIELD_TIERS.reduce((nearest, value) =>
         Math.abs(value - currentDividendYield) <
@@ -691,6 +704,36 @@ export default function StockDashboard() {
                       </strong>
                     </div>
                   </div>
+                  {(watchPrice !== null || dailyDropAlertPercent !== null) && (
+                    <div className="quote-alert-panel">
+                      <div className="quote-alert-heading">
+                        <span>关注提醒</span>
+                        <small>每日收盘后检查</small>
+                      </div>
+                      <div className="quote-alert-rules">
+                        {watchPrice !== null && (
+                          <div>
+                            <span>关注价</span>
+                            <strong>≤ ¥{numberFormatter.format(watchPrice)}</strong>
+                            <small>
+                              {watchPriceDistancePercent === null
+                                ? "等待行情"
+                                : watchPriceDistancePercent <= 0
+                                  ? "已进入关注区间"
+                                  : `距关注价还需下跌 ${watchPriceDistancePercent.toFixed(2)}%`}
+                            </small>
+                          </div>
+                        )}
+                        {dailyDropAlertPercent !== null && (
+                          <div>
+                            <span>单日跌幅提醒</span>
+                            <strong>≤ {dailyDropAlertPercent.toFixed(2)}%</strong>
+                            <small>触发后推送微信消息</small>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="hero-skeleton">

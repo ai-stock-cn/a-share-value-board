@@ -35,6 +35,9 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /目标股息率对应价格/);
   assert.match(dashboard, /当前股息率/);
   assert.match(dashboard, /换手率/);
+  assert.match(dashboard, /关注提醒/);
+  assert.match(dashboard, /单日跌幅提醒/);
+  assert.match(dashboard, /每日收盘后检查/);
   assert.match(dashboard, /基本面分析/);
   assert.match(dashboard, /2026 最新报告/);
   assert.match(dashboard, /近三年年报/);
@@ -106,6 +109,8 @@ test("includes the GitHub Pages update workflow", async () => {
 
   assert.match(workflow, /schedule:/);
   assert.match(workflow, /actions\/deploy-pages@v4/);
+  assert.match(workflow, /SERVERCHAN_SENDKEY/);
+  assert.match(workflow, /npm run alerts:check/);
   assert.match(updater, /中国平安/);
   assert.match(updater, /云南白药/);
   assert.match(updater, /中国核电/);

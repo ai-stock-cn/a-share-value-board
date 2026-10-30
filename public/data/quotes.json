@@ -3,7 +3,7 @@
   "source": "新浪财经公开行情及分红 · 东方财富公开财务及分红数据 · GitHub 每日更新",
   "sourceStatus": "fresh",
   "sourceMessage": null,
-  "syncedAt": "2026-10-30T23:07:58.322Z",
+  "syncedAt": "2026-10-30T23:20:03.305Z",
   "stocks": [
     {
       "symbol": "000423.SZ",
@@ -13,6 +13,8 @@
       "category": "中药",
       "mark": "胶",
       "score": 89,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 19.6,
         "growth": 16.6,
@@ -116,6 +118,8 @@
       "category": "银行",
       "mark": "成",
       "score": 86,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 25,
         "growth": 12.1,
@@ -219,6 +223,8 @@
       "category": "银行",
       "mark": "苏",
       "score": 85,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 22.8,
         "growth": 14.2,
@@ -322,6 +328,8 @@
       "category": "中药",
       "mark": "江",
       "score": 82,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 24.7,
         "growth": 7.6,
@@ -425,6 +433,8 @@
       "category": "银行",
       "mark": "南",
       "score": 82,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 20.7,
         "growth": 13.8,
@@ -528,6 +538,8 @@
       "category": "银行",
       "mark": "宁",
       "score": 81,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 21.5,
         "growth": 13.8,
@@ -631,6 +643,8 @@
       "category": "消费",
       "mark": "海",
       "score": 80,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 24.2,
         "growth": 11.3,
@@ -734,6 +748,8 @@
       "category": "电器",
       "mark": "美",
       "score": 78,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 25,
         "growth": 12.7,
@@ -837,6 +853,8 @@
       "category": "电力",
       "mark": "瑞",
       "score": 77,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 25,
         "growth": 13.4,
@@ -940,6 +958,8 @@
       "category": "银行",
       "mark": "招",
       "score": 76,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 21.9,
         "growth": 7.6,
@@ -1043,6 +1063,8 @@
       "category": "中药",
       "mark": "云",
       "score": 75,
+      "watchPrice": 50,
+      "dailyDropAlertPercent": -3,
       "scoreBreakdown": {
         "profitability": 17.1,
         "growth": 11.5,
@@ -1146,6 +1168,8 @@
       "category": "电器",
       "mark": "苏",
       "score": 75,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 25,
         "growth": 8.5,
@@ -1249,6 +1273,8 @@
       "category": "电力",
       "mark": "长",
       "score": 74,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 25,
         "growth": 10.1,
@@ -1352,6 +1378,8 @@
       "category": "电器",
       "mark": "格",
       "score": 72,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 25,
         "growth": 5.2,
@@ -1455,6 +1483,8 @@
       "category": "电器",
       "mark": "智",
       "score": 68,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 21,
         "growth": 8.4,
@@ -1558,6 +1588,8 @@
       "category": "消费",
       "mark": "伊",
       "score": 68,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 25,
         "growth": 8.1,
@@ -1661,6 +1693,8 @@
       "category": "消费",
       "mark": "双",
       "score": 68,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 25,
         "growth": 6.3,
@@ -1764,6 +1798,8 @@
       "category": "银行",
       "mark": "农",
       "score": 68,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 16.5,
         "growth": 10.8,
@@ -1867,6 +1903,8 @@
       "category": "电力",
       "mark": "蒙",
       "score": 67,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 25,
         "growth": 5.1,
@@ -1970,6 +2008,8 @@
       "category": "运营商",
       "mark": "移",
       "score": 66,
+      "watchPrice": 90,
+      "dailyDropAlertPercent": -3,
       "scoreBreakdown": {
         "profitability": 18.1,
         "growth": 6.5,
@@ -2073,6 +2113,8 @@
       "category": "金融",
       "mark": "平",
       "score": 64,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 18.4,
         "growth": 5.1,
@@ -2176,6 +2218,8 @@
       "category": "电力",
       "mark": "华",
       "score": 64,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 22.8,
         "growth": 7.3,
@@ -2279,6 +2323,8 @@
       "category": "电器",
       "mark": "老",
       "score": 62,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 15.2,
         "growth": 1.7,
@@ -2382,6 +2428,8 @@
       "category": "银行",
       "mark": "兴",
       "score": 62,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 15.1,
         "growth": 5.4,
@@ -2485,6 +2533,8 @@
       "category": "电力",
       "mark": "投",
       "score": 61,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 20.9,
         "growth": 8.7,
@@ -2588,6 +2638,8 @@
       "category": "银行",
       "mark": "建",
       "score": 61,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 16.3,
         "growth": 9.1,
@@ -2691,6 +2743,8 @@
       "category": "银行",
       "mark": "交",
       "score": 60,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 13.5,
         "growth": 8.9,
@@ -2794,6 +2848,8 @@
       "category": "银行",
       "mark": "信",
       "score": 60,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 14.9,
         "growth": 7.8,
@@ -2897,6 +2953,8 @@
       "category": "银行",
       "mark": "中",
       "score": 60,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 14.3,
         "growth": 9.8,
@@ -3000,6 +3058,8 @@
       "category": "银行",
       "mark": "工",
       "score": 59,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 15.1,
         "growth": 8.2,
@@ -3103,6 +3163,8 @@
       "category": "电力",
       "mark": "国",
       "score": 58,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 19,
         "growth": 12.5,
@@ -3206,6 +3268,8 @@
       "category": "银行",
       "mark": "安",
       "score": 58,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 16.2,
         "growth": 3.6,
@@ -3309,6 +3373,8 @@
       "category": "运营商",
       "mark": "电",
       "score": 53,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 13,
         "growth": 5.6,
@@ -3412,6 +3478,8 @@
       "category": "电力",
       "mark": "核",
       "score": 46,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 14.7,
         "growth": 6.7,
@@ -3515,6 +3583,8 @@
       "category": "运营商",
       "mark": "联",
       "score": 46,
+      "watchPrice": null,
+      "dailyDropAlertPercent": null,
       "scoreBreakdown": {
         "profitability": 8.9,
         "growth": 3.9,

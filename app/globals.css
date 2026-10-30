@@ -408,6 +408,67 @@ footer {
   font-size: 12px;
 }
 
+.quote-alert-panel {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.quote-alert-heading {
+  display: grid;
+  gap: 3px;
+  min-width: 92px;
+}
+
+.quote-alert-heading span {
+  color: #526176;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.quote-alert-heading small {
+  color: #8a94a5;
+  font-size: 8px;
+}
+
+.quote-alert-rules {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.quote-alert-rules > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3px 8px;
+  align-items: baseline;
+  padding: 9px 11px;
+  border: 1px solid rgba(105, 140, 0, 0.16);
+  border-radius: 11px;
+  background: rgba(235, 255, 181, 0.56);
+}
+
+.quote-alert-rules span {
+  color: #66758a;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.quote-alert-rules strong {
+  color: #24320f;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+.quote-alert-rules small {
+  grid-column: 1 / -1;
+  color: #70805c;
+  font-size: 8px;
+}
+
 .quote-metrics {
   display: grid;
   gap: 12px;
@@ -1639,6 +1700,14 @@ footer span {
   }
 
   .quote-session {
+    grid-template-columns: 1fr;
+  }
+
+  .quote-alert-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .quote-alert-rules {
     grid-template-columns: 1fr;
   }
 

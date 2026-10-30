@@ -28,6 +28,8 @@ const STOCKS = [
     category: "运营商",
     mark: "移",
     score: 98,
+    watchPrice: 90,
+    dailyDropAlertPercent: -3,
   },
   {
     symbol: "000333.SZ",
@@ -118,6 +120,8 @@ const STOCKS = [
     category: "中药",
     mark: "云",
     score: 89,
+    watchPrice: 50,
+    dailyDropAlertPercent: -3,
   },
   {
     symbol: "601728.SH",
@@ -406,6 +410,8 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
 
   return {
     ...stock,
+    watchPrice: stock.watchPrice ?? null,
+    dailyDropAlertPercent: stock.dailyDropAlertPercent ?? null,
     score,
     scoreBreakdown,
     annualDividend,

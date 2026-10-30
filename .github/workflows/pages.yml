@@ -34,6 +34,12 @@ jobs:
         run: npm ci
       - name: 获取最新股票行情
         run: npm run update:data
+      - name: 检查并推送微信提醒
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
+          ALERT_SITE_URL: https://ai-stock-cn.github.io/a-share-value-board/
+        run: npm run alerts:check
       - name: 生成静态网站
         run: npm run build:pages
       - name: 上传网站文件
