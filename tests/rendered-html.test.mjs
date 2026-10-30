@@ -39,7 +39,8 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /最近三年年报/);
   assert.match(dashboard, /近三年核心财务指标/);
   assert.match(dashboard, /fundamental-insights/);
-  assert.match(dashboard, /dividend-highlight/);
+  assert.match(dashboard, /quote-metrics-table/);
+  assert.match(dashboard, /价格与股息摘要/);
   assert.match(dashboard, /stock-selector/);
   assert.match(dashboard, /按评分选择股票/);
   assert.match(dashboard, /按市场筛选股票/);

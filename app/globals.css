@@ -378,11 +378,6 @@ footer {
   line-height: 1;
 }
 
-.quote-metrics {
-  display: grid;
-  gap: 8px;
-}
-
 .quote-session {
   grid-column: 1 / -1;
   display: grid;
@@ -414,81 +409,92 @@ footer {
   font-size: 12px;
 }
 
-.change-summary {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: baseline;
-  gap: 2px 10px;
-  padding: 10px 13px;
+.quote-metrics-table {
+  width: 100%;
+  min-width: 190px;
   border: 1px solid rgba(10, 18, 34, 0.08);
-  border-radius: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 12px 30px rgba(70, 98, 133, 0.1);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-.change-summary span {
+.quote-metrics-table th,
+.quote-metrics-table td {
+  padding: 11px 13px;
+  vertical-align: middle;
+}
+
+.quote-metrics-table tr + tr th,
+.quote-metrics-table tr + tr td {
+  border-top: 1px solid rgba(10, 18, 34, 0.1);
+}
+
+.quote-metrics-table th {
   color: #66758a;
   font-size: 9px;
   font-weight: 700;
+  text-align: left;
 }
 
-.change-summary strong {
-  font-size: 15px;
-}
-
-.change-summary small {
-  grid-column: 1 / -1;
-  font-size: 10px;
+.quote-metrics-table td {
   text-align: right;
+  white-space: nowrap;
 }
 
-.dividend-highlight {
-  display: grid;
-  grid-template-columns: auto auto;
-  align-items: baseline;
-  gap: 1px 9px;
-  min-width: 164px;
-  padding: 10px 13px;
-  border-radius: 12px;
-  background: var(--lime);
-  box-shadow: 0 10px 28px rgba(215, 255, 99, 0.18);
+.quote-metric-change td strong {
+  display: block;
+  font-size: 16px;
+}
+
+.quote-metric-change td small {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+}
+
+.quote-metric-dividend {
+  background: rgba(215, 255, 99, 0.82);
+}
+
+.quote-metric-dividend th span,
+.quote-metric-dividend th small {
+  display: block;
+}
+
+.quote-metric-dividend th span {
   color: var(--ink);
-}
-
-.dividend-highlight span,
-.dividend-highlight small {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-.dividend-highlight span {
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.06em;
 }
 
-.dividend-highlight strong {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+.quote-metric-dividend td strong {
   font-size: 22px;
   letter-spacing: -0.04em;
 }
 
-.dividend-highlight small {
-  grid-column: 1 / -1;
+.quote-metric-dividend th small {
+  margin-top: 3px;
   color: rgba(10, 18, 34, 0.68);
   font-size: 9px;
   font-weight: 700;
 }
 
-.change-summary.up {
+.quote-metric-change.up {
   background: rgba(255, 125, 103, 0.16);
   color: #b84635;
 }
 
-.change-summary.down {
+.quote-metric-change.down {
   background: rgba(121, 168, 255, 0.2);
   color: #3568bf;
 }
 
-.change-summary.flat {
+.quote-metric-change.flat {
   background: rgba(255, 255, 255, 0.68);
   color: #526176;
 }
@@ -1409,7 +1415,7 @@ footer span {
     font-size: 52px;
   }
 
-  .dividend-highlight {
+  .quote-metrics-table {
     min-width: 0;
   }
 
@@ -1506,19 +1512,8 @@ footer span {
     gap: 18px;
   }
 
-  .quote-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .dividend-highlight {
-    grid-template-columns: 1fr;
-    align-content: center;
-    gap: 2px;
-  }
-
-  .dividend-highlight strong {
-    grid-column: 1;
-    font-size: 20px;
+  .quote-metrics-table {
+    min-width: 0;
   }
 
   .quote-session {
