@@ -1241,6 +1241,7 @@ footer {
 
 .stock-rail {
   position: sticky;
+  z-index: 30;
   top: 18px;
   align-self: start;
   max-height: calc(100vh - 36px);
@@ -1295,7 +1296,7 @@ footer {
 }
 
 .stock-selector-current,
-.stock-options button {
+.stock-option {
   display: grid;
   grid-template-areas:
     "mark identity score"
@@ -1327,7 +1328,7 @@ footer {
   top: calc(100% + 9px);
   left: 0;
   display: grid;
-  gap: 6px;
+  gap: 8px;
   width: 100%;
   min-width: min(360px, calc(100vw - 48px));
   max-height: min(430px, calc(100vh - 170px));
@@ -1341,17 +1342,68 @@ footer {
   backdrop-filter: blur(18px);
 }
 
-.stock-options button {
+.market-filter {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background: #e9ebe6;
+}
+
+.market-filter button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 8px 9px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #667085;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.market-filter button small {
+  display: grid;
+  min-width: 18px;
+  height: 18px;
+  place-items: center;
+  border-radius: 6px;
+  background: rgba(10, 18, 34, 0.08);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8px;
+}
+
+.market-filter button.is-active {
+  background: var(--ink);
+  color: white;
+  box-shadow: 0 6px 16px rgba(10, 18, 34, 0.16);
+}
+
+.market-filter button.is-active small {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+.stock-option-list {
+  display: grid;
+  gap: 6px;
+}
+
+.stock-option {
   border: 1px solid transparent;
   background: transparent;
 }
 
-.stock-options button:hover {
+.stock-option:hover {
   border-color: rgba(10, 18, 34, 0.16);
   background: white;
 }
 
-.stock-options button.is-active {
+.stock-option.is-active {
   border-color: rgba(10, 18, 34, 0.24);
   background: rgba(215, 255, 99, 0.28);
 }
@@ -1371,7 +1423,7 @@ footer {
 }
 
 .stock-selector-current .stock-mark,
-.stock-options button.is-active .stock-mark {
+.stock-option.is-active .stock-mark {
   background: var(--lime);
 }
 

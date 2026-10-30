@@ -34,6 +34,8 @@ type StockSummary = {
   currentDividendYield: number | null;
 };
 
+type MarketFilter = "all" | "上交所" | "深交所";
+
 type QuoteResponse = StockSummary & {
   currency: string;
   source: string;
@@ -88,6 +90,11 @@ const FALLBACK_STOCKS: StockSummary[] = [
 ];
 
 const DIVIDEND_YIELD_TIERS = [6.5, 6, 5.5, 5, 4.5, 4];
+const MARKET_FILTERS: Array<{ value: MarketFilter; label: string }> = [
+  { value: "all", label: "全部" },
+  { value: "上交所", label: "沪市" },
+  { value: "深交所", label: "深市" },
+];
 const DATA_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/quotes.json`;
 
 const numberFormatter = new Intl.NumberFormat("zh-CN", {
@@ -111,6 +118,7 @@ export default function StockDashboard() {
   const [data, setData] = useState<QuoteResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [marketFilter, setMarketFilter] = useState<MarketFilter>("all");
   const stockSelectorRef = useRef<HTMLDetailsElement>(null);
 
   const loadQuotes = useCallback(async (manual = false) => {
@@ -178,6 +186,13 @@ export default function StockDashboard() {
   const selectedStock =
     rankedStocks.find((stock) => stock.symbol === selectedSymbol) ??
     rankedStocks[0];
+  const filteredStocks = useMemo(
+    () =>
+      marketFilter === "all"
+        ? rankedStocks
+        : rankedStocks.filter((stock) => stock.market === marketFilter),
+    [marketFilter, rankedStocks],
+  );
   const latest = data?.quotes[0];
   const previous = data?.quotes[1];
   const change = latest && previous ? latest.close - previous.close : 0;
@@ -250,7 +265,10 @@ export default function StockDashboard() {
               <span className="stock-mark">{selectedStock.mark}</span>
               <span className="stock-identity">
                 <strong>{selectedStock.name}</strong>
-                <small>{selectedStock.symbol}</small>
+                <small>
+                  {formatMarketName(selectedStock.market)} ·{" "}
+                  {selectedStock.symbol}
+                </small>
               </span>
               <span className="stock-list-price">
                 <strong>
@@ -272,54 +290,98 @@ export default function StockDashboard() {
                 </i>
               </span>
             </summary>
-            <div className="stock-options" role="listbox" aria-label="按评分选择股票">
-              {rankedStocks.map((stock, index) => (
-                <button
-                  type="button"
-                  role="option"
-                  aria-selected={selectedSymbol === stock.symbol}
-                  className={selectedSymbol === stock.symbol ? "is-active" : ""}
-                  onClick={() => {
-                    setSelectedSymbol(stock.symbol);
-                    if (stockSelectorRef.current) {
-                      stockSelectorRef.current.open = false;
-                    }
-                  }}
-                  key={stock.symbol}
-                >
-                  <span className="stock-mark">{stock.mark}</span>
-                  <span className="stock-identity">
-                    <strong>{stock.name}</strong>
-                    <small>
-                      #{String(index + 1).padStart(2, "0")} · {stock.symbol}
-                    </small>
-                  </span>
-                  <span className="stock-list-price">
-                    <strong>
-                      {stock.latestClose === null
-                        ? "—"
-                        : `¥${numberFormatter.format(stock.latestClose)}`}
-                    </strong>
-                    <small
-                      className={
-                        stock.changePercent === null
-                          ? ""
-                          : stock.changePercent >= 0
-                            ? "positive"
-                            : "negative"
-                      }
+            <div className="stock-options">
+              <div className="market-filter" aria-label="按市场筛选股票">
+                {MARKET_FILTERS.map((filter) => {
+                  const count =
+                    filter.value === "all"
+                      ? rankedStocks.length
+                      : rankedStocks.filter(
+                          (stock) => stock.market === filter.value,
+                        ).length;
+
+                  return (
+                    <button
+                      type="button"
+                      aria-pressed={marketFilter === filter.value}
+                      className={marketFilter === filter.value ? "is-active" : ""}
+                      onClick={() => {
+                        setMarketFilter(filter.value);
+                        if (filter.value !== "all") {
+                          const firstMatch = rankedStocks.find(
+                            (stock) => stock.market === filter.value,
+                          );
+                          if (firstMatch) setSelectedSymbol(firstMatch.symbol);
+                        }
+                      }}
+                      key={filter.value}
                     >
-                      {stock.currentDividendYield === null
-                        ? "股息率 —"
-                        : `股息率 ${stock.currentDividendYield.toFixed(2)}%`}
-                    </small>
-                  </span>
-                  <span className="stock-score">
-                    <small>评分</small>
-                    <strong>{stock.score}</strong>
-                  </span>
-                </button>
-              ))}
+                      <span>{filter.label}</span>
+                      <small>{count}</small>
+                    </button>
+                  );
+                })}
+              </div>
+              <div
+                className="stock-option-list"
+                role="listbox"
+                aria-label="按评分选择股票"
+              >
+                {filteredStocks.map((stock) => {
+                  const rank = rankedStocks.indexOf(stock) + 1;
+
+                  return (
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={selectedSymbol === stock.symbol}
+                      className={`stock-option ${
+                        selectedSymbol === stock.symbol ? "is-active" : ""
+                      }`}
+                      onClick={() => {
+                        setSelectedSymbol(stock.symbol);
+                        if (stockSelectorRef.current) {
+                          stockSelectorRef.current.open = false;
+                        }
+                      }}
+                      key={stock.symbol}
+                    >
+                      <span className="stock-mark">{stock.mark}</span>
+                      <span className="stock-identity">
+                        <strong>{stock.name}</strong>
+                        <small>
+                          #{String(rank).padStart(2, "0")} ·{" "}
+                          {formatMarketName(stock.market)} · {stock.symbol}
+                        </small>
+                      </span>
+                      <span className="stock-list-price">
+                        <strong>
+                          {stock.latestClose === null
+                            ? "—"
+                            : `¥${numberFormatter.format(stock.latestClose)}`}
+                        </strong>
+                        <small
+                          className={
+                            stock.changePercent === null
+                              ? ""
+                              : stock.changePercent >= 0
+                                ? "positive"
+                                : "negative"
+                          }
+                        >
+                          {stock.currentDividendYield === null
+                            ? "股息率 —"
+                            : `股息率 ${stock.currentDividendYield.toFixed(2)}%`}
+                        </small>
+                      </span>
+                      <span className="stock-score">
+                        <small>评分</small>
+                        <strong>{stock.score}</strong>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </details>
           <p className="stock-rail-note">
@@ -969,6 +1031,12 @@ function formatTradeDate(value: string) {
     weekday: "short",
     timeZone: "Asia/Shanghai",
   }).format(new Date(`${value}T12:00:00+08:00`));
+}
+
+function formatMarketName(market: string) {
+  if (market === "上交所") return "沪市A股";
+  if (market === "深交所") return "深市A股";
+  return market;
 }
 
 function formatTableDate(value: string) {
