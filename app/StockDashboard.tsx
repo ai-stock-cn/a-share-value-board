@@ -318,12 +318,23 @@ export default function StockDashboard() {
                   <div className="price-line">
                     <span className="currency">¥</span>
                     <strong>{numberFormatter.format(latest.close)}</strong>
-                    <span className={`change-pill ${direction}`}>
-                      {change >= 0 ? "+" : ""}
-                      {numberFormatter.format(change)}&nbsp;&nbsp;
-                      {changePercent >= 0 ? "+" : ""}
-                      {changePercent.toFixed(2)}%
-                    </span>
+                    <div className="quote-badges">
+                      <span className={`change-pill ${direction}`}>
+                        {change >= 0 ? "+" : ""}
+                        {numberFormatter.format(change)}&nbsp;&nbsp;
+                        {changePercent >= 0 ? "+" : ""}
+                        {changePercent.toFixed(2)}%
+                      </span>
+                      <div className="dividend-highlight">
+                        <span>当前股息率</span>
+                        <strong>
+                          {currentDividendYield?.toFixed(2) ?? "—"}%
+                        </strong>
+                        <small>
+                          每股股息 ¥{dividendFormatter.format(annualDividend)}
+                        </small>
+                      </div>
+                    </div>
                   </div>
                   <div className="range-summary">
                     <span>今日区间</span>

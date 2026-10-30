@@ -352,11 +352,55 @@ footer {
 }
 
 .change-pill {
-  margin-left: auto;
   padding: 8px 10px;
   border-radius: 10px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 12px;
+}
+
+.quote-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.dividend-highlight {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: baseline;
+  gap: 1px 9px;
+  min-width: 164px;
+  padding: 10px 13px;
+  border-radius: 12px;
+  background: var(--lime);
+  box-shadow: 0 10px 28px rgba(215, 255, 99, 0.18);
+  color: var(--ink);
+}
+
+.dividend-highlight span,
+.dividend-highlight small {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.dividend-highlight span {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.dividend-highlight strong {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 22px;
+  letter-spacing: -0.04em;
+}
+
+.dividend-highlight small {
+  grid-column: 1 / -1;
+  color: rgba(10, 18, 34, 0.68);
+  font-size: 9px;
+  font-weight: 700;
 }
 
 .change-pill.up {
@@ -1011,9 +1055,18 @@ footer span {
     font-size: 52px;
   }
 
-  .change-pill {
+  .quote-badges {
     width: 100%;
     margin: 4px 0 0 29px;
+    align-items: stretch;
+  }
+
+  .change-pill {
+    width: fit-content;
+  }
+
+  .dividend-highlight {
+    width: min(100%, 220px);
   }
 
   .range-summary {
