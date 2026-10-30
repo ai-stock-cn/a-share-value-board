@@ -18,7 +18,8 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /云南白药/);
   assert.match(dashboard, /K 线走势/);
   assert.match(dashboard, /candle-price-label/);
-  assert.match(dashboard, /每根K线仅标注收盘价/);
+  assert.match(dashboard, /隔日标注收盘价/);
+  assert.match(dashboard, /showCloseLabel/);
   assert.doesNotMatch(dashboard, /kline-extreme-marker/);
   assert.match(dashboard, /目标股息率对应价格/);
   assert.match(dashboard, /当前股息率/);

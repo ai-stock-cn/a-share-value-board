@@ -1666,7 +1666,7 @@ footer {
 .kline-chart {
   display: block;
   width: 100%;
-  min-width: 820px;
+  min-width: 1040px;
   height: auto;
 }
 
@@ -1680,7 +1680,7 @@ footer {
 .kline-date-label {
   fill: #8a94a5;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
+  font-size: 12.5px;
 }
 
 .kline-candle {
@@ -1718,14 +1718,14 @@ footer {
 .candle-price-label {
   fill: #7d8796;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 8.8px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
   letter-spacing: -0.03em;
   pointer-events: none;
   paint-order: stroke;
   stroke: var(--panel);
   stroke-linejoin: round;
-  stroke-width: 4px;
+  stroke-width: 5px;
 }
 
 .kline-candle.candle-up .candle-price-label {
@@ -2020,7 +2020,7 @@ footer {
   }
 
   .kline-chart {
-    min-width: 760px;
+    min-width: 960px;
   }
 
   .kline-legend small {

@@ -569,7 +569,7 @@ export default function StockDashboard() {
                   <div className="kline-legend" aria-label="K线颜色说明">
                     <span><i className="up" />红涨</span>
                     <span><i className="down" />绿跌</span>
-                    <small>每根K线仅标注收盘价</small>
+                    <small>隔日标注收盘价，最新交易日始终显示</small>
                   </div>
                 </article>
               </section>
@@ -850,6 +850,8 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
               : quote.close < quote.open
                 ? "candle-down"
                 : "candle-flat";
+          const showCloseLabel =
+            index % 2 === 0 || index === quotes.length - 1;
 
           return (
             <g
@@ -876,15 +878,17 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
                 height={bodyHeight}
                 rx={1}
               />
-              <text
-                className="candle-price-label close"
-                x={centerX}
-                y={closeLabelY}
-                textAnchor="middle"
-                aria-hidden="true"
-              >
-                {quote.close.toFixed(2)}
-              </text>
+              {showCloseLabel && (
+                <text
+                  className="candle-price-label close"
+                  x={centerX}
+                  y={closeLabelY}
+                  textAnchor="middle"
+                  aria-hidden="true"
+                >
+                  {quote.close.toFixed(2)}
+                </text>
+              )}
             </g>
           );
         })}
