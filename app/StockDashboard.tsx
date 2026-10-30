@@ -299,6 +299,41 @@ export default function StockDashboard() {
             </div>
             <span className="stock-count">{String(stocks.length).padStart(2, "0")}</span>
           </div>
+          <label className="market-select">
+            <span>市场筛选</span>
+            <span className="market-select-control">
+              <select
+                aria-label="按市场筛选股票"
+                value={marketFilter}
+                onChange={(event) => {
+                  const nextFilter = event.target.value as MarketFilter;
+                  setMarketFilter(nextFilter);
+                  if (nextFilter !== "all") {
+                    const firstMatch = rankedStocks.find(
+                      (stock) => stock.market === nextFilter,
+                    );
+                    if (firstMatch) setSelectedSymbol(firstMatch.symbol);
+                  }
+                }}
+              >
+                {MARKET_FILTERS.map((filter) => {
+                  const count =
+                    filter.value === "all"
+                      ? rankedStocks.length
+                      : rankedStocks.filter(
+                          (stock) => stock.market === filter.value,
+                        ).length;
+
+                  return (
+                    <option value={filter.value} key={filter.value}>
+                      {filter.label} · {count} 只
+                    </option>
+                  );
+                })}
+              </select>
+              <i aria-hidden="true">⌄</i>
+            </span>
+          </label>
           <details className="stock-selector" ref={stockSelectorRef}>
             <summary className="stock-selector-current">
               <span className="stock-mark">{selectedStock.mark}</span>
@@ -330,37 +365,6 @@ export default function StockDashboard() {
               </span>
             </summary>
             <div className="stock-options">
-              <div className="market-filter" aria-label="按市场筛选股票">
-                {MARKET_FILTERS.map((filter) => {
-                  const count =
-                    filter.value === "all"
-                      ? rankedStocks.length
-                      : rankedStocks.filter(
-                          (stock) => stock.market === filter.value,
-                        ).length;
-
-                  return (
-                    <button
-                      type="button"
-                      aria-pressed={marketFilter === filter.value}
-                      className={marketFilter === filter.value ? "is-active" : ""}
-                      onClick={() => {
-                        setMarketFilter(filter.value);
-                        if (filter.value !== "all") {
-                          const firstMatch = rankedStocks.find(
-                            (stock) => stock.market === filter.value,
-                          );
-                          if (firstMatch) setSelectedSymbol(firstMatch.symbol);
-                        }
-                      }}
-                      key={filter.value}
-                    >
-                      <span>{filter.label}</span>
-                      <small>{count}</small>
-                    </button>
-                  );
-                })}
-              </div>
               <div
                 className="stock-option-list"
                 role="listbox"

@@ -1634,7 +1634,7 @@ footer {
 
 .stock-selector {
   position: relative;
-  margin-top: 14px;
+  margin-top: 10px;
 }
 
 .stock-selector summary {
@@ -1692,50 +1692,53 @@ footer {
   backdrop-filter: blur(18px);
 }
 
-.market-filter {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
-  padding: 4px;
-  border-radius: 12px;
-  background: #e9ebe6;
-}
-
-.market-filter button {
+.market-select {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
-  padding: 8px 9px;
-  border: 0;
-  border-radius: 9px;
-  background: transparent;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.62);
   color: #667085;
   font-size: 10px;
   font-weight: 800;
+}
+
+.market-select-control {
+  position: relative;
+  display: flex;
+  min-width: 108px;
+  align-items: center;
+}
+
+.market-select select {
+  width: 100%;
+  padding: 6px 26px 6px 9px;
+  border: 0;
+  border-radius: 8px;
+  appearance: none;
+  background: var(--ink);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  outline: none;
   cursor: pointer;
 }
 
-.market-filter button small {
-  display: grid;
-  min-width: 18px;
-  height: 18px;
-  place-items: center;
-  border-radius: 6px;
-  background: rgba(10, 18, 34, 0.08);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 8px;
+.market-select select:focus-visible {
+  box-shadow: 0 0 0 3px rgba(121, 168, 255, 0.3);
 }
 
-.market-filter button.is-active {
-  background: var(--ink);
-  color: white;
-  box-shadow: 0 6px 16px rgba(10, 18, 34, 0.16);
-}
-
-.market-filter button.is-active small {
-  background: var(--lime);
-  color: var(--ink);
+.market-select-control i {
+  position: absolute;
+  right: 9px;
+  color: var(--lime);
+  font-size: 12px;
+  font-style: normal;
+  pointer-events: none;
 }
 
 .stock-option-list {
