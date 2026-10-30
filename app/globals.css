@@ -987,7 +987,7 @@ footer {
 
 table {
   width: 100%;
-  min-width: 1080px;
+  min-width: 1180px;
   border-collapse: collapse;
   font-variant-numeric: tabular-nums;
 }
@@ -1046,6 +1046,7 @@ td small {
 .open-low-cell { color: #3e75d7; }
 .close-change-positive { color: #d95543; }
 .close-change-negative { color: #3e75d7; }
+.range-difference-cell { color: #667085; }
 
 .error-panel {
   display: flex;

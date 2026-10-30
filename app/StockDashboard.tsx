@@ -621,7 +621,7 @@ export default function StockDashboard() {
                   <span>价格单位：人民币</span>
                 </div>
                 <p className="comparison-formula">
-                  振幅 =（最高 − 最低）÷ 前一交易日收盘价；收盘涨跌幅 =（当日收盘 − 前一交易日收盘）÷ 前一交易日收盘价
+                  日内价差 = 最高 − 最低；振幅 = 日内价差 ÷ 前一交易日收盘价；收盘涨跌幅 =（当日收盘 − 前一交易日收盘）÷ 前一交易日收盘价
                 </p>
 
                 <div className="table-wrap">
@@ -636,6 +636,7 @@ export default function StockDashboard() {
                         <th>开盘→最高</th>
                         <th>收盘</th>
                         <th>收盘涨跌幅</th>
+                        <th>日内价差</th>
                         <th>日内振幅</th>
                       </tr>
                     </thead>
@@ -649,7 +650,7 @@ export default function StockDashboard() {
                                   <span className="date-cell">{formatTableDate(row.date)}</span>
                                   <span className="day-context">{formatWeekday(row.date)}</span>
                                 </td>
-                                <td colSpan={8}>
+                                <td colSpan={9}>
                                   <span className="market-closed-label">休市</span>
                                 </td>
                               </tr>
@@ -697,13 +698,16 @@ export default function StockDashboard() {
                                   ? "—"
                                   : `${closeChangePercent >= 0 ? "+" : ""}${closeChangePercent.toFixed(2)}%`}
                               </td>
+                              <td className="range-difference-cell">
+                                {numberFormatter.format(quote.high - quote.low)}
+                              </td>
                               <td>{formatAmplitude(quote, data.quotes)}</td>
                             </tr>
                           );
                         }) :
                         Array.from({ length: 6 }).map((_, index) => (
                           <tr key={index}>
-                            {Array.from({ length: 9 }).map((__, cell) => (
+                            {Array.from({ length: 10 }).map((__, cell) => (
                               <td key={cell}><Skeleton baseColor="#f0f1eb" highlightColor="#ffffff" /></td>
                             ))}
                           </tr>
