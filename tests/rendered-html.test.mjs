@@ -35,6 +35,8 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /收盘后更新/);
   assert.match(dashboard, /开盘→最低/);
   assert.match(dashboard, /开盘→最高/);
+  assert.match(dashboard, /收盘涨跌幅/);
+  assert.match(dashboard, /calculateCloseChangePercent/);
   assert.match(dashboard, /formatSignedDifference/);
   assert.match(dashboard, /DIVIDEND_YIELD_TIERS/);
   assert.match(dashboard, /最近 7 天/);

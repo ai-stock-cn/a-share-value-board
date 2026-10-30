@@ -927,6 +927,13 @@ footer {
   font-size: 10px;
 }
 
+.comparison-formula {
+  margin: 9px 0 0;
+  color: #7c8799;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
 .comparison-section .table-wrap {
   margin-top: 12px;
 }
@@ -980,7 +987,7 @@ footer {
 
 table {
   width: 100%;
-  min-width: 960px;
+  min-width: 1080px;
   border-collapse: collapse;
   font-variant-numeric: tabular-nums;
 }
@@ -1037,6 +1044,8 @@ td small {
 .low-cell { color: #3e75d7; }
 .open-high-cell { color: #d95543; }
 .open-low-cell { color: #3e75d7; }
+.close-change-positive { color: #d95543; }
+.close-change-negative { color: #3e75d7; }
 
 .error-panel {
   display: flex;

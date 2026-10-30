@@ -620,6 +620,9 @@ export default function StockDashboard() {
                   <strong>每日价格对比</strong>
                   <span>价格单位：人民币</span>
                 </div>
+                <p className="comparison-formula">
+                  振幅 =（最高 − 最低）÷ 前一交易日收盘价；收盘涨跌幅 =（当日收盘 − 前一交易日收盘）÷ 前一交易日收盘价
+                </p>
 
                 <div className="table-wrap">
                   <table>
@@ -632,6 +635,7 @@ export default function StockDashboard() {
                         <th>开盘→最低</th>
                         <th>开盘→最高</th>
                         <th>收盘</th>
+                        <th>收盘涨跌幅</th>
                         <th>日内振幅</th>
                       </tr>
                     </thead>
@@ -645,7 +649,7 @@ export default function StockDashboard() {
                                   <span className="date-cell">{formatTableDate(row.date)}</span>
                                   <span className="day-context">{formatWeekday(row.date)}</span>
                                 </td>
-                                <td colSpan={7}>
+                                <td colSpan={8}>
                                   <span className="market-closed-label">休市</span>
                                 </td>
                               </tr>
@@ -653,6 +657,10 @@ export default function StockDashboard() {
                           }
 
                           const quote = row.quote;
+                          const closeChangePercent = calculateCloseChangePercent(
+                            quote,
+                            data.quotes,
+                          );
 
                           return (
                             <tr className={row.isRecent ? "is-recent-row" : ""} key={row.date}>
@@ -674,13 +682,28 @@ export default function StockDashboard() {
                                 {formatSignedDifference(quote.high - quote.open)}
                               </td>
                               <td><strong>{numberFormatter.format(quote.close)}</strong></td>
+                              <td
+                                className={
+                                  closeChangePercent === null
+                                    ? ""
+                                    : closeChangePercent > 0
+                                      ? "close-change-positive"
+                                      : closeChangePercent < 0
+                                        ? "close-change-negative"
+                                        : ""
+                                }
+                              >
+                                {closeChangePercent === null
+                                  ? "—"
+                                  : `${closeChangePercent >= 0 ? "+" : ""}${closeChangePercent.toFixed(2)}%`}
+                              </td>
                               <td>{formatAmplitude(quote, data.quotes)}</td>
                             </tr>
                           );
                         }) :
                         Array.from({ length: 6 }).map((_, index) => (
                           <tr key={index}>
-                            {Array.from({ length: 8 }).map((__, cell) => (
+                            {Array.from({ length: 9 }).map((__, cell) => (
                               <td key={cell}><Skeleton baseColor="#f0f1eb" highlightColor="#ffffff" /></td>
                             ))}
                           </tr>
@@ -1012,6 +1035,20 @@ function formatAmplitude(quote: DailyQuote, quotes: DailyQuote[]) {
   if (!previousClose) return "—";
 
   return `${(((quote.high - quote.low) / previousClose) * 100).toFixed(2)}%`;
+}
+
+function calculateCloseChangePercent(
+  quote: DailyQuote,
+  quotes: DailyQuote[],
+) {
+  const quoteIndex = quotes.findIndex(
+    (item) => item.tradeDate === quote.tradeDate,
+  );
+  const previousClose = quotes[quoteIndex + 1]?.close;
+
+  if (!previousClose) return null;
+
+  return ((quote.close - previousClose) / previousClose) * 100;
 }
 
 function formatSignedDifference(value: number) {
