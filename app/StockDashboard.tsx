@@ -630,14 +630,14 @@ export default function StockDashboard() {
                     <thead>
                       <tr>
                         <th>日期</th>
+                        <th>收盘</th>
+                        <th>收盘涨跌幅</th>
+                        <th>日内价差</th>
                         <th>开盘</th>
                         <th>最高</th>
                         <th>最低</th>
                         <th>开盘→最低</th>
                         <th>开盘→最高</th>
-                        <th>收盘</th>
-                        <th>收盘涨跌幅</th>
-                        <th>日内价差</th>
                         <th>日内振幅</th>
                       </tr>
                     </thead>
@@ -674,15 +674,6 @@ export default function StockDashboard() {
                                   <span className="day-context">{formatWeekday(row.date)}</span>
                                 ) : null}
                               </td>
-                              <td>{numberFormatter.format(quote.open)}</td>
-                              <td className="high-cell">{numberFormatter.format(quote.high)}</td>
-                              <td className="low-cell">{numberFormatter.format(quote.low)}</td>
-                              <td className="open-low-cell">
-                                {formatSignedDifference(quote.low - quote.open)}
-                              </td>
-                              <td className="open-high-cell">
-                                {formatSignedDifference(quote.high - quote.open)}
-                              </td>
                               <td><strong>{numberFormatter.format(quote.close)}</strong></td>
                               <td
                                 className={
@@ -701,6 +692,15 @@ export default function StockDashboard() {
                               </td>
                               <td className="range-difference-cell">
                                 {numberFormatter.format(quote.high - quote.low)}
+                              </td>
+                              <td>{numberFormatter.format(quote.open)}</td>
+                              <td className="high-cell">{numberFormatter.format(quote.high)}</td>
+                              <td className="low-cell">{numberFormatter.format(quote.low)}</td>
+                              <td className="open-low-cell">
+                                {formatSignedDifference(quote.low - quote.open)}
+                              </td>
+                              <td className="open-high-cell">
+                                {formatSignedDifference(quote.high - quote.open)}
                               </td>
                               <td>{formatAmplitude(quote, data.quotes)}</td>
                             </tr>

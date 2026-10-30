@@ -40,6 +40,15 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /开盘→最高/);
   assert.match(dashboard, /收盘涨跌幅/);
   assert.match(dashboard, /日内价差/);
+  assert.ok(
+    dashboard.indexOf("<th>收盘</th>") < dashboard.indexOf("<th>开盘</th>"),
+  );
+  assert.ok(
+    dashboard.indexOf("<th>收盘涨跌幅</th>") < dashboard.indexOf("<th>开盘</th>"),
+  );
+  assert.ok(
+    dashboard.indexOf("<th>日内价差</th>") < dashboard.indexOf("<th>开盘</th>"),
+  );
   assert.match(dashboard, /quote\.high - quote\.low/);
   assert.match(dashboard, /calculateCloseChangePercent/);
   assert.match(dashboard, /formatSignedDifference/);
