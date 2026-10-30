@@ -403,9 +403,16 @@ export default function StockDashboard() {
 
             <div className="quote-hero" aria-live="polite">
               <div className="quote-heading">
-                <span>
-                  {latest ? formatTradeDate(latest.tradeDate) : "正在获取交易日"}
-                </span>
+                <div className="quote-date">
+                  <span>
+                    {latest ? formatTradeDate(latest.tradeDate) : "正在获取交易日"}
+                  </span>
+                  <small>
+                    {data
+                      ? `收盘后更新 · 最近检查 ${formatSyncTime(data.syncedAt)}`
+                      : "正在连接行情服务…"}
+                  </small>
+                </div>
                 <button
                   type="button"
                   onClick={() => void loadQuotes(true)}
@@ -452,6 +459,18 @@ export default function StockDashboard() {
                       <small>
                         每股股息 ¥{dividendFormatter.format(annualDividend)}
                       </small>
+                    </div>
+                  </div>
+                  <div className="quote-session">
+                    <div>
+                      <span>今日区间</span>
+                      <strong>
+                        {numberFormatter.format(latest.low)} — {numberFormatter.format(latest.high)}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>成交量</span>
+                      <strong>{compactFormatter.format(latest.volume)} 股</strong>
                     </div>
                   </div>
                 </div>
@@ -523,14 +542,14 @@ export default function StockDashboard() {
                     </div>
                     {chartQuotes.length > 0 && (
                       <div className="trend-range">
-                        <span>区间</span>
+                        <span>收盘区间</span>
                         <strong>
                           {numberFormatter.format(
-                            Math.min(...chartQuotes.map((item) => item.low)),
+                            Math.min(...chartQuotes.map((item) => item.close)),
                           )}{" "}
                           —{" "}
                           {numberFormatter.format(
-                            Math.max(...chartQuotes.map((item) => item.high)),
+                            Math.max(...chartQuotes.map((item) => item.close)),
                           )}
                         </strong>
                       </div>
@@ -540,115 +559,9 @@ export default function StockDashboard() {
                   <div className="kline-legend" aria-label="K线颜色说明">
                     <span><i className="up" />红涨</span>
                     <span><i className="down" />绿跌</span>
-                    <small>每根K线上方为最高价，下方为最低价</small>
+                    <small>每根K线仅标注收盘价</small>
                   </div>
                 </article>
-
-                <aside className="status-card">
-                  <div>
-                    <span className="section-kicker">数据状态</span>
-                    <h2>每天收盘后更新</h2>
-                  </div>
-                  <div className="status-list">
-                    <div>
-                      <span>最新交易日</span>
-                      <strong>{latest?.tradeDate ?? "获取中"}</strong>
-                    </div>
-                    <div>
-                      <span>成交量</span>
-                      <strong>
-                        {latest ? `${compactFormatter.format(latest.volume)} 股` : "—"}
-                      </strong>
-                    </div>
-                    <div>
-                      <span>计算用每股分红</span>
-                      <strong>¥{dividendFormatter.format(annualDividend)}</strong>
-                    </div>
-                    <div>
-                      <span>当前静态股息率</span>
-                      <strong>
-                        {currentDividendYield
-                          ? `${currentDividendYield.toFixed(2)}%`
-                          : "—"}
-                      </strong>
-                    </div>
-                  </div>
-                  <p className="sync-note">
-                    {data
-                      ? `最近检查：${formatSyncTime(data.syncedAt)}`
-                      : "正在连接行情服务…"}
-                  </p>
-                </aside>
-              </section>
-
-              <section className="dividend-section" aria-label="股息率参考价格">
-                <div className="dividend-heading">
-                  <div>
-                    <span className="section-kicker">股息估值</span>
-                    <h2>目标股息率对应价格</h2>
-                    <p>
-                      按每股税前现金分红 ¥{dividendFormatter.format(annualDividend)} 计算
-                    </p>
-                  </div>
-                  <div className="dividend-current">
-                    <span>现价静态股息率</span>
-                    <strong>
-                      {currentDividendYield
-                        ? `${currentDividendYield.toFixed(2)}%`
-                        : "—"}
-                    </strong>
-                  </div>
-                </div>
-
-                <div className="yield-grid">
-                  {DIVIDEND_YIELD_TIERS.map((yieldRate) => {
-                    const targetPrice = annualDividend / (yieldRate / 100);
-                    const priceGap = latest
-                      ? ((targetPrice - latest.close) / latest.close) * 100
-                      : null;
-                    const isNearest = nearestYieldTier === yieldRate;
-
-                    return (
-                      <article
-                        className={`yield-card ${isNearest ? "is-nearest" : ""}`}
-                        key={yieldRate}
-                      >
-                        <div>
-                          <span>目标股息率</span>
-                          {isNearest && <small>最接近现价</small>}
-                        </div>
-                        <strong>{yieldRate.toFixed(1)}%</strong>
-                        <p>¥{numberFormatter.format(targetPrice)}</p>
-                        <span className="yield-gap">
-                          {priceGap === null
-                            ? "等待现价"
-                            : `较现价 ${priceGap >= 0 ? "+" : ""}${priceGap.toFixed(1)}%`}
-                        </span>
-                      </article>
-                    );
-                  })}
-                </div>
-
-                <div className="dividend-note">
-                  <p>
-                    计算公式：参考价格 = 当前采用的每股现金分红 ÷ 目标股息率。分红可能调整，结果仅作静态比较。
-                  </p>
-                  <div className="dividend-sources">
-                    <span>{data?.dividendBasis ?? selectedStock.dividendBasis}</span>
-                    {(data?.dividendSources ?? selectedStock.dividendSources).map(
-                      (source) => (
-                        <a
-                          href={source.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          key={source.url}
-                        >
-                          {source.label} ↗
-                        </a>
-                      ),
-                    )}
-                  </div>
-                </div>
               </section>
 
               <section className="week-section" aria-label="最近七天行情统计">
@@ -778,6 +691,76 @@ export default function StockDashboard() {
                   </table>
                 </div>
               </section>
+
+              <section className="dividend-section" aria-label="股息率参考价格">
+                <div className="dividend-heading">
+                  <div>
+                    <span className="section-kicker">股息估值</span>
+                    <h2>目标股息率对应价格</h2>
+                    <p>
+                      按每股税前现金分红 ¥{dividendFormatter.format(annualDividend)} 计算
+                    </p>
+                  </div>
+                  <div className="dividend-current">
+                    <span>现价静态股息率</span>
+                    <strong>
+                      {currentDividendYield
+                        ? `${currentDividendYield.toFixed(2)}%`
+                        : "—"}
+                    </strong>
+                  </div>
+                </div>
+
+                <div className="yield-grid">
+                  {DIVIDEND_YIELD_TIERS.map((yieldRate) => {
+                    const targetPrice = annualDividend / (yieldRate / 100);
+                    const priceGap = latest
+                      ? ((targetPrice - latest.close) / latest.close) * 100
+                      : null;
+                    const isNearest = nearestYieldTier === yieldRate;
+
+                    return (
+                      <article
+                        className={`yield-card ${isNearest ? "is-nearest" : ""}`}
+                        key={yieldRate}
+                      >
+                        <div>
+                          <span>目标股息率</span>
+                          {isNearest && <small>最接近现价</small>}
+                        </div>
+                        <strong>{yieldRate.toFixed(1)}%</strong>
+                        <p>¥{numberFormatter.format(targetPrice)}</p>
+                        <span className="yield-gap">
+                          {priceGap === null
+                            ? "等待现价"
+                            : `较现价 ${priceGap >= 0 ? "+" : ""}${priceGap.toFixed(1)}%`}
+                        </span>
+                      </article>
+                    );
+                  })}
+                </div>
+
+                <div className="dividend-note">
+                  <p>
+                    计算公式：参考价格 = 当前采用的每股现金分红 ÷ 目标股息率。分红可能调整，结果仅作静态比较。
+                  </p>
+                  <div className="dividend-sources">
+                    <span>{data?.dividendBasis ?? selectedStock.dividendBasis}</span>
+                    {(data?.dividendSources ?? selectedStock.dividendSources).map(
+                      (source) => (
+                        <a
+                          href={source.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          key={source.url}
+                        >
+                          {source.label} ↗
+                        </a>
+                      ),
+                    )}
+                  </div>
+                </div>
+              </section>
             </>
           )}
         </div>
@@ -800,9 +783,9 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
     );
   }
 
-  const width = 900;
-  const height = 360;
-  const padding = { top: 18, right: 66, bottom: 42, left: 12 };
+  const width = 1100;
+  const height = 460;
+  const padding = { top: 34, right: 72, bottom: 48, left: 14 };
   const plotWidth = width - padding.left - padding.right;
   const plotHeight = height - padding.top - padding.bottom;
   const rawMin = Math.min(...quotes.map((quote) => quote.low));
@@ -812,7 +795,7 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
   const chartMax = rawMax + paddingValue;
   const priceRange = chartMax - chartMin;
   const step = plotWidth / quotes.length;
-  const candleWidth = Math.min(18, Math.max(5, step * 0.56));
+  const candleWidth = Math.min(22, Math.max(7, step * 0.58));
   const toY = (value: number) =>
     padding.top + ((chartMax - value) / priceRange) * plotHeight;
   const gridLines = Array.from({ length: 5 }, (_, index) => {
@@ -822,31 +805,6 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
   const labelIndexes = Array.from(
     new Set([0, Math.floor((quotes.length - 1) / 2), quotes.length - 1]),
   );
-  const highestIndex = quotes.reduce(
-    (highest, quote, index) =>
-      quote.high > quotes[highest].high ? index : highest,
-    0,
-  );
-  const lowestIndex = quotes.reduce(
-    (lowest, quote, index) =>
-      quote.low < quotes[lowest].low ? index : lowest,
-    0,
-  );
-  const extremeMarkers = [
-    {
-      kind: "high",
-      index: highestIndex,
-      label: "最高",
-      value: quotes[highestIndex].high,
-    },
-    {
-      kind: "low",
-      index: lowestIndex,
-      label: "最低",
-      value: quotes[lowestIndex].low,
-    },
-  ] as const;
-
   return (
     <div className="kline-scroll">
       <svg
@@ -880,15 +838,14 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
           const closeY = toY(quote.close);
           const bodyY = Math.min(openY, closeY);
           const bodyHeight = Math.max(Math.abs(closeY - openY), 2);
-          const labelOffset = index % 2 === 0 ? 0 : 7;
-          const highLabelY = Math.max(
-            padding.top + 8,
-            toY(quote.high) - 6 - labelOffset,
-          );
-          const lowLabelY = Math.min(
-            padding.top + plotHeight - 2,
-            toY(quote.low) + 12 + labelOffset,
-          );
+          const labelOffset = (index % 3) * 4;
+          const closeLabelY =
+            quote.close >= quote.open
+              ? Math.max(padding.top + 10, closeY - 9 - labelOffset)
+              : Math.min(
+                  padding.top + plotHeight - 2,
+                  closeY + 15 + labelOffset,
+                );
           const direction =
             quote.close > quote.open
               ? "candle-up"
@@ -921,63 +878,14 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
                 height={bodyHeight}
                 rx={1}
               />
-              {index !== highestIndex && (
-                <text
-                  className="candle-price-label high"
-                  x={centerX}
-                  y={highLabelY}
-                  textAnchor="middle"
-                  aria-hidden="true"
-                >
-                  {quote.high.toFixed(2)}
-                </text>
-              )}
-              {index !== lowestIndex && (
-                <text
-                  className="candle-price-label low"
-                  x={centerX}
-                  y={lowLabelY}
-                  textAnchor="middle"
-                  aria-hidden="true"
-                >
-                  {quote.low.toFixed(2)}
-                </text>
-              )}
-            </g>
-          );
-        })}
-
-        {extremeMarkers.map((marker) => {
-          const centerX =
-            padding.left + step * marker.index + step / 2;
-          const pointY = toY(marker.value);
-          const extendRight = centerX < padding.left + plotWidth * 0.64;
-          const lineEndX = centerX + (extendRight ? 48 : -48);
-          const textX = lineEndX + (extendRight ? 6 : -6);
-          const textY =
-            marker.kind === "high"
-              ? Math.max(padding.top + 11, pointY - 9)
-              : Math.min(padding.top + plotHeight - 2, pointY + 18);
-
-          return (
-            <g
-              className={`kline-extreme-marker ${marker.kind}`}
-              aria-label={`区间${marker.label}价 ${marker.value.toFixed(2)}`}
-              key={marker.kind}
-            >
-              <circle cx={centerX} cy={pointY} r={3.2} />
-              <line
-                x1={centerX}
-                y1={pointY}
-                x2={lineEndX}
-                y2={pointY}
-              />
               <text
-                x={textX}
-                y={textY}
-                textAnchor={extendRight ? "start" : "end"}
+                className="candle-price-label close"
+                x={centerX}
+                y={closeLabelY}
+                textAnchor="middle"
+                aria-hidden="true"
               >
-                {marker.label} {marker.value.toFixed(2)}
+                {quote.close.toFixed(2)}
               </text>
             </g>
           );

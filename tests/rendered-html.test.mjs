@@ -17,8 +17,9 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /中国平安/);
   assert.match(dashboard, /云南白药/);
   assert.match(dashboard, /K 线走势/);
-  assert.match(dashboard, /kline-extreme-marker/);
   assert.match(dashboard, /candle-price-label/);
+  assert.match(dashboard, /每根K线仅标注收盘价/);
+  assert.doesNotMatch(dashboard, /kline-extreme-marker/);
   assert.match(dashboard, /目标股息率对应价格/);
   assert.match(dashboard, /当前股息率/);
   assert.match(dashboard, /dividend-highlight/);
@@ -28,15 +29,21 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /沪市A股/);
   assert.match(dashboard, /深市A股/);
   assert.match(dashboard, /当日四价/);
+  assert.match(dashboard, /quote-session/);
+  assert.match(dashboard, /今日区间/);
+  assert.match(dashboard, /收盘后更新/);
   assert.match(dashboard, /开盘→最低/);
   assert.match(dashboard, /开盘→最高/);
   assert.match(dashboard, /formatSignedDifference/);
-  assert.doesNotMatch(dashboard, /今日区间/);
   assert.match(dashboard, /DIVIDEND_YIELD_TIERS/);
   assert.match(dashboard, /最近 7 天/);
   assert.match(dashboard, /601318/);
   assert.match(dashboard, /react-loading-skeleton/);
   assert.match(dashboard, /data\/quotes\.json/);
+  assert.ok(
+    dashboard.indexOf('className="dividend-section"') >
+      dashboard.indexOf('className="history-section"'),
+  );
 });
 
 test("includes the GitHub Pages update workflow", async () => {

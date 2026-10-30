@@ -292,6 +292,17 @@ footer {
   font-size: 13px;
 }
 
+.quote-date {
+  display: grid;
+  gap: 5px;
+}
+
+.quote-date small {
+  color: #7f8ba0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+}
+
 .refresh-button {
   display: inline-flex;
   align-items: center;
@@ -368,6 +379,36 @@ footer {
 .quote-metrics {
   display: grid;
   gap: 8px;
+}
+
+.quote-session {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.quote-session > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.quote-session span {
+  color: #8995a9;
+  font-size: 9px;
+}
+
+.quote-session strong {
+  color: #f7f8fb;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
 }
 
 .change-summary {
@@ -547,9 +588,9 @@ footer {
 
 .insight-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(270px, 0.8fr);
-  gap: 18px;
-  padding-bottom: 72px;
+  grid-template-columns: 1fr;
+  gap: 0;
+  padding-bottom: 18px;
 }
 
 .trend-card,
@@ -858,7 +899,7 @@ footer {
 }
 
 .history-section {
-  margin-bottom: 60px;
+  margin-bottom: 18px;
   padding: 30px;
 }
 
@@ -1560,7 +1601,7 @@ footer {
 .kline-chart {
   display: block;
   width: 100%;
-  min-width: 650px;
+  min-width: 820px;
   height: auto;
 }
 
@@ -1612,59 +1653,26 @@ footer {
 .candle-price-label {
   fill: #7d8796;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 7.2px;
+  font-size: 8.8px;
   font-weight: 700;
   letter-spacing: -0.03em;
   pointer-events: none;
   paint-order: stroke;
   stroke: var(--panel);
   stroke-linejoin: round;
-  stroke-width: 3px;
+  stroke-width: 4px;
 }
 
-.candle-price-label.high {
+.kline-candle.candle-up .candle-price-label {
   fill: #b84c41;
 }
 
-.candle-price-label.low {
+.kline-candle.candle-down .candle-price-label {
   fill: #267c60;
 }
 
-.kline-extreme-marker circle {
-  stroke: var(--panel);
-  stroke-width: 2;
-}
-
-.kline-extreme-marker line {
-  stroke-width: 1.4;
-}
-
-.kline-extreme-marker text {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 11px;
-  font-weight: 800;
-  paint-order: stroke;
-  stroke: var(--panel);
-  stroke-linejoin: round;
-  stroke-width: 5px;
-}
-
-.kline-extreme-marker.high circle,
-.kline-extreme-marker.high text {
-  fill: #c94f41;
-}
-
-.kline-extreme-marker.high line {
-  stroke: #c94f41;
-}
-
-.kline-extreme-marker.low circle,
-.kline-extreme-marker.low text {
-  fill: #1f7f60;
-}
-
-.kline-extreme-marker.low line {
-  stroke: #1f7f60;
+.kline-candle.candle-flat .candle-price-label {
+  fill: #667085;
 }
 
 .kline-loading {
@@ -1706,9 +1714,9 @@ footer {
   padding: 30px;
   border: 1px solid var(--line);
   border-radius: 24px;
-  background: #111a2d;
-  box-shadow: 0 24px 60px rgba(10, 18, 34, 0.12);
-  color: white;
+  background: #f5f8ee;
+  box-shadow: 0 18px 50px rgba(10, 18, 34, 0.06);
+  color: var(--ink);
 }
 
 .dividend-heading {
@@ -1719,7 +1727,7 @@ footer {
 }
 
 .dividend-heading .section-kicker {
-  color: #9ba6ba;
+  color: #667085;
 }
 
 .dividend-heading h2 {
@@ -1730,16 +1738,16 @@ footer {
 
 .dividend-heading p {
   margin: 0;
-  color: #aeb7c8;
+  color: #667085;
   font-size: 12px;
 }
 
 .dividend-current {
   min-width: 170px;
   padding: 14px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(10, 18, 34, 0.12);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.06);
+  background: white;
   text-align: right;
 }
 
@@ -1749,36 +1757,36 @@ footer {
 }
 
 .dividend-current span {
-  color: #9ba6ba;
+  color: #667085;
   font-size: 10px;
 }
 
 .dividend-current strong {
   margin-top: 5px;
-  color: var(--lime);
+  color: #355f20;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 25px;
 }
 
 .yield-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 9px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
   margin-top: 26px;
 }
 
 .yield-card {
-  min-height: 172px;
-  padding: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 154px;
+  padding: 18px;
+  border: 1px solid rgba(10, 18, 34, 0.11);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.82);
 }
 
 .yield-card.is-nearest {
-  border-color: var(--lime);
-  background: rgba(215, 255, 99, 0.1);
-  box-shadow: inset 0 3px 0 var(--lime);
+  border-color: #8fb535;
+  background: #eff8d8;
+  box-shadow: inset 0 3px 0 #a9d23f;
 }
 
 .yield-card > div {
@@ -1791,13 +1799,13 @@ footer {
 }
 
 .yield-card > div span {
-  color: #9ba6ba;
+  color: #667085;
   font-size: 9px;
 }
 
 .yield-card > div small {
   margin-top: 4px;
-  color: var(--lime);
+  color: #53751e;
   font-size: 8px;
 }
 
@@ -1810,14 +1818,14 @@ footer {
 
 .yield-card p {
   margin: 15px 0 4px;
-  color: white;
+  color: var(--ink);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 16px;
   font-weight: 700;
 }
 
 .yield-gap {
-  color: #9ba6ba;
+  color: #667085;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 8px;
 }
@@ -1828,13 +1836,13 @@ footer {
   gap: 28px;
   margin-top: 22px;
   padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(10, 18, 34, 0.12);
 }
 
 .dividend-note p {
   max-width: 600px;
   margin: 0;
-  color: #8f9bb0;
+  color: #667085;
   font-size: 10px;
   line-height: 1.7;
 }
@@ -1850,12 +1858,12 @@ footer {
 
 .dividend-sources span {
   width: 100%;
-  color: #8f9bb0;
+  color: #667085;
   text-align: right;
 }
 
 .dividend-sources a {
-  color: var(--lime);
+  color: #35664e;
   text-decoration: none;
 }
 
@@ -1947,7 +1955,7 @@ footer {
   }
 
   .kline-chart {
-    min-width: 620px;
+    min-width: 760px;
   }
 
   .kline-legend small {
