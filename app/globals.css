@@ -417,91 +417,66 @@ footer {
   border-spacing: 0;
   border-radius: 14px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.82);
+  background: linear-gradient(
+    108deg,
+    rgba(226, 237, 252, 0.9) 0%,
+    rgba(255, 255, 255, 0.92) 49%,
+    rgba(230, 255, 167, 0.78) 100%
+  );
   box-shadow: 0 14px 34px rgba(70, 98, 133, 0.09);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-.quote-metrics-table th,
 .quote-metrics-table td {
-  padding: 13px 10px;
-  vertical-align: middle;
+  width: 50%;
+  padding: 13px 12px;
+  vertical-align: top;
 }
 
-.quote-metrics-table th {
+.quote-metric-title {
+  display: block;
   color: #66758a;
   font-size: 9px;
   font-weight: 700;
-  text-align: left;
   white-space: nowrap;
 }
 
-.quote-metric-label-column {
-  width: 45%;
+.quote-metric-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  margin-top: 8px;
 }
 
-.quote-metric-value-column {
-  width: 27%;
-}
-
-.quote-metric-detail-column {
-  width: 28%;
-}
-
-.quote-metrics-table td {
-  text-align: right;
-  white-space: nowrap;
-}
-
-.quote-metric-change td strong {
-  display: block;
+.quote-metric-change strong {
   font-size: 17px;
 }
 
-.quote-metric-change td small {
+.quote-metric-change small {
   display: inline-flex;
-  margin-top: 3px;
   padding: 3px 5px;
   border-radius: 999px;
   font-size: 8px;
   font-weight: 800;
 }
 
-.quote-metric-dividend {
-  background: linear-gradient(
-    90deg,
-    rgba(215, 255, 99, 0.12),
-    rgba(215, 255, 99, 0.32)
-  );
-}
-
-.quote-metric-dividend th {
-  border-left: 3px solid #b9ee3e;
-}
-
-.quote-metric-dividend th span,
-.quote-metric-dividend th small {
+.quote-metric-dividend strong {
   display: block;
-}
-
-.quote-metric-dividend th span {
-  color: var(--ink);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-}
-
-.quote-metric-dividend td strong {
+  margin-top: 5px;
   color: #17210c;
   font-size: 20px;
   letter-spacing: -0.04em;
+  line-height: 1;
 }
 
-.quote-metric-dividend th small {
-  margin-top: 3px;
+.quote-metric-dividend small {
+  display: block;
+  margin-top: 7px;
   color: rgba(10, 18, 34, 0.68);
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .quote-metric-change.up {
@@ -512,11 +487,11 @@ footer {
   color: #3568bf;
 }
 
-.quote-metric-change.up td small {
+.quote-metric-change.up small {
   background: rgba(255, 125, 103, 0.14);
 }
 
-.quote-metric-change.down td small {
+.quote-metric-change.down small {
   background: rgba(121, 168, 255, 0.16);
 }
 

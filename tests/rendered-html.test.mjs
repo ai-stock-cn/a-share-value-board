@@ -47,6 +47,7 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /分红回报/);
   assert.match(dashboard, /fundamental-insights/);
   assert.match(dashboard, /quote-metrics-table/);
+  assert.match(dashboard, /quote-metrics-row/);
   assert.match(dashboard, /价格与股息摘要/);
   assert.match(dashboard, /stock-selector/);
   assert.match(dashboard, /按评分选择股票/);

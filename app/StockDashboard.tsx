@@ -609,36 +609,29 @@ export default function StockDashboard() {
                     className="quote-metrics-table"
                     aria-label="价格与股息摘要"
                   >
-                    <colgroup>
-                      <col className="quote-metric-label-column" />
-                      <col className="quote-metric-value-column" />
-                      <col className="quote-metric-detail-column" />
-                    </colgroup>
                     <tbody>
-                      <tr className={`quote-metric-change ${direction}`}>
-                        <th scope="row">较前收</th>
-                        <td colSpan={2}>
-                          <strong>
-                            {change >= 0 ? "+" : ""}
-                            {numberFormatter.format(change)}
-                          </strong>
-                          <small>
-                            {changePercent >= 0 ? "+" : ""}
-                            {changePercent.toFixed(2)}%
-                          </small>
+                      <tr className="quote-metrics-row">
+                        <td className={`quote-metric-change ${direction}`}>
+                          <span className="quote-metric-title">较前收</span>
+                          <div className="quote-metric-value">
+                            <strong>
+                              {change >= 0 ? "+" : ""}
+                              {numberFormatter.format(change)}
+                            </strong>
+                            <small>
+                              {changePercent >= 0 ? "+" : ""}
+                              {changePercent.toFixed(2)}%
+                            </small>
+                          </div>
                         </td>
-                      </tr>
-                      <tr className="quote-metric-dividend">
-                        <th scope="row">
-                          <span>当前股息率</span>
-                          <small>
-                            每股股息 ¥{dividendFormatter.format(annualDividend)}
-                          </small>
-                        </th>
-                        <td colSpan={2}>
+                        <td className="quote-metric-dividend">
+                          <span className="quote-metric-title">当前股息率</span>
                           <strong>
                             {currentDividendYield?.toFixed(2) ?? "—"}%
                           </strong>
+                          <small>
+                            每股股息 ¥{dividendFormatter.format(annualDividend)}
+                          </small>
                         </td>
                       </tr>
                     </tbody>
