@@ -51,17 +51,32 @@ const STOCKS = [
 
 const SOURCE_URL =
   "https://quotes.sina.cn/cn/api/openapi.php/CN_MarketDataService.getKLineData";
+const EASTMONEY_FINANCE_URL =
+  "https://datacenter-web.eastmoney.com/api/data/v1/get";
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const outputPath = resolve(projectRoot, "public/data/quotes.json");
 
-const quoteEntries = await Promise.all(
-  STOCKS.map(async (stock) => [stock.symbol, await fetchRecentQuotes(stock)]),
+const stockDataEntries = [];
+for (const stock of STOCKS) {
+  const quotes = await fetchRecentQuotes(stock);
+  const { annualReports, freeFloatShares } = await fetchFinancialData(stock);
+  const turnoverRate = calculateTurnoverRate(quotes[0], freeFloatShares);
+  stockDataEntries.push([
+    stock.symbol,
+    { quotes, turnoverRate, annualReports },
+  ]);
+}
+const stockDataBySymbol = Object.fromEntries(stockDataEntries);
+const quotesBySymbol = Object.fromEntries(
+  Object.entries(stockDataBySymbol).map(([symbol, stockData]) => [
+    symbol,
+    stockData.quotes,
+  ]),
 );
-const quotesBySymbol = Object.fromEntries(quoteEntries);
 const syncedAt = new Date().toISOString();
 
 const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
-  const quotes = quotesBySymbol[stock.symbol];
+  const { quotes, turnoverRate, annualReports } = stockDataBySymbol[stock.symbol];
   const latestQuote = quotes[0];
   const previousQuote = quotes[1];
   const changePercent =
@@ -76,12 +91,14 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
     currentDividendYield: latestQuote
       ? (stock.annualDividend / latestQuote.close) * 100
       : null,
+    turnoverRate,
+    annualReports,
   };
 }).sort((left, right) => right.score - left.score);
 
 const payload = {
   currency: "CNY",
-  source: "新浪财经公开行情 · GitHub 每日更新",
+  source: "新浪财经公开行情 · 东方财富公开财务数据 · GitHub 每日更新",
   sourceStatus: "fresh",
   sourceMessage: null,
   syncedAt,
@@ -102,7 +119,7 @@ async function fetchRecentQuotes(stock) {
     datalen: "120",
   }).toString();
 
-  const response = await fetch(url, {
+  const response = await fetchWithRetry(url, {
     headers: {
       Accept: "application/json",
       Referer: "https://finance.sina.com.cn/",
@@ -136,6 +153,93 @@ async function fetchRecentQuotes(stock) {
   }
 
   return quotes;
+}
+
+async function fetchFinancialData(stock) {
+  const url = new URL(EASTMONEY_FINANCE_URL);
+  url.search = new URLSearchParams({
+    reportName: "RPT_F10_FINANCE_MAINFINADATA",
+    columns: "ALL",
+    filter: `(SECUCODE="${stock.symbol}")`,
+    pageNumber: "1",
+    pageSize: "20",
+    sortTypes: "-1",
+    sortColumns: "REPORT_DATE",
+  }).toString();
+
+  const response = await fetchWithRetry(url, {
+    headers: {
+      Accept: "application/json",
+      Referer: "https://emweb.securities.eastmoney.com/",
+      "User-Agent": "Mozilla/5.0 A-Share-Daily-Quote-Dashboard/1.0",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`${stock.name}财务数据源返回异常状态：${response.status}`);
+  }
+
+  const payload = await response.json();
+  const reports = payload.result?.data;
+
+  if (!Array.isArray(reports) || reports.length === 0) {
+    throw new Error(`${stock.name}没有可用年报数据`);
+  }
+
+  const annualReports = reports
+    .filter((report) => report.REPORT_TYPE === "年报")
+    .slice(0, 3)
+    .map((report) => ({
+      year: String(report.REPORT_YEAR ?? ""),
+      reportDate: String(report.REPORT_DATE ?? "").split(" ")[0],
+      noticeDate: String(report.NOTICE_DATE ?? "").split(" ")[0],
+      revenue: toFiniteNumber(report.TOTALOPERATEREVE),
+      revenueGrowth: toFiniteNumber(report.TOTALOPERATEREVETZ),
+      netProfit: toFiniteNumber(report.PARENTNETPROFIT),
+      netProfitGrowth: toFiniteNumber(report.PARENTNETPROFITTZ),
+      eps: toFiniteNumber(report.EPSJB),
+      roe: toFiniteNumber(report.ROEJQ),
+      bookValuePerShare: toFiniteNumber(report.BPS),
+      debtRatio: toFiniteNumber(report.ZCFZL),
+    }));
+
+  if (annualReports.length === 0) {
+    throw new Error(`${stock.name}没有可用年报数据`);
+  }
+
+  return {
+    annualReports,
+    freeFloatShares: toFiniteNumber(reports[0]?.A_FREE_SHARE),
+  };
+}
+
+function toFiniteNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+function calculateTurnoverRate(latestQuote, freeFloatShares) {
+  if (!latestQuote || !freeFloatShares || freeFloatShares <= 0) return null;
+  return (latestQuote.volume / freeFloatShares) * 100;
+}
+
+async function fetchWithRetry(url, options, attempts = 3) {
+  let lastError;
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      return await fetch(url, options);
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) {
+        await new Promise((resolveDelay) =>
+          setTimeout(resolveDelay, attempt * 800),
+        );
+      }
+    }
+  }
+
+  throw lastError;
 }
 
 function isDailyQuote(value) {

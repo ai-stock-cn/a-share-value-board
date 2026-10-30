@@ -1,9 +1,9 @@
 {
   "currency": "CNY",
-  "source": "新浪财经公开行情 · GitHub 每日更新",
+  "source": "新浪财经公开行情 · 东方财富公开财务数据 · GitHub 每日更新",
   "sourceStatus": "fresh",
   "sourceMessage": null,
-  "syncedAt": "2026-10-30T14:38:58.668Z",
+  "syncedAt": "2026-10-30T22:13:25.568Z",
   "stocks": [
     {
       "symbol": "601318.SH",
@@ -27,7 +27,49 @@
       ],
       "latestClose": 52.8,
       "changePercent": -0.7518796992481309,
-      "currentDividendYield": 5.113636363636364
+      "currentDividendYield": 5.113636363636364,
+      "turnoverRate": 0.6660328285727409,
+      "annualReports": [
+        {
+          "year": "2025",
+          "reportDate": "2025-12-31",
+          "noticeDate": "2026-03-27",
+          "revenue": 1050506000000,
+          "revenueGrowth": 2.097431785601,
+          "netProfit": 134778000000,
+          "netProfitGrowth": 6.453829567086,
+          "eps": 7.68,
+          "roe": 14,
+          "bookValuePerShare": 55.25,
+          "debtRatio": 89.8119152819
+        },
+        {
+          "year": "2024",
+          "reportDate": "2024-12-31",
+          "noticeDate": "2025-03-20",
+          "revenue": 1028925000000,
+          "revenueGrowth": 12.599845259683,
+          "netProfit": 126607000000,
+          "netProfitGrowth": 47.79314772661,
+          "eps": 7.16,
+          "roe": 13.8,
+          "bookValuePerShare": 50.99,
+          "debtRatio": 89.931089526
+        },
+        {
+          "year": "2023",
+          "reportDate": "2023-12-31",
+          "noticeDate": "2024-03-22",
+          "revenue": 913789000000,
+          "revenueGrowth": 3.797786120372,
+          "netProfit": 85665000000,
+          "netProfitGrowth": -22.829886134333,
+          "eps": 4.84,
+          "roe": 9.7,
+          "bookValuePerShare": 49.37,
+          "debtRatio": 89.3903154829
+        }
+      ]
     },
     {
       "symbol": "000538.SZ",
@@ -51,7 +93,49 @@
       ],
       "latestClose": 53.71,
       "changePercent": 1.4736444360476122,
-      "currentDividendYield": 4.844535468255446
+      "currentDividendYield": 4.844535468255446,
+      "turnoverRate": 0.609783222516716,
+      "annualReports": [
+        {
+          "year": "2025",
+          "reportDate": "2025-12-31",
+          "noticeDate": "2026-04-01",
+          "revenue": 41186999090.31,
+          "revenueGrowth": 2.881846493072,
+          "netProfit": 5153486838.91,
+          "netProfitGrowth": 8.507811948613,
+          "eps": 2.89,
+          "roe": 13.02,
+          "bookValuePerShare": 22.44291775051,
+          "debtRatio": 26.0207287697
+        },
+        {
+          "year": "2024",
+          "reportDate": "2024-12-31",
+          "noticeDate": "2025-04-01",
+          "revenue": 40033300814.72,
+          "revenueGrowth": 2.357397590042,
+          "netProfit": 4749415499.55,
+          "netProfitGrowth": 16.015347511798,
+          "eps": 2.66,
+          "roe": 11.99,
+          "bookValuePerShare": 21.763582535003,
+          "debtRatio": 26.5488313659
+        },
+        {
+          "year": "2023",
+          "reportDate": "2023-12-31",
+          "noticeDate": "2024-03-30",
+          "revenue": 39111292156,
+          "revenueGrowth": 7.18837074881,
+          "netProfit": 4093782074.02,
+          "netProfitGrowth": 36.408209037123,
+          "eps": 2.29,
+          "roe": 10.51,
+          "bookValuePerShare": 22.193752134076,
+          "debtRatio": 25.8048065338
+        }
+      ]
     }
   ],
   "quotesBySymbol": {
