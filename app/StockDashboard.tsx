@@ -32,7 +32,14 @@ type AnnualReport = {
   debtRatio: number | null;
 };
 
-type StockCategory = "金融" | "电力" | "消费" | "电器" | "运营商" | "中药";
+type StockCategory =
+  | "金融"
+  | "银行"
+  | "电力"
+  | "消费"
+  | "电器"
+  | "运营商"
+  | "中药";
 
 type StockSummary = {
   symbol: string;
@@ -124,6 +131,7 @@ const MARKET_FILTERS: Array<{ value: MarketFilter; label: string }> = [
 const CATEGORY_FILTERS: Array<{ value: CategoryFilter; label: string }> = [
   { value: "all", label: "全部分类" },
   { value: "金融", label: "金融" },
+  { value: "银行", label: "银行" },
   { value: "电力", label: "电力" },
   { value: "消费", label: "消费" },
   { value: "电器", label: "电器" },
