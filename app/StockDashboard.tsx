@@ -741,6 +741,8 @@ export default function StockDashboard() {
                         <th>开盘</th>
                         <th>最高</th>
                         <th>最低</th>
+                        <th>开盘→最低</th>
+                        <th>开盘→最高</th>
                         <th>收盘</th>
                         <th>日内振幅</th>
                       </tr>
@@ -755,13 +757,19 @@ export default function StockDashboard() {
                           <td>{numberFormatter.format(quote.open)}</td>
                           <td className="high-cell">{numberFormatter.format(quote.high)}</td>
                           <td className="low-cell">{numberFormatter.format(quote.low)}</td>
+                          <td className="open-low-cell">
+                            {formatSignedDifference(quote.low - quote.open)}
+                          </td>
+                          <td className="open-high-cell">
+                            {formatSignedDifference(quote.high - quote.open)}
+                          </td>
                           <td><strong>{numberFormatter.format(quote.close)}</strong></td>
                           <td>{formatAmplitude(quote, data.quotes)}</td>
                         </tr>
                       )) ??
                         Array.from({ length: 6 }).map((_, index) => (
                           <tr key={index}>
-                            {Array.from({ length: 6 }).map((__, cell) => (
+                            {Array.from({ length: 8 }).map((__, cell) => (
                               <td key={cell}><Skeleton baseColor="#f0f1eb" highlightColor="#ffffff" /></td>
                             ))}
                           </tr>
@@ -1094,4 +1102,8 @@ function formatAmplitude(quote: DailyQuote, quotes: DailyQuote[]) {
   if (!previousClose) return "—";
 
   return `${(((quote.high - quote.low) / previousClose) * 100).toFixed(2)}%`;
+}
+
+function formatSignedDifference(value: number) {
+  return `${value >= 0 ? "+" : ""}${numberFormatter.format(value)}`;
 }
