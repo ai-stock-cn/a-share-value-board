@@ -463,12 +463,6 @@ export default function StockDashboard() {
                   </div>
                   <div className="quote-session">
                     <div>
-                      <span>今日区间</span>
-                      <strong>
-                        {numberFormatter.format(latest.low)} — {numberFormatter.format(latest.high)}
-                      </strong>
-                    </div>
-                    <div>
                       <span>成交量</span>
                       <strong>{compactFormatter.format(latest.volume)} 股</strong>
                     </div>

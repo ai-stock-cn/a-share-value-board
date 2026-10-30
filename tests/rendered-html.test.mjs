@@ -30,7 +30,7 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /深市A股/);
   assert.match(dashboard, /当日四价/);
   assert.match(dashboard, /quote-session/);
-  assert.match(dashboard, /今日区间/);
+  assert.doesNotMatch(dashboard, /今日区间/);
   assert.match(dashboard, /收盘后更新/);
   assert.match(dashboard, /开盘→最低/);
   assert.match(dashboard, /开盘→最高/);
