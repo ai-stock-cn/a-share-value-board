@@ -3,111 +3,8 @@
   "source": "新浪财经公开行情及分红 · 东方财富公开财务及分红数据 · GitHub 每日更新",
   "sourceStatus": "fresh",
   "sourceMessage": null,
-  "syncedAt": "2026-10-30T22:55:39.262Z",
+  "syncedAt": "2026-10-30T23:07:58.322Z",
   "stocks": [
-    {
-      "symbol": "601838.SH",
-      "name": "成都银行",
-      "code": "601838",
-      "market": "上交所",
-      "category": "银行",
-      "mark": "成",
-      "score": 92,
-      "scoreBreakdown": {
-        "profitability": 25,
-        "growth": 12.1,
-        "dividend": 25,
-        "quality": 20,
-        "stability": 10
-      },
-      "annualDividend": 1.4100000000000001,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
-      "dividendSources": [
-        {
-          "label": "新浪分红记录",
-          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601838.phtml"
-        },
-        {
-          "label": "东方财富分红记录",
-          "url": "https://data.eastmoney.com/yjfp/detail/601838.html"
-        }
-      ],
-      "latestClose": 19.94,
-      "changePercent": 0.20100502512564172,
-      "currentDividendYield": 7.071213640922769,
-      "turnoverRate": 0.708743899030461,
-      "financialReports": [
-        {
-          "year": "2026",
-          "reportType": "三季报",
-          "reportDate": "2026-09-30",
-          "noticeDate": "2026-10-29",
-          "revenue": 19507503000,
-          "revenueGrowth": 9.835134434074,
-          "netProfit": 9917974000,
-          "netProfitGrowth": 4.48178300874,
-          "eps": 2.28,
-          "roe": 10.48,
-          "bookValuePerShare": 21.98,
-          "bookValueGrowth": 9.8295955444,
-          "debtRatio": 93.0507357956,
-          "nonPerformingLoanRatio": 0.68,
-          "provisionCoverageRatio": 448.06
-        },
-        {
-          "year": "2025",
-          "reportType": "年报",
-          "reportDate": "2025-12-31",
-          "noticeDate": "2026-04-23",
-          "revenue": 23602625000,
-          "revenueGrowth": 2.702596742157,
-          "netProfit": 13283492000,
-          "netProfitGrowth": 3.306108545556,
-          "eps": 3.07,
-          "roe": 15.39,
-          "bookValuePerShare": 20.84,
-          "bookValueGrowth": 8.8250652742,
-          "debtRatio": 92.8963092485,
-          "nonPerformingLoanRatio": 0.68,
-          "provisionCoverageRatio": 426.17
-        },
-        {
-          "year": "2024",
-          "reportType": "年报",
-          "reportDate": "2024-12-31",
-          "noticeDate": "2025-04-29",
-          "revenue": 22981527000,
-          "revenueGrowth": 5.894972161564,
-          "netProfit": 12858380000,
-          "netProfitGrowth": 10.172650126577,
-          "eps": 3.28,
-          "roe": 17.81,
-          "bookValuePerShare": 19.15,
-          "bookValueGrowth": 11.9883040936,
-          "debtRatio": 93.128282782,
-          "nonPerformingLoanRatio": 0.66,
-          "provisionCoverageRatio": 479.29
-        },
-        {
-          "year": "2023",
-          "reportType": "年报",
-          "reportDate": "2023-12-31",
-          "noticeDate": "2024-04-25",
-          "revenue": 21702189000,
-          "revenueGrowth": 7.217303898087,
-          "netProfit": 11671118000,
-          "netProfitGrowth": 16.218680099343,
-          "eps": 3.01,
-          "roe": 18.78,
-          "bookValuePerShare": 17.1,
-          "bookValueGrowth": 15.4625253207,
-          "debtRatio": 93.4643699441,
-          "nonPerformingLoanRatio": 0.68,
-          "provisionCoverageRatio": 504.29
-        }
-      ]
-    },
     {
       "symbol": "000423.SZ",
       "name": "东阿阿胶",
@@ -115,17 +12,17 @@
       "market": "深交所",
       "category": "中药",
       "mark": "胶",
-      "score": 91,
+      "score": 89,
       "scoreBreakdown": {
         "profitability": 19.6,
         "growth": 16.6,
-        "dividend": 25,
+        "dividend": 22.4,
         "quality": 20,
         "stability": 10
       },
-      "annualDividend": 5.5606013999999995,
-      "dividendBasis": "近12个月已实施现金分红 4 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 2.705582,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -138,7 +35,7 @@
       ],
       "latestClose": 47.93,
       "changePercent": 1.2676949080921223,
-      "currentDividendYield": 11.601505111621114,
+      "currentDividendYield": 5.6448612559983316,
       "turnoverRate": 0.7186470791238544,
       "financialReports": [
         {
@@ -212,6 +109,109 @@
       ]
     },
     {
+      "symbol": "601838.SH",
+      "name": "成都银行",
+      "code": "601838",
+      "market": "上交所",
+      "category": "银行",
+      "mark": "成",
+      "score": 86,
+      "scoreBreakdown": {
+        "profitability": 25,
+        "growth": 12.1,
+        "dividend": 19.2,
+        "quality": 20,
+        "stability": 10
+      },
+      "annualDividend": 0.921,
+      "dividendBasis": "2025 完整年度已实施现金分红 1 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
+      "dividendSources": [
+        {
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601838.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
+          "url": "https://data.eastmoney.com/yjfp/detail/601838.html"
+        }
+      ],
+      "latestClose": 19.94,
+      "changePercent": 0.20100502512564172,
+      "currentDividendYield": 4.618856569709127,
+      "turnoverRate": 0.708743899030461,
+      "financialReports": [
+        {
+          "year": "2026",
+          "reportType": "三季报",
+          "reportDate": "2026-09-30",
+          "noticeDate": "2026-10-29",
+          "revenue": 19507503000,
+          "revenueGrowth": 9.835134434074,
+          "netProfit": 9917974000,
+          "netProfitGrowth": 4.48178300874,
+          "eps": 2.28,
+          "roe": 10.48,
+          "bookValuePerShare": 21.98,
+          "bookValueGrowth": 9.8295955444,
+          "debtRatio": 93.0507357956,
+          "nonPerformingLoanRatio": 0.68,
+          "provisionCoverageRatio": 448.06
+        },
+        {
+          "year": "2025",
+          "reportType": "年报",
+          "reportDate": "2025-12-31",
+          "noticeDate": "2026-04-23",
+          "revenue": 23602625000,
+          "revenueGrowth": 2.702596742157,
+          "netProfit": 13283492000,
+          "netProfitGrowth": 3.306108545556,
+          "eps": 3.07,
+          "roe": 15.39,
+          "bookValuePerShare": 20.84,
+          "bookValueGrowth": 8.8250652742,
+          "debtRatio": 92.8963092485,
+          "nonPerformingLoanRatio": 0.68,
+          "provisionCoverageRatio": 426.17
+        },
+        {
+          "year": "2024",
+          "reportType": "年报",
+          "reportDate": "2024-12-31",
+          "noticeDate": "2025-04-29",
+          "revenue": 22981527000,
+          "revenueGrowth": 5.894972161564,
+          "netProfit": 12858380000,
+          "netProfitGrowth": 10.172650126577,
+          "eps": 3.28,
+          "roe": 17.81,
+          "bookValuePerShare": 19.15,
+          "bookValueGrowth": 11.9883040936,
+          "debtRatio": 93.128282782,
+          "nonPerformingLoanRatio": 0.66,
+          "provisionCoverageRatio": 479.29
+        },
+        {
+          "year": "2023",
+          "reportType": "年报",
+          "reportDate": "2023-12-31",
+          "noticeDate": "2024-04-25",
+          "revenue": 21702189000,
+          "revenueGrowth": 7.217303898087,
+          "netProfit": 11671118000,
+          "netProfitGrowth": 16.218680099343,
+          "eps": 3.01,
+          "roe": 18.78,
+          "bookValuePerShare": 17.1,
+          "bookValueGrowth": 15.4625253207,
+          "debtRatio": 93.4643699441,
+          "nonPerformingLoanRatio": 0.68,
+          "provisionCoverageRatio": 504.29
+        }
+      ]
+    },
+    {
       "symbol": "600919.SH",
       "name": "江苏银行",
       "code": "600919",
@@ -227,8 +227,8 @@
         "stability": 10
       },
       "annualDividend": 0.5641,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -329,9 +329,9 @@
         "quality": 20,
         "stability": 5.5
       },
-      "annualDividend": 1.3800000000000001,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 1.38,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -344,7 +344,7 @@
       ],
       "latestClose": 22.49,
       "changePercent": 1.8568840579710155,
-      "currentDividendYield": 6.1360604713205875,
+      "currentDividendYield": 6.136060471320587,
       "turnoverRate": 0.7689733674181161,
       "financialReports": [
         {
@@ -433,8 +433,8 @@
         "stability": 10
       },
       "annualDividend": 0.52915,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -536,8 +536,8 @@
         "stability": 10
       },
       "annualDividend": 1.2,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -624,6 +624,109 @@
       ]
     },
     {
+      "symbol": "603288.SH",
+      "name": "海天味业",
+      "code": "603288",
+      "market": "上交所",
+      "category": "消费",
+      "mark": "海",
+      "score": 80,
+      "scoreBreakdown": {
+        "profitability": 24.2,
+        "growth": 11.3,
+        "dividend": 17,
+        "quality": 20,
+        "stability": 7.5
+      },
+      "annualDividend": 1.36,
+      "dividendBasis": "2025 完整年度已实施现金分红 3 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
+      "dividendSources": [
+        {
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/603288.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
+          "url": "https://data.eastmoney.com/yjfp/detail/603288.html"
+        }
+      ],
+      "latestClose": 34.86,
+      "changePercent": 0.9556907037358768,
+      "currentDividendYield": 3.9013195639701665,
+      "turnoverRate": 0.3923229074581637,
+      "financialReports": [
+        {
+          "year": "2026",
+          "reportType": "三季报",
+          "reportDate": "2026-09-30",
+          "noticeDate": "2026-10-30",
+          "revenue": 22552931085,
+          "revenueGrowth": 4.266217231965,
+          "netProfit": 5379828889.33,
+          "netProfitGrowth": 1.16597023679,
+          "eps": 0.92,
+          "roe": 13.29,
+          "bookValuePerShare": 6.734946972071,
+          "bookValueGrowth": -0.3574387736,
+          "debtRatio": 17.4475437679,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        },
+        {
+          "year": "2025",
+          "reportType": "年报",
+          "reportDate": "2025-12-31",
+          "noticeDate": "2026-03-27",
+          "revenue": 28873380466.76,
+          "revenueGrowth": 7.31799855744,
+          "netProfit": 7038465194.15,
+          "netProfitGrowth": 10.95333560451,
+          "eps": 1.23,
+          "roe": 19.59,
+          "bookValuePerShare": 7.062679566117,
+          "bookValueGrowth": 27.1395609529,
+          "debtRatio": 19.8227018196,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        },
+        {
+          "year": "2024",
+          "reportType": "年报",
+          "reportDate": "2024-12-31",
+          "noticeDate": "2025-04-03",
+          "revenue": 26904508894.01,
+          "revenueGrowth": 9.549113197344,
+          "netProfit": 6343626494.69,
+          "netProfitGrowth": 12.742990044127,
+          "eps": 1.14,
+          "roe": 21.77,
+          "bookValuePerShare": 5.556127906031,
+          "bookValueGrowth": 8.2678231883,
+          "debtRatio": 23.190310631,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        },
+        {
+          "year": "2023",
+          "reportType": "年报",
+          "reportDate": "2023-12-31",
+          "noticeDate": "2024-04-27",
+          "revenue": 24559312356.59,
+          "revenueGrowth": -4.101341187421,
+          "netProfit": 5626626091.97,
+          "netProfitGrowth": -9.214535884591,
+          "eps": 1.01,
+          "roe": 20.72,
+          "bookValuePerShare": 5.130850851647,
+          "bookValueGrowth": -9.9333230728,
+          "debtRatio": 24.4395703547,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        }
+      ]
+    },
+    {
       "symbol": "000333.SZ",
       "name": "美的集团",
       "code": "000333",
@@ -639,8 +742,8 @@
         "stability": 10
       },
       "annualDividend": 4.3,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -727,109 +830,6 @@
       ]
     },
     {
-      "symbol": "603288.SH",
-      "name": "海天味业",
-      "code": "603288",
-      "market": "上交所",
-      "category": "消费",
-      "mark": "海",
-      "score": 78,
-      "scoreBreakdown": {
-        "profitability": 24.2,
-        "growth": 11.3,
-        "dividend": 14.7,
-        "quality": 20,
-        "stability": 7.5
-      },
-      "annualDividend": 1.1,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
-      "dividendSources": [
-        {
-          "label": "新浪分红记录",
-          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/603288.phtml"
-        },
-        {
-          "label": "东方财富分红记录",
-          "url": "https://data.eastmoney.com/yjfp/detail/603288.html"
-        }
-      ],
-      "latestClose": 34.86,
-      "changePercent": 0.9556907037358768,
-      "currentDividendYield": 3.1554790590935173,
-      "turnoverRate": 0.3923229074581637,
-      "financialReports": [
-        {
-          "year": "2026",
-          "reportType": "三季报",
-          "reportDate": "2026-09-30",
-          "noticeDate": "2026-10-30",
-          "revenue": 22552931085,
-          "revenueGrowth": 4.266217231965,
-          "netProfit": 5379828889.33,
-          "netProfitGrowth": 1.16597023679,
-          "eps": 0.92,
-          "roe": 13.29,
-          "bookValuePerShare": 6.734946972071,
-          "bookValueGrowth": -0.3574387736,
-          "debtRatio": 17.4475437679,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        },
-        {
-          "year": "2025",
-          "reportType": "年报",
-          "reportDate": "2025-12-31",
-          "noticeDate": "2026-03-27",
-          "revenue": 28873380466.76,
-          "revenueGrowth": 7.31799855744,
-          "netProfit": 7038465194.15,
-          "netProfitGrowth": 10.95333560451,
-          "eps": 1.23,
-          "roe": 19.59,
-          "bookValuePerShare": 7.062679566117,
-          "bookValueGrowth": 27.1395609529,
-          "debtRatio": 19.8227018196,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        },
-        {
-          "year": "2024",
-          "reportType": "年报",
-          "reportDate": "2024-12-31",
-          "noticeDate": "2025-04-03",
-          "revenue": 26904508894.01,
-          "revenueGrowth": 9.549113197344,
-          "netProfit": 6343626494.69,
-          "netProfitGrowth": 12.742990044127,
-          "eps": 1.14,
-          "roe": 21.77,
-          "bookValuePerShare": 5.556127906031,
-          "bookValueGrowth": 8.2678231883,
-          "debtRatio": 23.190310631,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        },
-        {
-          "year": "2023",
-          "reportType": "年报",
-          "reportDate": "2023-12-31",
-          "noticeDate": "2024-04-27",
-          "revenue": 24559312356.59,
-          "revenueGrowth": -4.101341187421,
-          "netProfit": 5626626091.97,
-          "netProfitGrowth": -9.214535884591,
-          "eps": 1.01,
-          "roe": 20.72,
-          "bookValuePerShare": 5.130850851647,
-          "bookValueGrowth": -9.9333230728,
-          "debtRatio": 24.4395703547,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        }
-      ]
-    },
-    {
       "symbol": "600406.SH",
       "name": "国电南瑞",
       "code": "600406",
@@ -844,9 +844,9 @@
         "quality": 14.9,
         "stability": 10
       },
-      "annualDividend": 0.628,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 0.622,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -859,7 +859,7 @@
       ],
       "latestClose": 23.16,
       "changePercent": -0.6008583690987149,
-      "currentDividendYield": 2.711571675302245,
+      "currentDividendYield": 2.68566493955095,
       "turnoverRate": 0.45258916970363217,
       "financialReports": [
         {
@@ -948,8 +948,8 @@
         "stability": 8
       },
       "annualDividend": 2.016,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -1046,13 +1046,13 @@
       "scoreBreakdown": {
         "profitability": 17.1,
         "growth": 11.5,
-        "dividend": 20,
+        "dividend": 19.9,
         "quality": 16.6,
         "stability": 10
       },
-      "annualDividend": 2.621,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 2.602,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -1065,7 +1065,7 @@
       ],
       "latestClose": 53.71,
       "changePercent": 1.4736444360476122,
-      "currentDividendYield": 4.87991063116738,
+      "currentDividendYield": 4.844535468255446,
       "turnoverRate": 0.609783222516716,
       "financialReports": [
         {
@@ -1154,8 +1154,8 @@
         "stability": 7
       },
       "annualDividend": 2.63,
-      "dividendBasis": "近12个月已实施现金分红 1 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 1 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -1257,8 +1257,8 @@
         "stability": 7.5
       },
       "annualDividend": 1,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -1345,109 +1345,6 @@
       ]
     },
     {
-      "symbol": "601288.SH",
-      "name": "农业银行",
-      "code": "601288",
-      "market": "上交所",
-      "category": "银行",
-      "mark": "农",
-      "score": 74,
-      "scoreBreakdown": {
-        "profitability": 16.5,
-        "growth": 10.8,
-        "dividend": 20.6,
-        "quality": 15.9,
-        "stability": 10
-      },
-      "annualDividend": 0.3792,
-      "dividendBasis": "近12个月已实施现金分红 3 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
-      "dividendSources": [
-        {
-          "label": "新浪分红记录",
-          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601288.phtml"
-        },
-        {
-          "label": "东方财富分红记录",
-          "url": "https://data.eastmoney.com/yjfp/detail/601288.html"
-        }
-      ],
-      "latestClose": 7.48,
-      "changePercent": -1.0582010582010475,
-      "currentDividendYield": 5.06951871657754,
-      "turnoverRate": 0.11866316888816471,
-      "financialReports": [
-        {
-          "year": "2026",
-          "reportType": "三季报",
-          "reportDate": "2026-09-30",
-          "noticeDate": "2026-10-31",
-          "revenue": 618812000000,
-          "revenueGrowth": 12.332357917208,
-          "netProfit": 236546000000,
-          "netProfitGrowth": 7.102721645937,
-          "eps": 0.65,
-          "roe": 8.01,
-          "bookValuePerShare": 8.276524859779,
-          "bookValueGrowth": 5.7747264745,
-          "debtRatio": 93.4899316061,
-          "nonPerformingLoanRatio": 1.23,
-          "provisionCoverageRatio": 289.13
-        },
-        {
-          "year": "2025",
-          "reportType": "年报",
-          "reportDate": "2025-12-31",
-          "noticeDate": "2026-03-31",
-          "revenue": 725306000000,
-          "revenueGrowth": 2.07598285847,
-          "netProfit": 291041000000,
-          "netProfitGrowth": 3.175661064297,
-          "eps": 0.78,
-          "roe": 10.16,
-          "bookValuePerShare": 7.91,
-          "bookValueGrowth": 6.8461935333,
-          "debtRatio": 93.3516599906,
-          "nonPerformingLoanRatio": 1.27,
-          "provisionCoverageRatio": 292.55
-        },
-        {
-          "year": "2024",
-          "reportType": "年报",
-          "reportDate": "2024-12-31",
-          "noticeDate": "2025-03-29",
-          "revenue": 710555000000,
-          "revenueGrowth": 2.263437858002,
-          "netProfit": 282083000000,
-          "netProfitGrowth": 4.724973640832,
-          "eps": 0.75,
-          "roe": 10.46,
-          "bookValuePerShare": 7.4,
-          "bookValueGrowth": 7.5581395349,
-          "debtRatio": 92.8367100015,
-          "nonPerformingLoanRatio": 1.3,
-          "provisionCoverageRatio": 299.61
-        },
-        {
-          "year": "2023",
-          "reportType": "年报",
-          "reportDate": "2023-12-31",
-          "noticeDate": "2024-03-29",
-          "revenue": 694828000000,
-          "revenueGrowth": 0.025336427449,
-          "netProfit": 269356000000,
-          "netProfitGrowth": 3.905382051599,
-          "eps": 0.72,
-          "roe": 10.91,
-          "bookValuePerShare": 6.88,
-          "bookValueGrowth": 8.0062794349,
-          "debtRatio": 92.7347633758,
-          "nonPerformingLoanRatio": 1.33,
-          "provisionCoverageRatio": 303.87
-        }
-      ]
-    },
-    {
       "symbol": "000651.SZ",
       "name": "格力电器",
       "code": "000651",
@@ -1463,8 +1360,8 @@
         "stability": 4
       },
       "annualDividend": 3,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -1566,8 +1463,8 @@
         "stability": 7.5
       },
       "annualDividend": 1.16071,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -1669,8 +1566,8 @@
         "stability": 6
       },
       "annualDividend": 1.38,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -1757,6 +1654,212 @@
       ]
     },
     {
+      "symbol": "000895.SZ",
+      "name": "双汇发展",
+      "code": "000895",
+      "market": "深交所",
+      "category": "消费",
+      "mark": "双",
+      "score": 68,
+      "scoreBreakdown": {
+        "profitability": 25,
+        "growth": 6.3,
+        "dividend": 23.3,
+        "quality": 12.4,
+        "stability": 1.5
+      },
+      "annualDividend": 1.45,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
+      "dividendSources": [
+        {
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/000895.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
+          "url": "https://data.eastmoney.com/yjfp/detail/000895.html"
+        }
+      ],
+      "latestClose": 24.42,
+      "changePercent": 1.3698630136986378,
+      "currentDividendYield": 5.937755937755937,
+      "turnoverRate": 0.3810490629224789,
+      "financialReports": [
+        {
+          "year": "2026",
+          "reportType": "三季报",
+          "reportDate": "2026-09-30",
+          "noticeDate": "2026-10-28",
+          "revenue": 42954937045.78,
+          "revenueGrowth": -3.802146720711,
+          "netProfit": 3642364222.13,
+          "netProfitGrowth": -7.990689221806,
+          "eps": 1.0513,
+          "roe": 16.83,
+          "bookValuePerShare": 6.418053455716,
+          "bookValueGrowth": 9.9395694861,
+          "debtRatio": 47.4866999227,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        },
+        {
+          "year": "2025",
+          "reportType": "年报",
+          "reportDate": "2025-12-31",
+          "noticeDate": "2026-03-25",
+          "revenue": 59459718486.96,
+          "revenueGrowth": -0.427916391626,
+          "netProfit": 5104609986.02,
+          "netProfitGrowth": 2.316311843302,
+          "eps": 1.4733,
+          "roe": 24.1,
+          "bookValuePerShare": 6.165835754605,
+          "bookValueGrowth": 1.1555384305,
+          "debtRatio": 45.3233752789,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        },
+        {
+          "year": "2024",
+          "reportType": "年报",
+          "reportDate": "2024-12-31",
+          "noticeDate": "2025-03-26",
+          "revenue": 59715249829.28,
+          "revenueGrowth": -0.635841149857,
+          "netProfit": 4989048074.6,
+          "netProfitGrowth": -1.260576942182,
+          "eps": 1.44,
+          "roe": 23.81,
+          "bookValuePerShare": 6.095401052948,
+          "bookValueGrowth": 1.322828416,
+          "debtRatio": 42.8046438184,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        },
+        {
+          "year": "2023",
+          "reportType": "年报",
+          "reportDate": "2023-12-31",
+          "noticeDate": "2024-03-27",
+          "revenue": 60097373661,
+          "revenueGrowth": -4.197629306232,
+          "netProfit": 5052741772.33,
+          "netProfitGrowth": -10.107729132821,
+          "eps": 1.4584,
+          "roe": 23.83,
+          "bookValuePerShare": 6.015822049424,
+          "bookValueGrowth": -4.6219266587,
+          "debtRatio": 42.3419952932,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        }
+      ]
+    },
+    {
+      "symbol": "601288.SH",
+      "name": "农业银行",
+      "code": "601288",
+      "market": "上交所",
+      "category": "银行",
+      "mark": "农",
+      "score": 68,
+      "scoreBreakdown": {
+        "profitability": 16.5,
+        "growth": 10.8,
+        "dividend": 15.3,
+        "quality": 15.9,
+        "stability": 10
+      },
+      "annualDividend": 0.2495,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
+      "dividendSources": [
+        {
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601288.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
+          "url": "https://data.eastmoney.com/yjfp/detail/601288.html"
+        }
+      ],
+      "latestClose": 7.48,
+      "changePercent": -1.0582010582010475,
+      "currentDividendYield": 3.335561497326203,
+      "turnoverRate": 0.11866316888816471,
+      "financialReports": [
+        {
+          "year": "2026",
+          "reportType": "三季报",
+          "reportDate": "2026-09-30",
+          "noticeDate": "2026-10-31",
+          "revenue": 618812000000,
+          "revenueGrowth": 12.332357917208,
+          "netProfit": 236546000000,
+          "netProfitGrowth": 7.102721645937,
+          "eps": 0.65,
+          "roe": 8.01,
+          "bookValuePerShare": 8.276524859779,
+          "bookValueGrowth": 5.7747264745,
+          "debtRatio": 93.4899316061,
+          "nonPerformingLoanRatio": 1.23,
+          "provisionCoverageRatio": 289.13
+        },
+        {
+          "year": "2025",
+          "reportType": "年报",
+          "reportDate": "2025-12-31",
+          "noticeDate": "2026-03-31",
+          "revenue": 725306000000,
+          "revenueGrowth": 2.07598285847,
+          "netProfit": 291041000000,
+          "netProfitGrowth": 3.175661064297,
+          "eps": 0.78,
+          "roe": 10.16,
+          "bookValuePerShare": 7.91,
+          "bookValueGrowth": 6.8461935333,
+          "debtRatio": 93.3516599906,
+          "nonPerformingLoanRatio": 1.27,
+          "provisionCoverageRatio": 292.55
+        },
+        {
+          "year": "2024",
+          "reportType": "年报",
+          "reportDate": "2024-12-31",
+          "noticeDate": "2025-03-29",
+          "revenue": 710555000000,
+          "revenueGrowth": 2.263437858002,
+          "netProfit": 282083000000,
+          "netProfitGrowth": 4.724973640832,
+          "eps": 0.75,
+          "roe": 10.46,
+          "bookValuePerShare": 7.4,
+          "bookValueGrowth": 7.5581395349,
+          "debtRatio": 92.8367100015,
+          "nonPerformingLoanRatio": 1.3,
+          "provisionCoverageRatio": 299.61
+        },
+        {
+          "year": "2023",
+          "reportType": "年报",
+          "reportDate": "2023-12-31",
+          "noticeDate": "2024-03-29",
+          "revenue": 694828000000,
+          "revenueGrowth": 0.025336427449,
+          "netProfit": 269356000000,
+          "netProfitGrowth": 3.905382051599,
+          "eps": 0.72,
+          "roe": 10.91,
+          "bookValuePerShare": 6.88,
+          "bookValueGrowth": 8.0062794349,
+          "debtRatio": 92.7347633758,
+          "nonPerformingLoanRatio": 1.33,
+          "provisionCoverageRatio": 303.87
+        }
+      ]
+    },
+    {
       "symbol": "600863.SH",
       "name": "内蒙华电",
       "code": "600863",
@@ -1771,9 +1874,9 @@
         "quality": 15.1,
         "stability": 4
       },
-      "annualDividend": 0.22000000000000003,
-      "dividendBasis": "近12个月已实施现金分红 1 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 0.22,
+      "dividendBasis": "2025 完整年度已实施现金分红 1 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -1786,7 +1889,7 @@
       ],
       "latestClose": 5.33,
       "changePercent": 1.1385199240986812,
-      "currentDividendYield": 4.127579737335836,
+      "currentDividendYield": 4.127579737335835,
       "turnoverRate": 1.5514916716369378,
       "financialReports": [
         {
@@ -1874,9 +1977,9 @@
         "quality": 16.7,
         "stability": 6
       },
-      "annualDividend": 4.7112,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 4.7037,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -1889,7 +1992,7 @@
       ],
       "latestClose": 102.13,
       "changePercent": 0.6504385532669721,
-      "currentDividendYield": 4.6129442866934305,
+      "currentDividendYield": 4.6056007049838446,
       "turnoverRate": 1.204458908814928,
       "financialReports": [
         {
@@ -1973,13 +2076,13 @@
       "scoreBreakdown": {
         "profitability": 18.4,
         "growth": 5.1,
-        "dividend": 20.9,
+        "dividend": 20.7,
         "quality": 12.6,
         "stability": 7
       },
-      "annualDividend": 2.73,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 2.7,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -1992,7 +2095,7 @@
       ],
       "latestClose": 52.8,
       "changePercent": -0.7518796992481309,
-      "currentDividendYield": 5.170454545454546,
+      "currentDividendYield": 5.113636363636364,
       "turnoverRate": 0.6660328285727409,
       "financialReports": [
         {
@@ -2081,8 +2184,8 @@
         "stability": 5.5
       },
       "annualDividend": 0.4,
-      "dividendBasis": "近12个月已实施现金分红 1 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 1 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -2169,109 +2272,6 @@
       ]
     },
     {
-      "symbol": "601398.SH",
-      "name": "工商银行",
-      "code": "601398",
-      "market": "上交所",
-      "category": "银行",
-      "mark": "工",
-      "score": 64,
-      "scoreBreakdown": {
-        "profitability": 15.1,
-        "growth": 8.2,
-        "dividend": 21.2,
-        "quality": 11.5,
-        "stability": 8
-      },
-      "annualDividend": 0.4613999999999999,
-      "dividendBasis": "近12个月已实施现金分红 3 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
-      "dividendSources": [
-        {
-          "label": "新浪分红记录",
-          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601398.phtml"
-        },
-        {
-          "label": "东方财富分红记录",
-          "url": "https://data.eastmoney.com/yjfp/detail/601398.html"
-        }
-      ],
-      "latestClose": 8.75,
-      "changePercent": -0.34168564920272626,
-      "currentDividendYield": 5.273142857142856,
-      "turnoverRate": 0.16007236316773737,
-      "financialReports": [
-        {
-          "year": "2026",
-          "reportType": "三季报",
-          "reportDate": "2026-09-30",
-          "noticeDate": "2026-10-31",
-          "revenue": 695947000000,
-          "revenueGrowth": 8.736961507934,
-          "netProfit": 285640000000,
-          "netProfitGrowth": 5.828652726114,
-          "eps": 0.78,
-          "roe": 6.9975,
-          "bookValuePerShare": 11.239420101176,
-          "bookValueGrowth": 4.7606942886,
-          "debtRatio": 92.3903433827,
-          "nonPerformingLoanRatio": 1.29,
-          "provisionCoverageRatio": 211.64
-        },
-        {
-          "year": "2025",
-          "reportType": "年报",
-          "reportDate": "2025-12-31",
-          "noticeDate": "2026-03-28",
-          "revenue": 838270000000,
-          "revenueGrowth": 2.003764892559,
-          "netProfit": 368562000000,
-          "netProfitGrowth": 0.737707830527,
-          "eps": 1,
-          "roe": 9.45,
-          "bookValuePerShare": 10.83,
-          "bookValueGrowth": 5.8572637314,
-          "debtRatio": 92.0115895626,
-          "nonPerformingLoanRatio": 1.31,
-          "provisionCoverageRatio": 213.6
-        },
-        {
-          "year": "2024",
-          "reportType": "年报",
-          "reportDate": "2024-12-31",
-          "noticeDate": "2025-03-29",
-          "revenue": 821803000000,
-          "revenueGrowth": -2.522566334943,
-          "netProfit": 365863000000,
-          "netProfitGrowth": 0.51374614347,
-          "eps": 0.98,
-          "roe": 9.88,
-          "bookValuePerShare": 10.23,
-          "bookValueGrowth": 7.1204188482,
-          "debtRatio": 91.833012281,
-          "nonPerformingLoanRatio": 1.34,
-          "provisionCoverageRatio": 214.91
-        },
-        {
-          "year": "2023",
-          "reportType": "年报",
-          "reportDate": "2023-12-31",
-          "noticeDate": "2024-03-28",
-          "revenue": 843070000000,
-          "revenueGrowth": -3.729899718408,
-          "netProfit": 363993000000,
-          "netProfitGrowth": 0.792231095555,
-          "eps": 0.98,
-          "roe": 10.66,
-          "bookValuePerShare": 9.55,
-          "bookValueGrowth": 8.2766439909,
-          "debtRatio": 91.5507051367,
-          "nonPerformingLoanRatio": 1.36,
-          "provisionCoverageRatio": 213.97
-        }
-      ]
-    },
-    {
       "symbol": "002508.SZ",
       "name": "老板电器",
       "code": "002508",
@@ -2287,8 +2287,8 @@
         "stability": 3.5
       },
       "annualDividend": 1,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -2390,8 +2390,8 @@
         "stability": 6
       },
       "annualDividend": 1.066,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -2493,8 +2493,8 @@
         "stability": 5
       },
       "annualDividend": 0.5081,
-      "dividendBasis": "近12个月已实施现金分红 1 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 1 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -2595,9 +2595,9 @@
         "quality": 12.6,
         "stability": 8
       },
-      "annualDividend": 0.38870000000000005,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 0.3887,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -2684,109 +2684,6 @@
       ]
     },
     {
-      "symbol": "000895.SZ",
-      "name": "双汇发展",
-      "code": "000895",
-      "market": "深交所",
-      "category": "消费",
-      "mark": "双",
-      "score": 60,
-      "scoreBreakdown": {
-        "profitability": 25,
-        "growth": 6.3,
-        "dividend": 15.1,
-        "quality": 12.4,
-        "stability": 1.5
-      },
-      "annualDividend": 0.8,
-      "dividendBasis": "近12个月已实施现金分红 1 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
-      "dividendSources": [
-        {
-          "label": "新浪分红记录",
-          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/000895.phtml"
-        },
-        {
-          "label": "东方财富分红记录",
-          "url": "https://data.eastmoney.com/yjfp/detail/000895.html"
-        }
-      ],
-      "latestClose": 24.42,
-      "changePercent": 1.3698630136986378,
-      "currentDividendYield": 3.276003276003276,
-      "turnoverRate": 0.3810490629224789,
-      "financialReports": [
-        {
-          "year": "2026",
-          "reportType": "三季报",
-          "reportDate": "2026-09-30",
-          "noticeDate": "2026-10-28",
-          "revenue": 42954937045.78,
-          "revenueGrowth": -3.802146720711,
-          "netProfit": 3642364222.13,
-          "netProfitGrowth": -7.990689221806,
-          "eps": 1.0513,
-          "roe": 16.83,
-          "bookValuePerShare": 6.418053455716,
-          "bookValueGrowth": 9.9395694861,
-          "debtRatio": 47.4866999227,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        },
-        {
-          "year": "2025",
-          "reportType": "年报",
-          "reportDate": "2025-12-31",
-          "noticeDate": "2026-03-25",
-          "revenue": 59459718486.96,
-          "revenueGrowth": -0.427916391626,
-          "netProfit": 5104609986.02,
-          "netProfitGrowth": 2.316311843302,
-          "eps": 1.4733,
-          "roe": 24.1,
-          "bookValuePerShare": 6.165835754605,
-          "bookValueGrowth": 1.1555384305,
-          "debtRatio": 45.3233752789,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        },
-        {
-          "year": "2024",
-          "reportType": "年报",
-          "reportDate": "2024-12-31",
-          "noticeDate": "2025-03-26",
-          "revenue": 59715249829.28,
-          "revenueGrowth": -0.635841149857,
-          "netProfit": 4989048074.6,
-          "netProfitGrowth": -1.260576942182,
-          "eps": 1.44,
-          "roe": 23.81,
-          "bookValuePerShare": 6.095401052948,
-          "bookValueGrowth": 1.322828416,
-          "debtRatio": 42.8046438184,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        },
-        {
-          "year": "2023",
-          "reportType": "年报",
-          "reportDate": "2023-12-31",
-          "noticeDate": "2024-03-27",
-          "revenue": 60097373661,
-          "revenueGrowth": -4.197629306232,
-          "netProfit": 5052741772.33,
-          "netProfitGrowth": -10.107729132821,
-          "eps": 1.4584,
-          "roe": 23.83,
-          "bookValuePerShare": 6.015822049424,
-          "bookValueGrowth": -4.6219266587,
-          "debtRatio": 42.3419952932,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        }
-      ]
-    },
-    {
       "symbol": "601328.SH",
       "name": "交通银行",
       "code": "601328",
@@ -2802,8 +2699,8 @@
         "stability": 10
       },
       "annualDividend": 0.3247,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -2905,8 +2802,8 @@
         "stability": 8
       },
       "annualDividend": 0.381,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -3008,8 +2905,8 @@
         "stability": 10
       },
       "annualDividend": 0.2263,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -3096,23 +2993,229 @@
       ]
     },
     {
+      "symbol": "601398.SH",
+      "name": "工商银行",
+      "code": "601398",
+      "market": "上交所",
+      "category": "银行",
+      "mark": "工",
+      "score": 59,
+      "scoreBreakdown": {
+        "profitability": 15.1,
+        "growth": 8.2,
+        "dividend": 15.9,
+        "quality": 11.5,
+        "stability": 8
+      },
+      "annualDividend": 0.3103,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
+      "dividendSources": [
+        {
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/601398.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
+          "url": "https://data.eastmoney.com/yjfp/detail/601398.html"
+        }
+      ],
+      "latestClose": 8.75,
+      "changePercent": -0.34168564920272626,
+      "currentDividendYield": 3.5462857142857143,
+      "turnoverRate": 0.16007236316773737,
+      "financialReports": [
+        {
+          "year": "2026",
+          "reportType": "三季报",
+          "reportDate": "2026-09-30",
+          "noticeDate": "2026-10-31",
+          "revenue": 695947000000,
+          "revenueGrowth": 8.736961507934,
+          "netProfit": 285640000000,
+          "netProfitGrowth": 5.828652726114,
+          "eps": 0.78,
+          "roe": 6.9975,
+          "bookValuePerShare": 11.239420101176,
+          "bookValueGrowth": 4.7606942886,
+          "debtRatio": 92.3903433827,
+          "nonPerformingLoanRatio": 1.29,
+          "provisionCoverageRatio": 211.64
+        },
+        {
+          "year": "2025",
+          "reportType": "年报",
+          "reportDate": "2025-12-31",
+          "noticeDate": "2026-03-28",
+          "revenue": 838270000000,
+          "revenueGrowth": 2.003764892559,
+          "netProfit": 368562000000,
+          "netProfitGrowth": 0.737707830527,
+          "eps": 1,
+          "roe": 9.45,
+          "bookValuePerShare": 10.83,
+          "bookValueGrowth": 5.8572637314,
+          "debtRatio": 92.0115895626,
+          "nonPerformingLoanRatio": 1.31,
+          "provisionCoverageRatio": 213.6
+        },
+        {
+          "year": "2024",
+          "reportType": "年报",
+          "reportDate": "2024-12-31",
+          "noticeDate": "2025-03-29",
+          "revenue": 821803000000,
+          "revenueGrowth": -2.522566334943,
+          "netProfit": 365863000000,
+          "netProfitGrowth": 0.51374614347,
+          "eps": 0.98,
+          "roe": 9.88,
+          "bookValuePerShare": 10.23,
+          "bookValueGrowth": 7.1204188482,
+          "debtRatio": 91.833012281,
+          "nonPerformingLoanRatio": 1.34,
+          "provisionCoverageRatio": 214.91
+        },
+        {
+          "year": "2023",
+          "reportType": "年报",
+          "reportDate": "2023-12-31",
+          "noticeDate": "2024-03-28",
+          "revenue": 843070000000,
+          "revenueGrowth": -3.729899718408,
+          "netProfit": 363993000000,
+          "netProfitGrowth": 0.792231095555,
+          "eps": 0.98,
+          "roe": 10.66,
+          "bookValuePerShare": 9.55,
+          "bookValueGrowth": 8.2766439909,
+          "debtRatio": 91.5507051367,
+          "nonPerformingLoanRatio": 1.36,
+          "provisionCoverageRatio": 213.97
+        }
+      ]
+    },
+    {
+      "symbol": "600795.SH",
+      "name": "国电电力",
+      "code": "600795",
+      "market": "上交所",
+      "category": "电力",
+      "mark": "国",
+      "score": 58,
+      "scoreBreakdown": {
+        "profitability": 19,
+        "growth": 12.5,
+        "dividend": 18.9,
+        "quality": 4.4,
+        "stability": 3
+      },
+      "annualDividend": 0.241,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
+      "dividendSources": [
+        {
+          "label": "新浪分红记录",
+          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600795.phtml"
+        },
+        {
+          "label": "东方财富分红记录",
+          "url": "https://data.eastmoney.com/yjfp/detail/600795.html"
+        }
+      ],
+      "latestClose": 5.35,
+      "changePercent": -0.5576208178438709,
+      "currentDividendYield": 4.5046728971962615,
+      "turnoverRate": 0.7284409831959204,
+      "financialReports": [
+        {
+          "year": "2026",
+          "reportType": "三季报",
+          "reportDate": "2026-09-30",
+          "noticeDate": "2026-10-27",
+          "revenue": 124355198760.12,
+          "revenueGrowth": -0.679058734068,
+          "netProfit": 3961334209.67,
+          "netProfitGrowth": -41.54547932333,
+          "eps": 0.222,
+          "roe": 6.519,
+          "bookValuePerShare": 3.435330537762,
+          "bookValueGrowth": 0.0877617993,
+          "debtRatio": 73.5530160046,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        },
+        {
+          "year": "2025",
+          "reportType": "年报",
+          "reportDate": "2025-12-31",
+          "noticeDate": "2026-04-15",
+          "revenue": 170243994133.7,
+          "revenueGrowth": -4.988231468047,
+          "netProfit": 7161419062.53,
+          "netProfitGrowth": -27.154840772616,
+          "eps": 0.402,
+          "roe": 12.283,
+          "bookValuePerShare": 3.334379528633,
+          "bookValueGrowth": 6.1328710066,
+          "debtRatio": 73.4473875092,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        },
+        {
+          "year": "2024",
+          "reportType": "年报",
+          "reportDate": "2024-12-31",
+          "noticeDate": "2025-04-16",
+          "revenue": 179182007412.53,
+          "revenueGrowth": -1.003802219544,
+          "netProfit": 9831015730.47,
+          "netProfitGrowth": 75.284991351934,
+          "eps": 0.551,
+          "roe": 18.598,
+          "bookValuePerShare": 3.141702939916,
+          "bookValueGrowth": 14.91304332,
+          "debtRatio": 73.4045160539,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        },
+        {
+          "year": "2023",
+          "reportType": "年报",
+          "reportDate": "2023-12-31",
+          "noticeDate": "2024-04-16",
+          "revenue": 180998878168.94,
+          "revenueGrowth": -7.024694587133,
+          "netProfit": 5608589563,
+          "netProfitGrowth": 98.802598128838,
+          "eps": 0.314,
+          "roe": 11.834,
+          "bookValuePerShare": 2.733982887536,
+          "bookValueGrowth": 7.9685327044,
+          "debtRatio": 73.9185626049,
+          "nonPerformingLoanRatio": null,
+          "provisionCoverageRatio": null
+        }
+      ]
+    },
+    {
       "symbol": "000001.SZ",
       "name": "平安银行",
       "code": "000001",
       "market": "深交所",
       "category": "银行",
       "mark": "安",
-      "score": 59,
+      "score": 58,
       "scoreBreakdown": {
         "profitability": 16.2,
         "growth": 3.6,
-        "dividend": 21.1,
+        "dividend": 20.8,
         "quality": 13.7,
         "stability": 4
       },
-      "annualDividend": 0.609,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 0.596,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -3125,7 +3228,7 @@
       ],
       "latestClose": 11.64,
       "changePercent": 0.8665511265164769,
-      "currentDividendYield": 5.231958762886597,
+      "currentDividendYield": 5.120274914089347,
       "turnoverRate": 0.9606695516621044,
       "financialReports": [
         {
@@ -3209,13 +3312,13 @@
       "scoreBreakdown": {
         "profitability": 13,
         "growth": 5.6,
-        "dividend": 16,
+        "dividend": 16.9,
         "quality": 10.4,
         "stability": 7.5
       },
-      "annualDividend": 0.2514,
-      "dividendBasis": "近12个月已实施现金分红 2 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 0.272,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -3228,7 +3331,7 @@
       ],
       "latestClose": 7.01,
       "changePercent": 0.28612303290414265,
-      "currentDividendYield": 3.5863052781740374,
+      "currentDividendYield": 3.8801711840228252,
       "turnoverRate": 0.11675749293346116,
       "financialReports": [
         {
@@ -3302,126 +3405,23 @@
       ]
     },
     {
-      "symbol": "600795.SH",
-      "name": "国电电力",
-      "code": "600795",
-      "market": "上交所",
-      "category": "电力",
-      "mark": "国",
-      "score": 52,
-      "scoreBreakdown": {
-        "profitability": 19,
-        "growth": 12.5,
-        "dividend": 13.1,
-        "quality": 4.4,
-        "stability": 3
-      },
-      "annualDividend": 0.141,
-      "dividendBasis": "近12个月已实施现金分红 1 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
-      "dividendSources": [
-        {
-          "label": "新浪分红记录",
-          "url": "https://money.finance.sina.com.cn/corp/go.php/vISSUE_ShareBonus/stockid/600795.phtml"
-        },
-        {
-          "label": "东方财富分红记录",
-          "url": "https://data.eastmoney.com/yjfp/detail/600795.html"
-        }
-      ],
-      "latestClose": 5.35,
-      "changePercent": -0.5576208178438709,
-      "currentDividendYield": 2.635514018691589,
-      "turnoverRate": 0.7284409831959204,
-      "financialReports": [
-        {
-          "year": "2026",
-          "reportType": "三季报",
-          "reportDate": "2026-09-30",
-          "noticeDate": "2026-10-27",
-          "revenue": 124355198760.12,
-          "revenueGrowth": -0.679058734068,
-          "netProfit": 3961334209.67,
-          "netProfitGrowth": -41.54547932333,
-          "eps": 0.222,
-          "roe": 6.519,
-          "bookValuePerShare": 3.435330537762,
-          "bookValueGrowth": 0.0877617993,
-          "debtRatio": 73.5530160046,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        },
-        {
-          "year": "2025",
-          "reportType": "年报",
-          "reportDate": "2025-12-31",
-          "noticeDate": "2026-04-15",
-          "revenue": 170243994133.7,
-          "revenueGrowth": -4.988231468047,
-          "netProfit": 7161419062.53,
-          "netProfitGrowth": -27.154840772616,
-          "eps": 0.402,
-          "roe": 12.283,
-          "bookValuePerShare": 3.334379528633,
-          "bookValueGrowth": 6.1328710066,
-          "debtRatio": 73.4473875092,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        },
-        {
-          "year": "2024",
-          "reportType": "年报",
-          "reportDate": "2024-12-31",
-          "noticeDate": "2025-04-16",
-          "revenue": 179182007412.53,
-          "revenueGrowth": -1.003802219544,
-          "netProfit": 9831015730.47,
-          "netProfitGrowth": 75.284991351934,
-          "eps": 0.551,
-          "roe": 18.598,
-          "bookValuePerShare": 3.141702939916,
-          "bookValueGrowth": 14.91304332,
-          "debtRatio": 73.4045160539,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        },
-        {
-          "year": "2023",
-          "reportType": "年报",
-          "reportDate": "2023-12-31",
-          "noticeDate": "2024-04-16",
-          "revenue": 180998878168.94,
-          "revenueGrowth": -7.024694587133,
-          "netProfit": 5608589563,
-          "netProfitGrowth": 98.802598128838,
-          "eps": 0.314,
-          "roe": 11.834,
-          "bookValuePerShare": 2.733982887536,
-          "bookValueGrowth": 7.9685327044,
-          "debtRatio": 73.9185626049,
-          "nonPerformingLoanRatio": null,
-          "provisionCoverageRatio": null
-        }
-      ]
-    },
-    {
       "symbol": "601985.SH",
       "name": "中国核电",
       "code": "601985",
       "market": "上交所",
       "category": "电力",
       "mark": "核",
-      "score": 47,
+      "score": 46,
       "scoreBreakdown": {
         "profitability": 14.7,
         "growth": 6.7,
-        "dividend": 11.3,
+        "dividend": 10.7,
         "quality": 8.2,
         "stability": 6
       },
-      "annualDividend": 0.19999999999999998,
-      "dividendBasis": "近12个月已实施现金分红 3 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 0.18,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -3434,7 +3434,7 @@
       ],
       "latestClose": 9.8,
       "changePercent": -1.40845070422534,
-      "currentDividendYield": 2.0408163265306123,
+      "currentDividendYield": 1.8367346938775508,
       "turnoverRate": 0.5294447057498812,
       "financialReports": [
         {
@@ -3514,17 +3514,17 @@
       "market": "上交所",
       "category": "运营商",
       "mark": "联",
-      "score": 39,
+      "score": 46,
       "scoreBreakdown": {
         "profitability": 8.9,
         "growth": 3.9,
-        "dividend": 8.7,
+        "dividend": 16.5,
         "quality": 8.7,
         "stability": 8.5
       },
-      "annualDividend": 0.0523,
-      "dividendBasis": "近12个月已实施现金分红 1 次，税前合计",
-      "dividendAsOf": "截至 2026-10-30",
+      "annualDividend": 0.1635,
+      "dividendBasis": "2025 完整年度已实施现金分红 2 次，税前合计",
+      "dividendAsOf": "采用 2025 完整年度，截至 2026-10-30",
       "dividendSources": [
         {
           "label": "新浪分红记录",
@@ -3537,7 +3537,7 @@
       ],
       "latestClose": 4.39,
       "changePercent": -0.22727272727274261,
-      "currentDividendYield": 1.1913439635535308,
+      "currentDividendYield": 3.7243735763097954,
       "turnoverRate": 0.42023249632248033,
       "financialReports": [
         {

@@ -1,6 +1,11 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  calculateAnnualDividend,
+  calculateDividendYearCount,
+  mergeDividendRecords,
+} from "./dividends.mjs";
 import { calculateFundamentalScore } from "./scoring.mjs";
 
 const STOCKS = [
@@ -388,6 +393,7 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
     financialReports,
     annualDividend,
     dividendCount,
+    dividendFiscalYear,
     score,
     scoreBreakdown,
   } = stockDataBySymbol[stock.symbol];
@@ -404,10 +410,13 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
     scoreBreakdown,
     annualDividend,
     dividendBasis:
-      dividendCount > 0
-        ? `近12个月已实施现金分红 ${dividendCount} 次，税前合计`
-        : "近12个月暂无已实施现金分红",
-    dividendAsOf: latestQuote ? `截至 ${latestQuote.tradeDate}` : "等待行情",
+      dividendCount > 0 && dividendFiscalYear
+        ? `${dividendFiscalYear} 完整年度已实施现金分红 ${dividendCount} 次，税前合计`
+        : "暂无完整年度已实施现金分红",
+    dividendAsOf:
+      latestQuote && dividendFiscalYear
+        ? `采用 ${dividendFiscalYear} 完整年度，截至 ${latestQuote.tradeDate}`
+        : "等待完整年度分红数据",
     dividendSources: [
       {
         label: "新浪分红记录",
@@ -450,12 +459,14 @@ async function fetchStockData(stock) {
       fetchDividendRecords(stock),
     ]);
   const turnoverRate = calculateTurnoverRate(quotes[0], freeFloatShares);
-  const { annualDividend, dividendCount } = calculateTrailingDividend(
+  const { annualDividend, dividendCount, dividendFiscalYear } =
+    calculateAnnualDividend(
     dividendRecords,
     quotes[0].tradeDate,
   );
   const dividendYearCount = calculateDividendYearCount(
     dividendRecords,
+    dividendFiscalYear,
     quotes[0].tradeDate,
   );
   const currentDividendYield = (annualDividend / quotes[0].close) * 100;
@@ -474,6 +485,7 @@ async function fetchStockData(stock) {
       financialReports,
       annualDividend,
       dividendCount,
+      dividendFiscalYear,
       score: fundamentalScore.total,
       scoreBreakdown: fundamentalScore.breakdown,
     },
@@ -597,8 +609,8 @@ async function fetchFinancialData(stock) {
 
 async function fetchDividendRecords(stock) {
   const results = await Promise.allSettled([
-    fetchSinaDividendRecords(stock),
     fetchEastmoneyDividendRecords(stock),
+    fetchSinaDividendRecords(stock),
   ]);
   const records = mergeDividendRecords(
     ...results
@@ -645,12 +657,22 @@ async function fetchSinaDividendRecords(stock) {
       ),
     )
     .filter((cells) => cells.length >= 7 && /^\d{4}-\d{2}-\d{2}$/.test(cells[0]))
-    .map((cells) => ({
-      REPORT_DATE: cells[0],
-      PRETAX_BONUS_RMB: Number(cells[3]),
-      ASSIGN_PROGRESS: cells[4],
-      EX_DIVIDEND_DATE: cells[5],
-    }));
+    .map((cells) => {
+      const announcementDate = cells[0];
+      const announcementYear = Number(announcementDate.slice(0, 4));
+      const announcementMonth = Number(announcementDate.slice(5, 7));
+      const isAnnual = announcementMonth <= 7;
+
+      return {
+        SOURCE: "sina",
+        ANNOUNCEMENT_DATE: announcementDate,
+        FISCAL_YEAR: isAnnual ? announcementYear - 1 : announcementYear,
+        IS_ANNUAL: isAnnual,
+        PRETAX_BONUS_RMB: Number(cells[3]),
+        ASSIGN_PROGRESS: cells[4],
+        EX_DIVIDEND_DATE: cells[5],
+      };
+    });
 }
 
 async function fetchEastmoneyDividendRecords(stock) {
@@ -678,31 +700,18 @@ async function fetchEastmoneyDividendRecords(stock) {
   }
 
   const payload = await response.json();
-  return Array.isArray(payload.result?.data) ? payload.result.data : [];
-}
+  return Array.isArray(payload.result?.data)
+    ? payload.result.data.map((record) => {
+        const reportDate = String(record.REPORT_DATE ?? "").slice(0, 10);
 
-function mergeDividendRecords(...recordGroups) {
-  const seen = new Set();
-
-  return recordGroups
-    .flat()
-    .filter((record) => {
-      const exDividendDate = String(record.EX_DIVIDEND_DATE ?? "").slice(0, 10);
-      const pretaxBonus = Number(record.PRETAX_BONUS_RMB);
-      const key = `${exDividendDate}|${pretaxBonus.toFixed(6)}`;
-
-      if (!exDividendDate || !Number.isFinite(pretaxBonus) || seen.has(key)) {
-        return false;
-      }
-
-      seen.add(key);
-      return true;
-    })
-    .sort((left, right) =>
-      String(right.EX_DIVIDEND_DATE).localeCompare(
-        String(left.EX_DIVIDEND_DATE),
-      ),
-    );
+        return {
+          ...record,
+          SOURCE: "eastmoney",
+          FISCAL_YEAR: Number(reportDate.slice(0, 4)),
+          IS_ANNUAL: reportDate.slice(5, 10) === "12-31",
+        };
+      })
+    : [];
 }
 
 function stripHtml(value) {
@@ -722,65 +731,6 @@ function toFiniteNumber(value) {
 function calculateTurnoverRate(latestQuote, freeFloatShares) {
   if (!latestQuote || !freeFloatShares || freeFloatShares <= 0) return null;
   return (latestQuote.volume / freeFloatShares) * 100;
-}
-
-function calculateTrailingDividend(records, tradeDate) {
-  const endDate = new Date(`${tradeDate}T12:00:00Z`);
-  const startDate = new Date(endDate);
-  startDate.setUTCFullYear(startDate.getUTCFullYear() - 1);
-
-  const implementedRecords = records.filter((record) => {
-    const exDividendDate = new Date(
-      `${String(record.EX_DIVIDEND_DATE ?? "").split(" ")[0]}T12:00:00Z`,
-    );
-    const pretaxBonus = Number(record.PRETAX_BONUS_RMB);
-
-    return (
-      String(record.ASSIGN_PROGRESS ?? "").includes("实施") &&
-      Number.isFinite(pretaxBonus) &&
-      pretaxBonus > 0 &&
-      !Number.isNaN(exDividendDate.getTime()) &&
-      exDividendDate > startDate &&
-      exDividendDate <= endDate
-    );
-  });
-
-  return {
-    annualDividend:
-      implementedRecords.reduce(
-        (total, record) => total + Number(record.PRETAX_BONUS_RMB) / 10,
-        0,
-      ),
-    dividendCount: implementedRecords.length,
-  };
-}
-
-function calculateDividendYearCount(records, tradeDate) {
-  const endDate = new Date(`${tradeDate}T12:00:00Z`);
-  const startDate = new Date(endDate);
-  startDate.setUTCFullYear(startDate.getUTCFullYear() - 3);
-
-  return new Set(
-    records
-      .filter((record) => {
-        const exDividendDate = new Date(
-          `${String(record.EX_DIVIDEND_DATE ?? "").split(" ")[0]}T12:00:00Z`,
-        );
-        const pretaxBonus = Number(record.PRETAX_BONUS_RMB);
-
-        return (
-          String(record.ASSIGN_PROGRESS ?? "").includes("实施") &&
-          Number.isFinite(pretaxBonus) &&
-          pretaxBonus > 0 &&
-          !Number.isNaN(exDividendDate.getTime()) &&
-          exDividendDate > startDate &&
-          exDividendDate <= endDate
-        );
-      })
-      .map((record) =>
-        String(record.EX_DIVIDEND_DATE ?? "").slice(0, 4),
-      ),
-  ).size;
 }
 
 async function fetchWithRetry(url, options, attempts = 3) {

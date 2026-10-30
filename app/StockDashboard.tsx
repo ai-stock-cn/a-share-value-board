@@ -1099,7 +1099,11 @@ export default function StockDashboard() {
                     计算公式：参考价格 = 当前采用的每股现金分红 ÷ 目标股息率。分红可能调整，结果仅作静态比较。
                   </p>
                   <div className="dividend-sources">
-                    <span>{data?.dividendBasis ?? selectedStock.dividendBasis}</span>
+                    <span>
+                      {data?.dividendBasis ?? selectedStock.dividendBasis}
+                      {"；"}
+                      {data?.dividendAsOf ?? selectedStock.dividendAsOf}
+                    </span>
                     {(data?.dividendSources ?? selectedStock.dividendSources).map(
                       (source) => (
                         <a
