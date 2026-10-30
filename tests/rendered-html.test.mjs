@@ -22,6 +22,8 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /目标股息率对应价格/);
   assert.match(dashboard, /当前股息率/);
   assert.match(dashboard, /dividend-highlight/);
+  assert.match(dashboard, /当日四价/);
+  assert.doesNotMatch(dashboard, /今日区间/);
   assert.match(dashboard, /DIVIDEND_YIELD_TIERS/);
   assert.match(dashboard, /最近 7 天/);
   assert.match(dashboard, /601318/);

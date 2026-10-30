@@ -170,10 +170,6 @@ export default function StockDashboard() {
   const change = latest && previous ? latest.close - previous.close : 0;
   const changePercent = previous ? (change / previous.close) * 100 : 0;
   const direction = change > 0 ? "up" : change < 0 ? "down" : "flat";
-  const rangePosition = latest
-    ? ((latest.close - latest.low) / Math.max(latest.high - latest.low, 0.01)) *
-      100
-    : 0;
   const annualDividend = data?.annualDividend ?? selectedStock.annualDividend;
   const currentDividendYield = latest
     ? (annualDividend / latest.close) * 100
@@ -314,41 +310,37 @@ export default function StockDashboard() {
               </div>
 
               {latest ? (
-                <>
-                  <div className="price-line">
-                    <span className="currency">¥</span>
-                    <strong>{numberFormatter.format(latest.close)}</strong>
-                    <div className="quote-badges">
-                      <span className={`change-pill ${direction}`}>
+                <div className="quote-overview">
+                  <div className="current-quote">
+                    <span className="quote-label">最新收盘价</span>
+                    <div className="current-price">
+                      <span className="currency">¥</span>
+                      <strong>{numberFormatter.format(latest.close)}</strong>
+                    </div>
+                  </div>
+                  <div className="quote-metrics">
+                    <div className={`change-summary ${direction}`}>
+                      <span>较前收</span>
+                      <strong>
                         {change >= 0 ? "+" : ""}
-                        {numberFormatter.format(change)}&nbsp;&nbsp;
+                        {numberFormatter.format(change)}
+                      </strong>
+                      <small>
                         {changePercent >= 0 ? "+" : ""}
                         {changePercent.toFixed(2)}%
-                      </span>
-                      <div className="dividend-highlight">
-                        <span>当前股息率</span>
-                        <strong>
-                          {currentDividendYield?.toFixed(2) ?? "—"}%
-                        </strong>
-                        <small>
-                          每股股息 ¥{dividendFormatter.format(annualDividend)}
-                        </small>
-                      </div>
+                      </small>
+                    </div>
+                    <div className="dividend-highlight">
+                      <span>当前股息率</span>
+                      <strong>
+                        {currentDividendYield?.toFixed(2) ?? "—"}%
+                      </strong>
+                      <small>
+                        每股股息 ¥{dividendFormatter.format(annualDividend)}
+                      </small>
                     </div>
                   </div>
-                  <div className="range-summary">
-                    <span>今日区间</span>
-                    <div className="range-track" aria-hidden="true">
-                      <i
-                        style={{
-                          left: `${Math.min(100, Math.max(0, rangePosition))}%`,
-                        }}
-                      />
-                    </div>
-                    <span>{numberFormatter.format(latest.low)}</span>
-                    <span>{numberFormatter.format(latest.high)}</span>
-                  </div>
-                </>
+                </div>
               ) : (
                 <div className="hero-skeleton">
                   <Skeleton
@@ -376,10 +368,36 @@ export default function StockDashboard() {
           ) : (
             <>
               <section className="price-grid" aria-label="当日四价">
-                <PriceCard label="开盘价" value={latest?.open} accent="amber" index="01" />
-                <PriceCard label="最高价" value={latest?.high} accent="coral" index="02" />
-                <PriceCard label="最低价" value={latest?.low} accent="blue" index="03" />
-                <PriceCard label="收盘价" value={latest?.close} accent="lime" index="04" />
+                <div className="price-grid-heading">
+                  <span className="section-kicker">当日四价</span>
+                  <small>
+                    {latest ? formatTableDate(latest.tradeDate) : "--.--"} · CNY
+                  </small>
+                </div>
+                <PriceCard
+                  label="开盘价"
+                  value={latest?.open}
+                  accent="amber"
+                  index="01"
+                />
+                <PriceCard
+                  label="最高价"
+                  value={latest?.high}
+                  accent="coral"
+                  index="02"
+                />
+                <PriceCard
+                  label="最低价"
+                  value={latest?.low}
+                  accent="blue"
+                  index="03"
+                />
+                <PriceCard
+                  label="收盘价"
+                  value={latest?.close}
+                  accent="lime"
+                  index="04"
+                />
               </section>
 
               <section className="insight-grid">
