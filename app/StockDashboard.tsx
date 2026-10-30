@@ -569,6 +569,7 @@ export default function StockDashboard() {
                   <div className="kline-legend" aria-label="K线颜色说明">
                     <span><i className="up" />红涨</span>
                     <span><i className="down" />绿跌</span>
+                    <span><i className="close-line" />收盘连线</span>
                     <small>隔日标注收盘价，最新交易日始终显示</small>
                   </div>
                 </article>
@@ -830,6 +831,13 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
   const labelIndexes = Array.from(
     new Set([0, Math.floor((quotes.length - 1) / 2), quotes.length - 1]),
   );
+  const closeLinePoints = quotes
+    .map((quote, index) => {
+      const centerX = padding.left + step * index + step / 2;
+      return `${centerX},${toY(quote.close)}`;
+    })
+    .join(" ");
+
   return (
     <div className="kline-scroll">
       <svg
@@ -856,6 +864,12 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
             </text>
           </g>
         ))}
+
+        <polyline
+          className="kline-close-line"
+          points={closeLinePoints}
+          aria-hidden="true"
+        />
 
         {quotes.map((quote, index) => {
           const centerX = padding.left + step * index + step / 2;
@@ -904,6 +918,13 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
                 width={candleWidth}
                 height={bodyHeight}
                 rx={1}
+              />
+              <circle
+                className="candle-close-point"
+                cx={centerX}
+                cy={closeY}
+                r={2.8}
+                aria-hidden="true"
               />
               {showCloseLabel && (
                 <text

@@ -1686,6 +1686,23 @@ footer {
   stroke-dasharray: 3 5;
 }
 
+.kline-close-line {
+  fill: none;
+  stroke: #315d9b;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.4;
+  opacity: 0.72;
+  vector-effect: non-scaling-stroke;
+}
+
+.candle-close-point {
+  fill: #fbfbf7;
+  stroke: #315d9b;
+  stroke-width: 1.8;
+  vector-effect: non-scaling-stroke;
+}
+
 .kline-price-label,
 .kline-date-label {
   fill: #8a94a5;
@@ -1777,6 +1794,12 @@ footer {
 
 .kline-legend i.up { background: #dc5c4c; }
 .kline-legend i.down { background: #2e9b72; }
+.kline-legend i.close-line {
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+  background: #315d9b;
+}
 
 .kline-legend small {
   margin-left: auto;
