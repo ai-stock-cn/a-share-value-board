@@ -1245,7 +1245,7 @@ footer {
   align-self: start;
   max-height: calc(100vh - 36px);
   padding: 20px;
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid var(--line);
   border-radius: 24px;
   background: rgba(251, 251, 247, 0.88);
@@ -1281,48 +1281,86 @@ footer {
   font-weight: 800;
 }
 
-.stock-list {
-  display: grid;
-  gap: 8px;
-  max-height: calc(100vh - 210px);
-  margin: 14px -6px 0;
-  padding: 0 6px;
-  overflow-y: auto;
-  scrollbar-width: thin;
+.stock-selector {
+  position: relative;
+  margin-top: 14px;
 }
 
-.stock-list button {
+.stock-selector summary {
+  list-style: none;
+}
+
+.stock-selector summary::-webkit-details-marker {
+  display: none;
+}
+
+.stock-selector-current,
+.stock-options button {
   display: grid;
-  grid-template-columns: 38px minmax(0, 1fr);
+  grid-template-areas:
+    "mark identity score"
+    "mark price score";
+  grid-template-columns: 40px minmax(0, 1fr) auto;
   grid-template-rows: auto auto;
-  gap: 0 11px;
+  gap: 3px 11px;
   width: 100%;
   padding: 13px;
-  border: 1px solid transparent;
   border-radius: 16px;
-  background: transparent;
   text-align: left;
   cursor: pointer;
   transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
 }
 
-.stock-list button:hover {
-  border-color: rgba(10, 18, 34, 0.16);
-  background: white;
-  transform: translateY(-1px);
-}
-
-.stock-list button.is-active {
-  border-color: var(--ink);
+.stock-selector-current {
+  border: 1px solid var(--ink);
   background: var(--ink);
   color: white;
 }
 
+.stock-selector-current:hover {
+  transform: translateY(-1px);
+}
+
+.stock-options {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 9px);
+  left: 0;
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  min-width: min(360px, calc(100vw - 48px));
+  max-height: min(430px, calc(100vh - 170px));
+  padding: 8px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(251, 251, 247, 0.98);
+  box-shadow: 0 24px 64px rgba(10, 18, 34, 0.2);
+  scrollbar-width: thin;
+  backdrop-filter: blur(18px);
+}
+
+.stock-options button {
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.stock-options button:hover {
+  border-color: rgba(10, 18, 34, 0.16);
+  background: white;
+}
+
+.stock-options button.is-active {
+  border-color: rgba(10, 18, 34, 0.24);
+  background: rgba(215, 255, 99, 0.28);
+}
+
 .stock-mark {
   display: grid;
-  grid-row: 1 / 3;
-  width: 38px;
-  height: 38px;
+  grid-area: mark;
+  width: 40px;
+  height: 40px;
   place-items: center;
   align-self: center;
   border-radius: 12px;
@@ -1332,23 +1370,38 @@ footer {
   font-weight: 800;
 }
 
-.stock-list button.is-active .stock-mark {
+.stock-selector-current .stock-mark,
+.stock-options button.is-active .stock-mark {
   background: var(--lime);
 }
 
-.stock-identity,
+.stock-identity {
+  grid-area: identity;
+  min-width: 0;
+  align-self: end;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+}
+
 .stock-list-price {
+  grid-area: price;
+  align-self: start;
+}
+
+.stock-identity,
+.stock-list-price,
+.stock-score {
   display: flex;
   justify-content: space-between;
   gap: 8px;
 }
 
-.stock-identity {
-  align-items: baseline;
-}
-
 .stock-identity strong {
+  overflow: hidden;
   font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .stock-identity small,
@@ -1358,14 +1411,19 @@ footer {
   font-size: 8px;
 }
 
-.stock-list button.is-active .stock-identity small,
-.stock-list button.is-active .stock-list-price small {
+.stock-identity small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stock-selector-current .stock-identity small,
+.stock-selector-current .stock-list-price small {
   color: #aeb7c8;
 }
 
 .stock-list-price {
   align-items: end;
-  margin-top: 5px;
 }
 
 .stock-list-price strong {
@@ -1375,6 +1433,47 @@ footer {
 
 .stock-list-price small.positive { color: #e77b68; }
 .stock-list-price small.negative { color: #48a47e; }
+
+.stock-score {
+  grid-area: score;
+  min-width: 42px;
+  align-self: stretch;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.stock-score small {
+  color: #8a94a5;
+  font-size: 8px;
+  font-style: normal;
+}
+
+.stock-score strong {
+  font-size: 17px;
+}
+
+.stock-selector-current .stock-score {
+  color: var(--lime);
+}
+
+.stock-selector-current .stock-score small {
+  color: #aeb7c8;
+}
+
+.selector-chevron {
+  color: white;
+  font-size: 14px;
+  font-style: normal;
+  line-height: 0.7;
+  transition: transform 180ms ease;
+}
+
+.stock-selector[open] .selector-chevron {
+  transform: rotate(180deg);
+}
 
 .stock-rail-note {
   margin: 16px 2px 0;
@@ -1725,15 +1824,8 @@ footer {
     align-items: center;
   }
 
-  .stock-list {
-    display: flex;
-    max-height: none;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-
-  .stock-list button {
-    min-width: 220px;
+  .stock-selector {
+    max-width: 520px;
   }
 
   .stock-rail-note {
@@ -1767,6 +1859,14 @@ footer {
 
   .stock-rail-heading h2 {
     font-size: 19px;
+  }
+
+  .stock-selector {
+    max-width: none;
+  }
+
+  .stock-options {
+    min-width: 100%;
   }
 
   .dashboard-main .hero,

@@ -10,6 +10,7 @@ const STOCKS = [
     code: "601318",
     market: "上交所",
     mark: "平",
+    score: 100,
     annualDividend: 2.7,
     dividendBasis: "2025 年中期 0.95 元 + 末期 1.75 元",
     dividendAsOf: "2025 年度",
@@ -31,6 +32,7 @@ const STOCKS = [
     code: "000538",
     market: "深交所",
     mark: "云",
+    score: 90,
     annualDividend: 2.602,
     dividendBasis: "2025 年特别分红 1.019 元 + 年度分红 1.583 元",
     dividendAsOf: "2025 年度合计",
@@ -75,7 +77,7 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
       ? (stock.annualDividend / latestQuote.close) * 100
       : null,
   };
-});
+}).sort((left, right) => right.score - left.score);
 
 const payload = {
   currency: "CNY",

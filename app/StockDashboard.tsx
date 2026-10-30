@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -24,6 +24,7 @@ type StockSummary = {
   code: string;
   market: string;
   mark: string;
+  score: number;
   annualDividend: number;
   dividendBasis: string;
   dividendAsOf: string;
@@ -60,6 +61,7 @@ const FALLBACK_STOCKS: StockSummary[] = [
     code: "601318",
     market: "上交所",
     mark: "平",
+    score: 100,
     annualDividend: 2.7,
     dividendBasis: "2025 年中期 0.95 元 + 末期 1.75 元",
     dividendAsOf: "2025 年度",
@@ -74,6 +76,7 @@ const FALLBACK_STOCKS: StockSummary[] = [
     code: "000538",
     market: "深交所",
     mark: "云",
+    score: 90,
     annualDividend: 2.602,
     dividendBasis: "2025 年特别分红 1.019 元 + 年度分红 1.583 元",
     dividendAsOf: "2025 年度合计",
@@ -108,6 +111,7 @@ export default function StockDashboard() {
   const [data, setData] = useState<QuoteResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const stockSelectorRef = useRef<HTMLDetailsElement>(null);
 
   const loadQuotes = useCallback(async (manual = false) => {
     if (manual) setIsRefreshing(true);
@@ -163,8 +167,17 @@ export default function StockDashboard() {
     return () => window.clearInterval(timer);
   }, [loadQuotes]);
 
+  const rankedStocks = useMemo(
+    () =>
+      [...stocks].sort(
+        (left, right) =>
+          right.score - left.score || left.name.localeCompare(right.name, "zh-CN"),
+      ),
+    [stocks],
+  );
   const selectedStock =
-    stocks.find((stock) => stock.symbol === selectedSymbol) ?? stocks[0];
+    rankedStocks.find((stock) => stock.symbol === selectedSymbol) ??
+    rankedStocks[0];
   const latest = data?.quotes[0];
   const previous = data?.quotes[1];
   const change = latest && previous ? latest.close - previous.close : 0;
@@ -232,46 +245,85 @@ export default function StockDashboard() {
             </div>
             <span className="stock-count">{String(stocks.length).padStart(2, "0")}</span>
           </div>
-          <div className="stock-list" role="tablist" aria-label="选择股票">
-            {stocks.map((stock) => (
-              <button
-                type="button"
-                role="tab"
-                aria-selected={selectedSymbol === stock.symbol}
-                className={selectedSymbol === stock.symbol ? "is-active" : ""}
-                onClick={() => setSelectedSymbol(stock.symbol)}
-                key={stock.symbol}
-              >
-                <span className="stock-mark">{stock.mark}</span>
-                <span className="stock-identity">
-                  <strong>{stock.name}</strong>
-                  <small>{stock.symbol}</small>
-                </span>
-                <span className="stock-list-price">
-                  <strong>
-                    {stock.latestClose === null
-                      ? "—"
-                      : `¥${numberFormatter.format(stock.latestClose)}`}
-                  </strong>
-                  <small
-                    className={
-                      stock.changePercent === null
-                        ? ""
-                        : stock.changePercent >= 0
-                          ? "positive"
-                          : "negative"
+          <details className="stock-selector" ref={stockSelectorRef}>
+            <summary className="stock-selector-current">
+              <span className="stock-mark">{selectedStock.mark}</span>
+              <span className="stock-identity">
+                <strong>{selectedStock.name}</strong>
+                <small>{selectedStock.symbol}</small>
+              </span>
+              <span className="stock-list-price">
+                <strong>
+                  {selectedStock.latestClose === null
+                    ? "—"
+                    : `¥${numberFormatter.format(selectedStock.latestClose)}`}
+                </strong>
+                <small>
+                  {selectedStock.currentDividendYield === null
+                    ? "股息率 —"
+                    : `股息率 ${selectedStock.currentDividendYield.toFixed(2)}%`}
+                </small>
+              </span>
+              <span className="stock-score">
+                <small>评分</small>
+                <strong>{selectedStock.score}</strong>
+                <i className="selector-chevron" aria-hidden="true">
+                  ⌄
+                </i>
+              </span>
+            </summary>
+            <div className="stock-options" role="listbox" aria-label="按评分选择股票">
+              {rankedStocks.map((stock, index) => (
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={selectedSymbol === stock.symbol}
+                  className={selectedSymbol === stock.symbol ? "is-active" : ""}
+                  onClick={() => {
+                    setSelectedSymbol(stock.symbol);
+                    if (stockSelectorRef.current) {
+                      stockSelectorRef.current.open = false;
                     }
-                  >
-                    {stock.currentDividendYield === null
-                      ? "股息率 —"
-                      : `股息率 ${stock.currentDividendYield.toFixed(2)}%`}
-                  </small>
-                </span>
-              </button>
-            ))}
-          </div>
+                  }}
+                  key={stock.symbol}
+                >
+                  <span className="stock-mark">{stock.mark}</span>
+                  <span className="stock-identity">
+                    <strong>{stock.name}</strong>
+                    <small>
+                      #{String(index + 1).padStart(2, "0")} · {stock.symbol}
+                    </small>
+                  </span>
+                  <span className="stock-list-price">
+                    <strong>
+                      {stock.latestClose === null
+                        ? "—"
+                        : `¥${numberFormatter.format(stock.latestClose)}`}
+                    </strong>
+                    <small
+                      className={
+                        stock.changePercent === null
+                          ? ""
+                          : stock.changePercent >= 0
+                            ? "positive"
+                            : "negative"
+                      }
+                    >
+                      {stock.currentDividendYield === null
+                        ? "股息率 —"
+                        : `股息率 ${stock.currentDividendYield.toFixed(2)}%`}
+                    </small>
+                  </span>
+                  <span className="stock-score">
+                    <small>评分</small>
+                    <strong>{stock.score}</strong>
+                  </span>
+                </button>
+              ))}
+            </div>
+          </details>
           <p className="stock-rail-note">
-            后续新增股票时会继续排列在此处，列表可独立滚动。
+            评分越高越靠前；新增股票会自动进入下拉列表。
           </p>
         </aside>
 
