@@ -903,6 +903,71 @@ footer {
   padding: 30px;
 }
 
+.comparison-section {
+  background: linear-gradient(180deg, #fff8e6 0%, #fbfbf7 46%);
+}
+
+.comparison-table-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(10, 18, 34, 0.11);
+}
+
+.comparison-table-heading strong {
+  font-family: "Songti SC", STSong, serif;
+  font-size: 20px;
+}
+
+.comparison-table-heading span {
+  color: #98a2b3;
+  font-size: 10px;
+}
+
+.comparison-section .table-wrap {
+  margin-top: 12px;
+}
+
+.comparison-section tbody tr.is-recent-row td {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.comparison-closed-row td {
+  color: #98a2b3;
+  background: rgba(10, 18, 34, 0.025);
+}
+
+.comparison-closed-row td[colspan] {
+  text-align: center;
+}
+
+.day-context {
+  margin-left: 9px;
+  color: #98a2b3;
+  font-family: "PingFang SC", sans-serif;
+  font-size: 9px;
+}
+
+.market-closed-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #8a94a5;
+  font-family: "PingFang SC", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.market-closed-label::before {
+  width: 18px;
+  height: 1px;
+  background: #b4bbc5;
+  content: "";
+}
+
 .table-caption {
   color: #98a2b3;
   font-size: 11px;

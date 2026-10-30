@@ -229,6 +229,22 @@ export default function StockDashboard() {
   const periodChangePercent = periodStart
     ? (periodChange / periodStart.close) * 100
     : 0;
+  const comparisonRows = useMemo(() => {
+    const recentDates = new Set(recentDays.map((day) => day.date));
+    const olderQuotes = (data?.quotes ?? [])
+      .filter((quote) => !recentDates.has(quote.tradeDate))
+      .slice(0, 5);
+
+    return [
+      ...recentDays.map((day) => ({ ...day, isRecent: true })),
+      ...olderQuotes.map((quote) => ({
+        date: quote.tradeDate,
+        isToday: false,
+        quote,
+        isRecent: false,
+      })),
+    ];
+  }, [data, recentDays]);
 
   return (
     <main className="site-shell">
@@ -558,14 +574,14 @@ export default function StockDashboard() {
                 </article>
               </section>
 
-              <section className="week-section" aria-label="最近七天行情统计">
-                <div className="section-heading week-heading">
+              <section className="history-section comparison-section" aria-label="近期行情对比">
+                <div className="section-heading comparison-heading">
                   <div>
-                    <span className="section-kicker">含今天 · 自然日</span>
-                    <h2>最近 7 天</h2>
+                    <span className="section-kicker">最近 7 天统计 · 历史记录</span>
+                    <h2>近期行情对比</h2>
                   </div>
                   <span className="table-caption">
-                    非交易日标记为休市，不补造价格
+                    前 7 行为自然日，非交易日标记为休市
                   </span>
                 </div>
 
@@ -600,44 +616,9 @@ export default function StockDashboard() {
                   </div>
                 </div>
 
-                <div className="week-days">
-                  {recentDays.map((day) => (
-                    <article
-                      className={`week-day ${day.isToday ? "is-today" : ""} ${day.quote ? "" : "is-closed"}`}
-                      key={day.date}
-                    >
-                      <div className="week-day-heading">
-                        <span>{day.date.slice(5).replace("-", ".")}</span>
-                        <small>{day.isToday ? "今天" : formatWeekday(day.date)}</small>
-                      </div>
-                      {day.quote ? (
-                        <>
-                          <strong>¥{numberFormatter.format(day.quote.close)}</strong>
-                          <dl>
-                            <div><dt>开</dt><dd>{numberFormatter.format(day.quote.open)}</dd></div>
-                            <div><dt>高</dt><dd>{numberFormatter.format(day.quote.high)}</dd></div>
-                            <div><dt>低</dt><dd>{numberFormatter.format(day.quote.low)}</dd></div>
-                            <div><dt>振幅</dt><dd>{formatAmplitude(day.quote, data?.quotes ?? [])}</dd></div>
-                          </dl>
-                        </>
-                      ) : (
-                        <div className="closed-state">
-                          <span>—</span>
-                          <strong>休市</strong>
-                        </div>
-                      )}
-                    </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className="history-section">
-                <div className="section-heading history-heading">
-                  <div>
-                    <span className="section-kicker">历史记录</span>
-                    <h2>最近交易日</h2>
-                  </div>
-                  <span className="table-caption">价格单位：人民币</span>
+                <div className="comparison-table-heading">
+                  <strong>每日价格对比</strong>
+                  <span>价格单位：人民币</span>
                 </div>
 
                 <div className="table-wrap">
@@ -655,25 +636,48 @@ export default function StockDashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {data?.quotes.slice(0, 12).map((quote, index) => (
-                        <tr key={quote.tradeDate}>
-                          <td>
-                            <span className="date-cell">{formatTableDate(quote.tradeDate)}</span>
-                            {index === 0 && <small>最新</small>}
-                          </td>
-                          <td>{numberFormatter.format(quote.open)}</td>
-                          <td className="high-cell">{numberFormatter.format(quote.high)}</td>
-                          <td className="low-cell">{numberFormatter.format(quote.low)}</td>
-                          <td className="open-low-cell">
-                            {formatSignedDifference(quote.low - quote.open)}
-                          </td>
-                          <td className="open-high-cell">
-                            {formatSignedDifference(quote.high - quote.open)}
-                          </td>
-                          <td><strong>{numberFormatter.format(quote.close)}</strong></td>
-                          <td>{formatAmplitude(quote, data.quotes)}</td>
-                        </tr>
-                      )) ??
+                      {data ?
+                        comparisonRows.map((row) => {
+                          if (!row.quote) {
+                            return (
+                              <tr className="comparison-closed-row" key={row.date}>
+                                <td>
+                                  <span className="date-cell">{formatTableDate(row.date)}</span>
+                                  <span className="day-context">{formatWeekday(row.date)}</span>
+                                </td>
+                                <td colSpan={7}>
+                                  <span className="market-closed-label">休市</span>
+                                </td>
+                              </tr>
+                            );
+                          }
+
+                          const quote = row.quote;
+
+                          return (
+                            <tr className={row.isRecent ? "is-recent-row" : ""} key={row.date}>
+                              <td>
+                                <span className="date-cell">{formatTableDate(row.date)}</span>
+                                {row.isToday ? (
+                                  <small>今天</small>
+                                ) : row.isRecent ? (
+                                  <span className="day-context">{formatWeekday(row.date)}</span>
+                                ) : null}
+                              </td>
+                              <td>{numberFormatter.format(quote.open)}</td>
+                              <td className="high-cell">{numberFormatter.format(quote.high)}</td>
+                              <td className="low-cell">{numberFormatter.format(quote.low)}</td>
+                              <td className="open-low-cell">
+                                {formatSignedDifference(quote.low - quote.open)}
+                              </td>
+                              <td className="open-high-cell">
+                                {formatSignedDifference(quote.high - quote.open)}
+                              </td>
+                              <td><strong>{numberFormatter.format(quote.close)}</strong></td>
+                              <td>{formatAmplitude(quote, data.quotes)}</td>
+                            </tr>
+                          );
+                        }) :
                         Array.from({ length: 6 }).map((_, index) => (
                           <tr key={index}>
                             {Array.from({ length: 8 }).map((__, cell) => (

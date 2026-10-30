@@ -37,6 +37,10 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /formatSignedDifference/);
   assert.match(dashboard, /DIVIDEND_YIELD_TIERS/);
   assert.match(dashboard, /最近 7 天/);
+  assert.match(dashboard, /近期行情对比/);
+  assert.match(dashboard, /comparisonRows/);
+  assert.match(dashboard, /market-closed-label/);
+  assert.doesNotMatch(dashboard, /className="week-section"/);
   assert.match(dashboard, /601318/);
   assert.match(dashboard, /react-loading-skeleton/);
   assert.match(dashboard, /data\/quotes\.json/);
