@@ -9,21 +9,99 @@ const STOCKS = [
     name: "中国平安",
     code: "601318",
     market: "上交所",
+    category: "金融",
     mark: "平",
     score: 100,
-    annualDividend: 2.7,
-    dividendBasis: "2025 年中期 0.95 元 + 末期 1.75 元",
-    dividendAsOf: "2025 年度",
-    dividendSources: [
-      {
-        label: "中期分红公告",
-        url: "https://static.cninfo.com.cn/finalpage/2025-10-17/1224716377.PDF",
-      },
-      {
-        label: "年度业绩公告",
-        url: "https://www.pingan.cn/tc/common/news/article/1774528001371.shtml",
-      },
-    ],
+  },
+  {
+    symbol: "600941.SH",
+    sourceSymbol: "sh600941",
+    name: "中国移动",
+    code: "600941",
+    market: "上交所",
+    category: "运营商",
+    mark: "移",
+    score: 98,
+  },
+  {
+    symbol: "000333.SZ",
+    sourceSymbol: "sz000333",
+    name: "美的集团",
+    code: "000333",
+    market: "深交所",
+    category: "电器",
+    mark: "美",
+    score: 97,
+  },
+  {
+    symbol: "600690.SH",
+    sourceSymbol: "sh600690",
+    name: "海尔智家",
+    code: "600690",
+    market: "上交所",
+    category: "电器",
+    mark: "智",
+    score: 96,
+  },
+  {
+    symbol: "000651.SZ",
+    sourceSymbol: "sz000651",
+    name: "格力电器",
+    code: "000651",
+    market: "深交所",
+    category: "电器",
+    mark: "格",
+    score: 95,
+  },
+  {
+    symbol: "600900.SH",
+    sourceSymbol: "sh600900",
+    name: "长江电力",
+    code: "600900",
+    market: "上交所",
+    category: "电力",
+    mark: "长",
+    score: 94,
+  },
+  {
+    symbol: "600887.SH",
+    sourceSymbol: "sh600887",
+    name: "伊利股份",
+    code: "600887",
+    market: "上交所",
+    category: "消费",
+    mark: "伊",
+    score: 93,
+  },
+  {
+    symbol: "600406.SH",
+    sourceSymbol: "sh600406",
+    name: "国电南瑞",
+    code: "600406",
+    market: "上交所",
+    category: "电力",
+    mark: "瑞",
+    score: 92,
+  },
+  {
+    symbol: "000423.SZ",
+    sourceSymbol: "sz000423",
+    name: "东阿阿胶",
+    code: "000423",
+    market: "深交所",
+    category: "中药",
+    mark: "胶",
+    score: 91,
+  },
+  {
+    symbol: "600886.SH",
+    sourceSymbol: "sh600886",
+    name: "国投电力",
+    code: "600886",
+    market: "上交所",
+    category: "电力",
+    mark: "投",
+    score: 90,
   },
   {
     symbol: "000538.SZ",
@@ -31,21 +109,119 @@ const STOCKS = [
     name: "云南白药",
     code: "000538",
     market: "深交所",
+    category: "中药",
     mark: "云",
-    score: 90,
-    annualDividend: 2.602,
-    dividendBasis: "2025 年特别分红 1.019 元 + 年度分红 1.583 元",
-    dividendAsOf: "2025 年度合计",
-    dividendSources: [
-      {
-        label: "特别分红公告",
-        url: "https://static.cninfo.com.cn/finalpage/2025-08-30/1224622372.PDF",
-      },
-      {
-        label: "年度分红公告",
-        url: "https://static.cninfo.com.cn/finalpage/2026-04-28/1225202736.PDF",
-      },
-    ],
+    score: 89,
+  },
+  {
+    symbol: "601728.SH",
+    sourceSymbol: "sh601728",
+    name: "中国电信",
+    code: "601728",
+    market: "上交所",
+    category: "运营商",
+    mark: "电",
+    score: 88,
+  },
+  {
+    symbol: "000895.SZ",
+    sourceSymbol: "sz000895",
+    name: "双汇发展",
+    code: "000895",
+    market: "深交所",
+    category: "消费",
+    mark: "双",
+    score: 87,
+  },
+  {
+    symbol: "603288.SH",
+    sourceSymbol: "sh603288",
+    name: "海天味业",
+    code: "603288",
+    market: "上交所",
+    category: "消费",
+    mark: "海",
+    score: 86,
+  },
+  {
+    symbol: "601985.SH",
+    sourceSymbol: "sh601985",
+    name: "中国核电",
+    code: "601985",
+    market: "上交所",
+    category: "电力",
+    mark: "核",
+    score: 85,
+  },
+  {
+    symbol: "600011.SH",
+    sourceSymbol: "sh600011",
+    name: "华能国际",
+    code: "600011",
+    market: "上交所",
+    category: "电力",
+    mark: "华",
+    score: 84,
+  },
+  {
+    symbol: "600795.SH",
+    sourceSymbol: "sh600795",
+    name: "国电电力",
+    code: "600795",
+    market: "上交所",
+    category: "电力",
+    mark: "国",
+    score: 83,
+  },
+  {
+    symbol: "600050.SH",
+    sourceSymbol: "sh600050",
+    name: "中国联通",
+    code: "600050",
+    market: "上交所",
+    category: "运营商",
+    mark: "联",
+    score: 82,
+  },
+  {
+    symbol: "002508.SZ",
+    sourceSymbol: "sz002508",
+    name: "老板电器",
+    code: "002508",
+    market: "深交所",
+    category: "电器",
+    mark: "老",
+    score: 81,
+  },
+  {
+    symbol: "002032.SZ",
+    sourceSymbol: "sz002032",
+    name: "苏泊尔",
+    code: "002032",
+    market: "深交所",
+    category: "电器",
+    mark: "苏",
+    score: 80,
+  },
+  {
+    symbol: "600750.SH",
+    sourceSymbol: "sh600750",
+    name: "华润江中",
+    code: "600750",
+    market: "上交所",
+    category: "中药",
+    mark: "江",
+    score: 79,
+  },
+  {
+    symbol: "600863.SH",
+    sourceSymbol: "sh600863",
+    name: "内蒙华电",
+    code: "600863",
+    market: "上交所",
+    category: "电力",
+    mark: "蒙",
+    score: 78,
   },
 ];
 
@@ -57,14 +233,11 @@ const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const outputPath = resolve(projectRoot, "public/data/quotes.json");
 
 const stockDataEntries = [];
-for (const stock of STOCKS) {
-  const quotes = await fetchRecentQuotes(stock);
-  const { annualReports, freeFloatShares } = await fetchFinancialData(stock);
-  const turnoverRate = calculateTurnoverRate(quotes[0], freeFloatShares);
-  stockDataEntries.push([
-    stock.symbol,
-    { quotes, turnoverRate, annualReports },
-  ]);
+for (let index = 0; index < STOCKS.length; index += 3) {
+  const entries = await Promise.all(
+    STOCKS.slice(index, index + 3).map((stock) => fetchStockData(stock)),
+  );
+  stockDataEntries.push(...entries);
 }
 const stockDataBySymbol = Object.fromEntries(stockDataEntries);
 const quotesBySymbol = Object.fromEntries(
@@ -76,7 +249,13 @@ const quotesBySymbol = Object.fromEntries(
 const syncedAt = new Date().toISOString();
 
 const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
-  const { quotes, turnoverRate, annualReports } = stockDataBySymbol[stock.symbol];
+  const {
+    quotes,
+    turnoverRate,
+    annualReports,
+    annualDividend,
+    dividendCount,
+  } = stockDataBySymbol[stock.symbol];
   const latestQuote = quotes[0];
   const previousQuote = quotes[1];
   const changePercent =
@@ -86,10 +265,22 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
 
   return {
     ...stock,
+    annualDividend,
+    dividendBasis:
+      dividendCount > 0
+        ? `近12个月已实施现金分红 ${dividendCount} 次，税前合计`
+        : "近12个月暂无已实施现金分红",
+    dividendAsOf: latestQuote ? `截至 ${latestQuote.tradeDate}` : "等待行情",
+    dividendSources: [
+      {
+        label: "分红记录",
+        url: `https://data.eastmoney.com/yjfp/detail/${stock.code}.html`,
+      },
+    ],
     latestClose: latestQuote?.close ?? null,
     changePercent,
     currentDividendYield: latestQuote
-      ? (stock.annualDividend / latestQuote.close) * 100
+      ? (annualDividend / latestQuote.close) * 100
       : null,
     turnoverRate,
     annualReports,
@@ -98,7 +289,7 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
 
 const payload = {
   currency: "CNY",
-  source: "新浪财经公开行情 · 东方财富公开财务数据 · GitHub 每日更新",
+  source: "新浪财经公开行情 · 东方财富公开财务及分红数据 · GitHub 每日更新",
   sourceStatus: "fresh",
   sourceMessage: null,
   syncedAt,
@@ -109,6 +300,31 @@ const payload = {
 await mkdir(dirname(outputPath), { recursive: true });
 await writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 console.log(`Updated ${stocks.length} stocks at ${syncedAt}`);
+
+async function fetchStockData(stock) {
+  const quotes = await fetchRecentQuotes(stock);
+  const [{ annualReports, freeFloatShares }, dividendRecords] =
+    await Promise.all([
+      fetchFinancialData(stock),
+      fetchDividendRecords(stock),
+    ]);
+  const turnoverRate = calculateTurnoverRate(quotes[0], freeFloatShares);
+  const { annualDividend, dividendCount } = calculateTrailingDividend(
+    dividendRecords,
+    quotes[0].tradeDate,
+  );
+
+  return [
+    stock.symbol,
+    {
+      quotes,
+      turnoverRate,
+      annualReports,
+      annualDividend,
+      dividendCount,
+    },
+  ];
+}
 
 async function fetchRecentQuotes(stock) {
   const url = new URL(SOURCE_URL);
@@ -213,6 +429,34 @@ async function fetchFinancialData(stock) {
   };
 }
 
+async function fetchDividendRecords(stock) {
+  const url = new URL(EASTMONEY_FINANCE_URL);
+  url.search = new URLSearchParams({
+    reportName: "RPT_SHAREBONUS_DET",
+    columns: "ALL",
+    filter: `(SECURITY_CODE="${stock.code}")`,
+    pageNumber: "1",
+    pageSize: "30",
+    sortTypes: "-1",
+    sortColumns: "REPORT_DATE",
+  }).toString();
+
+  const response = await fetchWithRetry(url, {
+    headers: {
+      Accept: "application/json",
+      Referer: "https://data.eastmoney.com/",
+      "User-Agent": "Mozilla/5.0 A-Share-Daily-Quote-Dashboard/1.0",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`${stock.name}分红数据源返回异常状态：${response.status}`);
+  }
+
+  const payload = await response.json();
+  return Array.isArray(payload.result?.data) ? payload.result.data : [];
+}
+
 function toFiniteNumber(value) {
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
@@ -221,6 +465,37 @@ function toFiniteNumber(value) {
 function calculateTurnoverRate(latestQuote, freeFloatShares) {
   if (!latestQuote || !freeFloatShares || freeFloatShares <= 0) return null;
   return (latestQuote.volume / freeFloatShares) * 100;
+}
+
+function calculateTrailingDividend(records, tradeDate) {
+  const endDate = new Date(`${tradeDate}T12:00:00Z`);
+  const startDate = new Date(endDate);
+  startDate.setUTCFullYear(startDate.getUTCFullYear() - 1);
+
+  const implementedRecords = records.filter((record) => {
+    const exDividendDate = new Date(
+      `${String(record.EX_DIVIDEND_DATE ?? "").split(" ")[0]}T12:00:00Z`,
+    );
+    const pretaxBonus = Number(record.PRETAX_BONUS_RMB);
+
+    return (
+      String(record.ASSIGN_PROGRESS ?? "").includes("实施") &&
+      Number.isFinite(pretaxBonus) &&
+      pretaxBonus > 0 &&
+      !Number.isNaN(exDividendDate.getTime()) &&
+      exDividendDate > startDate &&
+      exDividendDate <= endDate
+    );
+  });
+
+  return {
+    annualDividend:
+      implementedRecords.reduce(
+        (total, record) => total + Number(record.PRETAX_BONUS_RMB) / 10,
+        0,
+      ),
+    dividendCount: implementedRecords.length,
+  };
 }
 
 async function fetchWithRetry(url, options, attempts = 3) {

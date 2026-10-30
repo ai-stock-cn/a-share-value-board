@@ -32,11 +32,14 @@ type AnnualReport = {
   debtRatio: number | null;
 };
 
+type StockCategory = "金融" | "电力" | "消费" | "电器" | "运营商" | "中药";
+
 type StockSummary = {
   symbol: string;
   name: string;
   code: string;
   market: string;
+  category: StockCategory;
   mark: string;
   score: number;
   annualDividend: number;
@@ -51,6 +54,7 @@ type StockSummary = {
 };
 
 type MarketFilter = "all" | "上交所" | "深交所";
+type CategoryFilter = "all" | StockCategory;
 
 type QuoteResponse = StockSummary & {
   currency: string;
@@ -78,6 +82,7 @@ const FALLBACK_STOCKS: StockSummary[] = [
     name: "中国平安",
     code: "601318",
     market: "上交所",
+    category: "金融",
     mark: "平",
     score: 100,
     annualDividend: 2.7,
@@ -95,6 +100,7 @@ const FALLBACK_STOCKS: StockSummary[] = [
     name: "云南白药",
     code: "000538",
     market: "深交所",
+    category: "中药",
     mark: "云",
     score: 90,
     annualDividend: 2.602,
@@ -114,6 +120,15 @@ const MARKET_FILTERS: Array<{ value: MarketFilter; label: string }> = [
   { value: "all", label: "全部" },
   { value: "上交所", label: "沪市" },
   { value: "深交所", label: "深市" },
+];
+const CATEGORY_FILTERS: Array<{ value: CategoryFilter; label: string }> = [
+  { value: "all", label: "全部分类" },
+  { value: "金融", label: "金融" },
+  { value: "电力", label: "电力" },
+  { value: "消费", label: "消费" },
+  { value: "电器", label: "电器" },
+  { value: "运营商", label: "运营商" },
+  { value: "中药", label: "中药" },
 ];
 const DATA_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/quotes.json`;
 
@@ -139,6 +154,7 @@ export default function StockDashboard() {
   const [error, setError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [marketFilter, setMarketFilter] = useState<MarketFilter>("all");
+  const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all");
   const stockSelectorRef = useRef<HTMLDetailsElement>(null);
 
   const loadQuotes = useCallback(async (manual = false) => {
@@ -208,10 +224,12 @@ export default function StockDashboard() {
     rankedStocks[0];
   const filteredStocks = useMemo(
     () =>
-      marketFilter === "all"
-        ? rankedStocks
-        : rankedStocks.filter((stock) => stock.market === marketFilter),
-    [marketFilter, rankedStocks],
+      rankedStocks.filter(
+        (stock) =>
+          (marketFilter === "all" || stock.market === marketFilter) &&
+          (categoryFilter === "all" || stock.category === categoryFilter),
+      ),
+    [categoryFilter, marketFilter, rankedStocks],
   );
   const latest = data?.quotes[0];
   const previous = data?.quotes[1];
@@ -299,48 +317,99 @@ export default function StockDashboard() {
             </div>
             <span className="stock-count">{String(stocks.length).padStart(2, "0")}</span>
           </div>
-          <label className="market-select">
-            <span>市场筛选</span>
-            <span className="market-select-control">
-              <select
-                aria-label="按市场筛选股票"
-                value={marketFilter}
-                onChange={(event) => {
-                  const nextFilter = event.target.value as MarketFilter;
-                  setMarketFilter(nextFilter);
-                  if (nextFilter !== "all") {
-                    const firstMatch = rankedStocks.find(
-                      (stock) => stock.market === nextFilter,
+          <div className="stock-filter-group">
+            <label className="market-select">
+              <span>市场</span>
+              <span className="market-select-control">
+                <select
+                  aria-label="按市场筛选股票"
+                  value={marketFilter}
+                  onChange={(event) => {
+                    const nextFilter = event.target.value as MarketFilter;
+                    let firstMatch = rankedStocks.find(
+                      (stock) =>
+                        (nextFilter === "all" || stock.market === nextFilter) &&
+                        (categoryFilter === "all" || stock.category === categoryFilter),
                     );
-                    if (firstMatch) setSelectedSymbol(firstMatch.symbol);
-                  }
-                }}
-              >
-                {MARKET_FILTERS.map((filter) => {
-                  const count =
-                    filter.value === "all"
-                      ? rankedStocks.length
-                      : rankedStocks.filter(
-                          (stock) => stock.market === filter.value,
-                        ).length;
 
-                  return (
-                    <option value={filter.value} key={filter.value}>
-                      {filter.label} · {count} 只
-                    </option>
-                  );
-                })}
-              </select>
-              <i aria-hidden="true">⌄</i>
-            </span>
-          </label>
+                    setMarketFilter(nextFilter);
+                    if (!firstMatch && categoryFilter !== "all") {
+                      setCategoryFilter("all");
+                      firstMatch = rankedStocks.find(
+                        (stock) => nextFilter === "all" || stock.market === nextFilter,
+                      );
+                    }
+                    if (firstMatch) setSelectedSymbol(firstMatch.symbol);
+                    if (stockSelectorRef.current) stockSelectorRef.current.open = false;
+                  }}
+                >
+                  {MARKET_FILTERS.map((filter) => {
+                    const count = rankedStocks.filter(
+                      (stock) =>
+                        (filter.value === "all" || stock.market === filter.value) &&
+                        (categoryFilter === "all" || stock.category === categoryFilter),
+                    ).length;
+
+                    return (
+                      <option value={filter.value} key={filter.value}>
+                        {filter.label} · {count} 只
+                      </option>
+                    );
+                  })}
+                </select>
+                <i aria-hidden="true">⌄</i>
+              </span>
+            </label>
+            <label className="market-select category-select">
+              <span>分类</span>
+              <span className="market-select-control">
+                <select
+                  aria-label="按分类筛选股票"
+                  value={categoryFilter}
+                  onChange={(event) => {
+                    const nextFilter = event.target.value as CategoryFilter;
+                    let firstMatch = rankedStocks.find(
+                      (stock) =>
+                        (nextFilter === "all" || stock.category === nextFilter) &&
+                        (marketFilter === "all" || stock.market === marketFilter),
+                    );
+
+                    setCategoryFilter(nextFilter);
+                    if (!firstMatch && marketFilter !== "all") {
+                      setMarketFilter("all");
+                      firstMatch = rankedStocks.find(
+                        (stock) => nextFilter === "all" || stock.category === nextFilter,
+                      );
+                    }
+                    if (firstMatch) setSelectedSymbol(firstMatch.symbol);
+                    if (stockSelectorRef.current) stockSelectorRef.current.open = false;
+                  }}
+                >
+                  {CATEGORY_FILTERS.map((filter) => {
+                    const count = rankedStocks.filter(
+                      (stock) =>
+                        (filter.value === "all" || stock.category === filter.value) &&
+                        (marketFilter === "all" || stock.market === marketFilter),
+                    ).length;
+
+                    return (
+                      <option value={filter.value} key={filter.value}>
+                        {filter.label} · {count} 只
+                      </option>
+                    );
+                  })}
+                </select>
+                <i aria-hidden="true">⌄</i>
+              </span>
+            </label>
+          </div>
           <details className="stock-selector" ref={stockSelectorRef}>
             <summary className="stock-selector-current">
               <span className="stock-mark">{selectedStock.mark}</span>
               <span className="stock-identity">
                 <strong>{selectedStock.name}</strong>
                 <small>
-                  {formatMarketName(selectedStock.market)} ·{" "}
+                  {selectedStock.category} · {formatMarketName(selectedStock.market)} ·{" "}
                   {selectedStock.symbol}
                 </small>
               </span>
@@ -393,7 +462,7 @@ export default function StockDashboard() {
                       <span className="stock-identity">
                         <strong>{stock.name}</strong>
                         <small>
-                          #{String(rank).padStart(2, "0")} ·{" "}
+                          #{String(rank).padStart(2, "0")} · {stock.category} ·{" "}
                           {formatMarketName(stock.market)} · {stock.symbol}
                         </small>
                       </span>
@@ -428,7 +497,7 @@ export default function StockDashboard() {
             </div>
           </details>
           <p className="stock-rail-note">
-            评分越高越靠前；新增股票会自动进入下拉列表。
+            可按市场和分类筛选；评分越高越靠前。
           </p>
         </aside>
 
@@ -437,6 +506,7 @@ export default function StockDashboard() {
             <div className="hero-copy">
               <div className="eyebrow">
                 <span>{selectedStock.market}</span>
+                <span>{selectedStock.category}</span>
                 <span>{selectedStock.code}</span>
                 <span>A 股</span>
               </div>

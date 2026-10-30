@@ -16,6 +16,13 @@ test("defines the stock dashboard product content", async () => {
   assert.doesNotMatch(page, developmentPreviewMeta);
   assert.match(dashboard, /中国平安/);
   assert.match(dashboard, /云南白药/);
+  assert.match(dashboard, /按分类筛选股票/);
+  assert.match(dashboard, /CATEGORY_FILTERS/);
+  assert.match(dashboard, /电力/);
+  assert.match(dashboard, /消费/);
+  assert.match(dashboard, /电器/);
+  assert.match(dashboard, /运营商/);
+  assert.match(dashboard, /中药/);
   assert.match(dashboard, /K 线走势/);
   assert.match(dashboard, /candle-price-label/);
   assert.match(dashboard, /隔日标注收盘价/);
@@ -86,6 +93,13 @@ test("includes the GitHub Pages update workflow", async () => {
   assert.match(workflow, /actions\/deploy-pages@v4/);
   assert.match(updater, /中国平安/);
   assert.match(updater, /云南白药/);
+  assert.match(updater, /中国核电/);
+  assert.match(updater, /双汇发展/);
+  assert.match(updater, /格力电器/);
+  assert.match(updater, /中国移动/);
+  assert.match(updater, /东阿阿胶/);
+  assert.match(updater, /RPT_SHAREBONUS_DET/);
+  assert.match(updater, /calculateTrailingDividend/);
   assert.match(updater, /score:\s*100/);
   assert.match(updater, /right\.score - left\.score/);
   assert.match(updater, /RPT_F10_FINANCE_MAINFINADATA/);
