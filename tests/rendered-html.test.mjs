@@ -51,8 +51,11 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /价格与股息摘要/);
   assert.match(dashboard, /stock-selector/);
   assert.match(dashboard, /按评分选择股票/);
-  assert.match(dashboard, /filteredStocks\.slice\(0, 5\)/);
-  assert.match(dashboard, /默认显示评分前 5 名/);
+  assert.match(dashboard, /STOCK_PAGE_SIZES/);
+  assert.match(dashboard, /\[5, 10, 20\]/);
+  assert.match(dashboard, /设置每页股票数量/);
+  assert.match(dashboard, /股票列表分页/);
+  assert.match(dashboard, /每页最多显示 20 条/);
   assert.match(dashboard, /按市场筛选股票/);
   assert.match(dashboard, /market-select/);
   assert.match(dashboard, /<select/);

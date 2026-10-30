@@ -1984,22 +1984,84 @@ footer {
   color: var(--lime);
 }
 
-.stock-list-toggle {
-  width: 100%;
-  margin-top: 8px;
-  padding: 9px 12px;
-  border: 1px solid var(--line);
-  border-radius: 11px;
-  background: rgba(255, 255, 255, 0.7);
+.stock-pagination {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.stock-page-size {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   color: #667085;
   font-size: 9px;
   font-weight: 800;
+}
+
+.stock-page-size .market-select-control {
+  min-width: 72px;
+}
+
+.stock-page-size select {
+  width: 100%;
+  padding: 6px 24px 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--ink);
+  font-size: 9px;
+  font-weight: 800;
+  outline: none;
   cursor: pointer;
 }
 
-.stock-list-toggle:hover {
-  border-color: rgba(10, 18, 34, 0.2);
+.stock-page-size .market-select-control i {
+  color: #698c00;
+}
+
+.stock-page-controls {
+  display: grid;
+  grid-template-columns: 30px 42px 30px;
+  gap: 4px;
+  align-items: center;
+}
+
+.stock-page-controls button {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--ink);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.stock-page-controls button:hover:not(:disabled) {
+  border-color: rgba(10, 18, 34, 0.28);
   background: white;
+}
+
+.stock-page-controls button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.stock-page-controls > span {
+  color: #667085;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  font-weight: 800;
+  text-align: center;
 }
 
 .stock-rail-note {

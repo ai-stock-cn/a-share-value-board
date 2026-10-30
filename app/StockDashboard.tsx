@@ -75,6 +75,7 @@ type StockSummary = {
 
 type MarketFilter = "all" | "上交所" | "深交所";
 type CategoryFilter = "all" | StockCategory;
+type StockPageSize = 5 | 10 | 20;
 
 type QuoteResponse = StockSummary & {
   currency: string;
@@ -150,6 +151,7 @@ const FALLBACK_STOCKS: StockSummary[] = [
 ];
 
 const DIVIDEND_YIELD_TIERS = [6.5, 6, 5.5, 5, 4.5, 4];
+const STOCK_PAGE_SIZES: StockPageSize[] = [5, 10, 20];
 const SCORE_DIMENSIONS: Array<{
   key: keyof ScoreBreakdown;
   label: string;
@@ -201,7 +203,8 @@ export default function StockDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [marketFilter, setMarketFilter] = useState<MarketFilter>("all");
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all");
-  const [showAllStocks, setShowAllStocks] = useState(false);
+  const [stockPageSize, setStockPageSize] = useState<StockPageSize>(5);
+  const [stockPage, setStockPage] = useState(1);
   const initialRankSelectionRef = useRef(false);
 
   const loadQuotes = useCallback(async (manual = false) => {
@@ -291,9 +294,17 @@ export default function StockDashboard() {
       ),
     [categoryFilter, marketFilter, rankedStocks],
   );
+  const stockPageCount = Math.max(
+    1,
+    Math.ceil(filteredStocks.length / stockPageSize),
+  );
+  const activeStockPage = Math.min(stockPage, stockPageCount);
   const visibleStocks = useMemo(
-    () => (showAllStocks ? filteredStocks : filteredStocks.slice(0, 5)),
-    [filteredStocks, showAllStocks],
+    () => {
+      const startIndex = (activeStockPage - 1) * stockPageSize;
+      return filteredStocks.slice(startIndex, startIndex + stockPageSize);
+    },
+    [activeStockPage, filteredStocks, stockPageSize],
   );
   const latest = data?.quotes[0];
   const previous = data?.quotes[1];
@@ -411,7 +422,7 @@ export default function StockDashboard() {
                       );
                     }
                     if (firstMatch) setSelectedSymbol(firstMatch.symbol);
-                    setShowAllStocks(false);
+                    setStockPage(1);
                   }}
                 >
                   {MARKET_FILTERS.map((filter) => {
@@ -453,7 +464,7 @@ export default function StockDashboard() {
                       );
                     }
                     if (firstMatch) setSelectedSymbol(firstMatch.symbol);
-                    setShowAllStocks(false);
+                    setStockPage(1);
                   }}
                 >
                   {CATEGORY_FILTERS.map((filter) => {
@@ -530,20 +541,60 @@ export default function StockDashboard() {
                 );
               })}
             </div>
-            {filteredStocks.length > 5 && (
-              <button
-                type="button"
-                className="stock-list-toggle"
-                onClick={() => setShowAllStocks((current) => !current)}
-              >
-                {showAllStocks
-                  ? "收起至评分前 5 名"
-                  : `查看全部 ${filteredStocks.length} 只`}
-              </button>
-            )}
+            <div className="stock-pagination">
+              <label className="stock-page-size">
+                <span>每页</span>
+                <span className="market-select-control">
+                  <select
+                    aria-label="设置每页股票数量"
+                    value={stockPageSize}
+                    onChange={(event) => {
+                      setStockPageSize(
+                        Number(event.target.value) as StockPageSize,
+                      );
+                      setStockPage(1);
+                    }}
+                  >
+                    {STOCK_PAGE_SIZES.map((pageSize) => (
+                      <option value={pageSize} key={pageSize}>
+                        {pageSize} 条
+                      </option>
+                    ))}
+                  </select>
+                  <i aria-hidden="true">⌄</i>
+                </span>
+              </label>
+              <div className="stock-page-controls" aria-label="股票列表分页">
+                <button
+                  type="button"
+                  aria-label="上一页"
+                  disabled={activeStockPage === 1}
+                  onClick={() =>
+                    setStockPage((current) => Math.max(1, current - 1))
+                  }
+                >
+                  ←
+                </button>
+                <span aria-live="polite">
+                  {activeStockPage} / {stockPageCount}
+                </span>
+                <button
+                  type="button"
+                  aria-label="下一页"
+                  disabled={activeStockPage === stockPageCount}
+                  onClick={() =>
+                    setStockPage((current) =>
+                      Math.min(stockPageCount, current + 1),
+                    )
+                  }
+                >
+                  →
+                </button>
+              </div>
+            </div>
           </div>
           <p className="stock-rail-note">
-            默认显示评分前 5 名；可按市场和分类筛选。
+            按评分从高到低排列；每页最多显示 20 条。
           </p>
         </aside>
 
