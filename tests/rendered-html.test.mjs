@@ -25,6 +25,7 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /运营商/);
   assert.match(dashboard, /中药/);
   assert.match(dashboard, /石油/);
+  assert.match(dashboard, /资源/);
   assert.match(dashboard, /K 线走势/);
   assert.match(dashboard, /candle-price-label/);
   assert.match(dashboard, /隔日标注收盘价/);
@@ -127,6 +128,9 @@ test("includes the GitHub Pages update workflow", async () => {
   assert.match(updater, /中国海油/);
   assert.match(updater, /中国神华/);
   assert.match(updater, /中国石油/);
+  assert.match(updater, /神火股份/);
+  assert.match(updater, /云铝股份/);
+  assert.match(updater, /紫金矿业/);
   assert.match(updater, /RPT_SHAREBONUS_DET/);
   assert.match(updater, /SINA_DIVIDEND_URL/);
   assert.match(updater, /fetchSinaDividendRecords/);

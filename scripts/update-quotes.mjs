@@ -404,6 +404,36 @@ const STOCKS = [
     mark: "油",
     score: 61,
   },
+  {
+    symbol: "000933.SZ",
+    sourceSymbol: "sz000933",
+    name: "神火股份",
+    code: "000933",
+    market: "深交所",
+    category: "资源",
+    mark: "火",
+    score: 60,
+  },
+  {
+    symbol: "000807.SZ",
+    sourceSymbol: "sz000807",
+    name: "云铝股份",
+    code: "000807",
+    market: "深交所",
+    category: "资源",
+    mark: "铝",
+    score: 59,
+  },
+  {
+    symbol: "601899.SH",
+    sourceSymbol: "sh601899",
+    name: "紫金矿业",
+    code: "601899",
+    market: "上交所",
+    category: "资源",
+    mark: "紫",
+    score: 58,
+  },
 ];
 
 const SOURCE_URL =
