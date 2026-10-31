@@ -51,7 +51,8 @@ type StockCategory =
   | "消费"
   | "电器"
   | "运营商"
-  | "中药";
+  | "中药"
+  | "石油";
 
 type StockSummary = {
   symbol: string;
@@ -183,6 +184,7 @@ const CATEGORY_FILTERS: Array<{ value: CategoryFilter; label: string }> = [
   { value: "电器", label: "电器" },
   { value: "运营商", label: "运营商" },
   { value: "中药", label: "中药" },
+  { value: "石油", label: "石油" },
 ];
 const DATA_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/quotes.json`;
 
