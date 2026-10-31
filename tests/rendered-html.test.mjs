@@ -174,6 +174,10 @@ test("keeps the desktop hero vertically balanced", async () => {
   );
   assert.match(
     styles,
+    /\.hero-alert-center \{[\s\S]*?order: 2;[\s\S]*?margin-top: auto;/,
+  );
+  assert.match(
+    styles,
     /\.stock-boll \.boll-above,[\s\S]*?background: #ddf7e4;[\s\S]*?color: #24784f;/,
   );
   assert.match(

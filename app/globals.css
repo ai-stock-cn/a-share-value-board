@@ -243,7 +243,8 @@ footer {
 }
 
 .hero-alert-center {
-  margin-bottom: auto;
+  order: 2;
+  margin-top: auto;
   padding: 15px;
   border: 1px solid rgba(10, 18, 34, 0.1);
   border-radius: 18px;
@@ -1649,7 +1650,8 @@ footer span {
   }
 
   .hero-alert-center {
-    margin-bottom: 28px;
+    margin-top: 28px;
+    margin-bottom: 0;
   }
 
   .price-grid {
