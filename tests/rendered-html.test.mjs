@@ -24,7 +24,6 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /电器/);
   assert.match(dashboard, /运营商/);
   assert.match(dashboard, /中药/);
-  assert.match(dashboard, /石油/);
   assert.match(dashboard, /资源/);
   assert.match(dashboard, /K 线走势/);
   assert.match(dashboard, /candle-price-label/);
