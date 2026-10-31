@@ -6,6 +6,7 @@ import {
   calculateDividendYearCount,
   mergeDividendRecords,
 } from "./dividends.mjs";
+import { calculateBollPositions } from "./boll.mjs";
 import { calculateFundamentalScore } from "./scoring.mjs";
 
 const STOCKS = [
@@ -469,6 +470,7 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
     annualDividend,
     dividendCount,
     dividendFiscalYear,
+    bollPositions,
     score,
     scoreBreakdown,
   } = stockDataBySymbol[stock.symbol];
@@ -509,6 +511,7 @@ const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
     currentDividendYield: latestQuote
       ? (annualDividend / latestQuote.close) * 100
       : null,
+    bollPositions,
     turnoverRate,
     financialReports,
   };
@@ -529,7 +532,7 @@ await writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 console.log(`Updated ${stocks.length} stocks at ${syncedAt}`);
 
 async function fetchStockData(stock) {
-  const quotes = await fetchRecentQuotes(stock);
+  const { quotes, bollPositions } = await fetchRecentQuotes(stock);
   const [{ financialReports, freeFloatShares }, dividendRecords] =
     await Promise.all([
       fetchFinancialData(stock),
@@ -563,6 +566,7 @@ async function fetchStockData(stock) {
       annualDividend,
       dividendCount,
       dividendFiscalYear,
+      bollPositions,
       score: fundamentalScore.total,
       scoreBreakdown: fundamentalScore.breakdown,
     },
@@ -575,10 +579,10 @@ async function fetchRecentQuotes(stock) {
     symbol: stock.sourceSymbol,
     scale: "240",
     ma: "no",
-    datalen: "120",
+    datalen: "520",
   }).toString();
 
-  const response = await fetchWithRetry(url, {
+  const { response, payload } = await fetchJsonWithRetry(url, {
     headers: {
       Accept: "application/json",
       Referer: "https://finance.sina.com.cn/",
@@ -590,12 +594,11 @@ async function fetchRecentQuotes(stock) {
     throw new Error(`${stock.name}行情源返回异常状态：${response.status}`);
   }
 
-  const payload = await response.json();
   if (payload.result?.status?.code !== 0 || !Array.isArray(payload.result.data)) {
     throw new Error(`${stock.name}行情源返回了无法识别的数据`);
   }
 
-  const quotes = payload.result.data
+  const historyQuotes = payload.result.data
     .map((item) => ({
       tradeDate: item.day ?? "",
       open: Number(item.open),
@@ -607,11 +610,14 @@ async function fetchRecentQuotes(stock) {
     .filter(isDailyQuote)
     .sort((left, right) => right.tradeDate.localeCompare(left.tradeDate));
 
-  if (quotes.length === 0) {
+  if (historyQuotes.length === 0) {
     throw new Error(`${stock.name}没有可用行情数据`);
   }
 
-  return quotes;
+  return {
+    quotes: historyQuotes.slice(0, 120),
+    bollPositions: calculateBollPositions(historyQuotes),
+  };
 }
 
 async function fetchFinancialData(stock) {
@@ -626,7 +632,7 @@ async function fetchFinancialData(stock) {
     sortColumns: "REPORT_DATE",
   }).toString();
 
-  const response = await fetchWithRetry(url, {
+  const { response, payload } = await fetchJsonWithRetry(url, {
     headers: {
       Accept: "application/json",
       Referer: "https://emweb.securities.eastmoney.com/",
@@ -638,7 +644,6 @@ async function fetchFinancialData(stock) {
     throw new Error(`${stock.name}财务数据源返回异常状态：${response.status}`);
   }
 
-  const payload = await response.json();
   const reports = payload.result?.data;
 
   if (!Array.isArray(reports) || reports.length === 0) {
@@ -764,7 +769,7 @@ async function fetchEastmoneyDividendRecords(stock) {
     sortColumns: "REPORT_DATE",
   }).toString();
 
-  const response = await fetchWithRetry(url, {
+  const { response, payload } = await fetchJsonWithRetry(url, {
     headers: {
       Accept: "application/json",
       Referer: "https://data.eastmoney.com/",
@@ -776,7 +781,6 @@ async function fetchEastmoneyDividendRecords(stock) {
     throw new Error(`${stock.name}分红数据源返回异常状态：${response.status}`);
   }
 
-  const payload = await response.json();
   return Array.isArray(payload.result?.data)
     ? payload.result.data.map((record) => {
         const reportDate = String(record.REPORT_DATE ?? "").slice(0, 10);
@@ -816,6 +820,27 @@ async function fetchWithRetry(url, options, attempts = 3) {
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
       return await fetch(url, options);
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) {
+        await new Promise((resolveDelay) =>
+          setTimeout(resolveDelay, attempt * 800),
+        );
+      }
+    }
+  }
+
+  throw lastError;
+}
+
+async function fetchJsonWithRetry(url, options, attempts = 3) {
+  let lastError;
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) return { response, payload: null };
+      return { response, payload: await response.json() };
     } catch (error) {
       lastError = error;
       if (attempt < attempts) {

@@ -44,6 +44,14 @@ type ScoreBreakdown = {
   stability: number;
 };
 
+type BollPosition = "上轨以上" | "中上" | "中下" | "下轨以下" | "数据不足";
+
+type BollPositions = {
+  daily: BollPosition;
+  weekly: BollPosition;
+  monthly: BollPosition;
+};
+
 type StockCategory =
   | "金融"
   | "银行"
@@ -70,6 +78,7 @@ type StockSummary = {
   latestClose: number | null;
   changePercent: number | null;
   currentDividendYield: number | null;
+  bollPositions: BollPositions;
   watchPrice: number | null;
   dailyDropAlertPercent: number | null;
   turnoverRate: number | null;
@@ -124,6 +133,11 @@ const FALLBACK_STOCKS: StockSummary[] = [
     latestClose: null,
     changePercent: null,
     currentDividendYield: null,
+    bollPositions: {
+      daily: "数据不足",
+      weekly: "数据不足",
+      monthly: "数据不足",
+    },
     watchPrice: 53,
     dailyDropAlertPercent: null,
     turnoverRate: null,
@@ -151,6 +165,11 @@ const FALLBACK_STOCKS: StockSummary[] = [
     latestClose: null,
     changePercent: null,
     currentDividendYield: null,
+    bollPositions: {
+      daily: "数据不足",
+      weekly: "数据不足",
+      monthly: "数据不足",
+    },
     watchPrice: 50,
     dailyDropAlertPercent: -3,
     turnoverRate: null,
@@ -572,6 +591,20 @@ export default function StockDashboard() {
                     <span className="stock-score">
                       <small>评分</small>
                       <strong>{stock.score}</strong>
+                    </span>
+                    <span className="stock-boll" aria-label={`${stock.name} BOLL位置`}>
+                      {([
+                        ["日BOLL", stock.bollPositions.daily],
+                        ["周BOLL", stock.bollPositions.weekly],
+                        ["月BOLL", stock.bollPositions.monthly],
+                      ] as const).map(([label, position]) => (
+                        <span key={label}>
+                          <small>{label}</small>
+                          <strong className={`boll-${getBollPositionClass(position)}`}>
+                            {position}
+                          </strong>
+                        </span>
+                      ))}
                     </span>
                   </button>
                 );
@@ -1494,6 +1527,14 @@ function sortStocks(stocks: StockSummary[], sortMode: StockSort) {
       right.score - left.score || left.name.localeCompare(right.name, "zh-CN")
     );
   });
+}
+
+function getBollPositionClass(position: BollPosition) {
+  if (position === "上轨以上") return "above";
+  if (position === "中上") return "upper-middle";
+  if (position === "中下") return "lower-middle";
+  if (position === "下轨以下") return "below";
+  return "unavailable";
 }
 
 function formatTableDate(value: string) {

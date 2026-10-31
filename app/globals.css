@@ -1863,9 +1863,10 @@ footer {
   display: grid;
   grid-template-areas:
     "mark identity score"
-    "mark price score";
+    "mark price score"
+    "boll boll boll";
   grid-template-columns: 40px minmax(0, 1fr) auto;
-  grid-template-rows: auto auto;
+  grid-template-rows: auto auto auto;
   gap: 2px 10px;
   width: 100%;
   padding: 7px 9px;
@@ -2055,6 +2056,69 @@ footer {
 
 .stock-option.is-active .stock-score {
   color: var(--lime);
+}
+
+.stock-boll {
+  display: grid;
+  grid-area: boll;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  margin-top: 3px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(138, 148, 165, 0.18);
+}
+
+.stock-boll > span {
+  display: grid;
+  gap: 3px;
+}
+
+.stock-boll small {
+  color: #8a94a5;
+  font-size: 7px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.stock-boll strong {
+  padding: 4px 2px;
+  border-radius: 6px;
+  font-size: 9px;
+  line-height: 1;
+  text-align: center;
+}
+
+.stock-boll .boll-above {
+  background: #ffe6df;
+  color: #c84c3a;
+}
+
+.stock-boll .boll-upper-middle {
+  background: #eef0f4;
+  color: #263247;
+}
+
+.stock-boll .boll-lower-middle {
+  background: #e8f0ff;
+  color: #3e6db7;
+}
+
+.stock-boll .boll-below {
+  background: #ddf7e4;
+  color: #24784f;
+}
+
+.stock-boll .boll-unavailable {
+  background: #f2f2ef;
+  color: #98a0ad;
+}
+
+.stock-option.is-active .stock-boll {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.stock-option.is-active .stock-boll small {
+  color: #aeb7c8;
 }
 
 .stock-pagination {

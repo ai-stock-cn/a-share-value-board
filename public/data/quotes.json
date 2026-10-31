@@ -3,7 +3,7 @@
   "source": "新浪财经公开行情及分红 · 东方财富公开财务及分红数据 · GitHub 每日更新",
   "sourceStatus": "fresh",
   "sourceMessage": null,
-  "syncedAt": "2026-10-31T02:17:08.531Z",
+  "syncedAt": "2026-10-31T02:28:09.883Z",
   "stocks": [
     {
       "symbol": "000423.SZ",
@@ -38,6 +38,11 @@
       "latestClose": 47.93,
       "changePercent": 1.2676949080921223,
       "currentDividendYield": 5.6448612559983316,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中下",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.7186470791238544,
       "financialReports": [
         {
@@ -143,6 +148,11 @@
       "latestClose": 19.94,
       "changePercent": 0.20100502512564172,
       "currentDividendYield": 4.618856569709127,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.708743899030461,
       "financialReports": [
         {
@@ -248,6 +258,11 @@
       "latestClose": 12.96,
       "changePercent": 1.8067556952081727,
       "currentDividendYield": 4.352623456790123,
+      "bollPositions": {
+        "daily": "上轨以上",
+        "weekly": "上轨以上",
+        "monthly": "上轨以上"
+      },
       "turnoverRate": 0.7260417321302092,
       "financialReports": [
         {
@@ -353,6 +368,11 @@
       "latestClose": 12.37,
       "changePercent": 0.08090614886731219,
       "currentDividendYield": 4.277687954729184,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.4684627490777238,
       "financialReports": [
         {
@@ -458,6 +478,11 @@
       "latestClose": 89.18,
       "changePercent": 1.9433013260173784,
       "currentDividendYield": 4.821708903341556,
+      "bollPositions": {
+        "daily": "上轨以上",
+        "weekly": "中上",
+        "monthly": "上轨以上"
+      },
       "turnoverRate": 0.5396409705421196,
       "financialReports": [
         {
@@ -563,6 +588,11 @@
       "latestClose": 22.49,
       "changePercent": 1.8568840579710155,
       "currentDividendYield": 6.136060471320587,
+      "bollPositions": {
+        "daily": "中下",
+        "weekly": "中下",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.7689733674181161,
       "financialReports": [
         {
@@ -668,6 +698,11 @@
       "latestClose": 35.17,
       "changePercent": 0.5431675242996137,
       "currentDividendYield": 3.4119988626670454,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.7524407157329325,
       "financialReports": [
         {
@@ -773,6 +808,11 @@
       "latestClose": 34.86,
       "changePercent": 0.9556907037358768,
       "currentDividendYield": 3.9013195639701665,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.3923229074581637,
       "financialReports": [
         {
@@ -878,6 +918,11 @@
       "latestClose": 42.7,
       "changePercent": 1.6666666666666736,
       "currentDividendYield": 6.159250585480093,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.3497384901252956,
       "financialReports": [
         {
@@ -983,6 +1028,11 @@
       "latestClose": 23.16,
       "changePercent": -0.6008583690987149,
       "currentDividendYield": 2.68566493955095,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.45258916970363217,
       "financialReports": [
         {
@@ -1088,6 +1138,11 @@
       "latestClose": 53.71,
       "changePercent": 1.4736444360476122,
       "currentDividendYield": 4.844535468255446,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.609783222516716,
       "financialReports": [
         {
@@ -1193,6 +1248,11 @@
       "latestClose": 43.55,
       "changePercent": 1.4205868653935712,
       "currentDividendYield": 4.629161882893226,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.4979208381384893,
       "financialReports": [
         {
@@ -1298,6 +1358,11 @@
       "latestClose": 25.36,
       "changePercent": -2.386451116243268,
       "currentDividendYield": 2.756309148264984,
+      "bollPositions": {
+        "daily": "中下",
+        "weekly": "中下",
+        "monthly": "中上"
+      },
       "turnoverRate": 1.2565125267565944,
       "financialReports": [
         {
@@ -1403,6 +1468,11 @@
       "latestClose": 27.6,
       "changePercent": -1.5691868758915755,
       "currentDividendYield": 2.1739130434782608,
+      "bollPositions": {
+        "daily": "中下",
+        "weekly": "中下",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.678390021927965,
       "financialReports": [
         {
@@ -1508,6 +1578,11 @@
       "latestClose": 29.74,
       "changePercent": -0.8336112037345782,
       "currentDividendYield": 3.362474781439139,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.4852932746399141,
       "financialReports": [
         {
@@ -1613,6 +1688,11 @@
       "latestClose": 38.49,
       "changePercent": 2.4215007982969765,
       "currentDividendYield": 7.79423226812159,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中下",
+        "monthly": "中下"
+      },
       "turnoverRate": 1.007591478570022,
       "financialReports": [
         {
@@ -1718,6 +1798,11 @@
       "latestClose": 20.74,
       "changePercent": 5.654610290371878,
       "currentDividendYield": 5.596480231436837,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中下",
+        "monthly": "中下"
+      },
       "turnoverRate": 1.3536780932817138,
       "financialReports": [
         {
@@ -1823,6 +1908,11 @@
       "latestClose": 7.48,
       "changePercent": -1.0582010582010475,
       "currentDividendYield": 3.335561497326203,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.11866316888816471,
       "financialReports": [
         {
@@ -1928,6 +2018,11 @@
       "latestClose": 35.97,
       "changePercent": 1.5527950310558924,
       "currentDividendYield": 3.183013622463164,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 1.9705490969899666,
       "financialReports": [
         {
@@ -2033,6 +2128,11 @@
       "latestClose": 26.08,
       "changePercent": 1.046106160402943,
       "currentDividendYield": 3.0674846625766876,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 1.1351776870714279,
       "financialReports": [
         {
@@ -2138,6 +2238,11 @@
       "latestClose": 30.15,
       "changePercent": 2.3769100169779267,
       "currentDividendYield": 4.577114427860696,
+      "bollPositions": {
+        "daily": "上轨以上",
+        "weekly": "上轨以上",
+        "monthly": "中上"
+      },
       "turnoverRate": 1.799550011213098,
       "financialReports": [
         {
@@ -2243,6 +2348,11 @@
       "latestClose": 52.8,
       "changePercent": -0.7518796992481309,
       "currentDividendYield": 5.113636363636364,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.6660328285727409,
       "financialReports": [
         {
@@ -2348,6 +2458,11 @@
       "latestClose": 102.13,
       "changePercent": 0.6504385532669721,
       "currentDividendYield": 4.6056007049838446,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中下"
+      },
       "turnoverRate": 1.204458908814928,
       "financialReports": [
         {
@@ -2453,6 +2568,11 @@
       "latestClose": 24.42,
       "changePercent": 1.3698630136986378,
       "currentDividendYield": 5.937755937755937,
+      "bollPositions": {
+        "daily": "上轨以上",
+        "weekly": "中上",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.3810490629224789,
       "financialReports": [
         {
@@ -2558,6 +2678,11 @@
       "latestClose": 7.5,
       "changePercent": -1.0554089709762544,
       "currentDividendYield": 5.333333333333334,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.6298526830602068,
       "financialReports": [
         {
@@ -2663,6 +2788,11 @@
       "latestClose": 5.33,
       "changePercent": 1.1385199240986812,
       "currentDividendYield": 4.127579737335835,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "上轨以上",
+        "monthly": "中上"
+      },
       "turnoverRate": 1.5514916716369378,
       "financialReports": [
         {
@@ -2768,6 +2898,11 @@
       "latestClose": 15.33,
       "changePercent": 1.2549537648612912,
       "currentDividendYield": 6.523157208088715,
+      "bollPositions": {
+        "daily": "中下",
+        "weekly": "中下",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.6091252155483196,
       "financialReports": [
         {
@@ -2873,6 +3008,11 @@
       "latestClose": 19.65,
       "changePercent": 1.288659793814433,
       "currentDividendYield": 5.424936386768449,
+      "bollPositions": {
+        "daily": "上轨以上",
+        "weekly": "上轨以上",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.6162818458868597,
       "financialReports": [
         {
@@ -2978,6 +3118,11 @@
       "latestClose": 8.63,
       "changePercent": 0.8177570093457976,
       "currentDividendYield": 3.762456546929316,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "上轨以上",
+        "monthly": "上轨以上"
+      },
       "turnoverRate": 0.9991172452835074,
       "financialReports": [
         {
@@ -3083,6 +3228,11 @@
       "latestClose": 7.09,
       "changePercent": -0.9776536312849202,
       "currentDividendYield": 3.1918194640338506,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "上轨以上"
+      },
       "turnoverRate": 0.19310274847257541,
       "financialReports": [
         {
@@ -3188,6 +3338,11 @@
       "latestClose": 9.46,
       "changePercent": 1.8299246501614825,
       "currentDividendYield": 4.027484143763213,
+      "bollPositions": {
+        "daily": "上轨以上",
+        "weekly": "中上",
+        "monthly": "上轨以上"
+      },
       "turnoverRate": 0.13403987919364213,
       "financialReports": [
         {
@@ -3293,6 +3448,11 @@
       "latestClose": 11.98,
       "changePercent": -0.4983388704318831,
       "currentDividendYield": 3.2445742904841404,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "上轨以上",
+        "monthly": "上轨以上"
+      },
       "turnoverRate": 1.2972967048788797,
       "financialReports": [
         {
@@ -3398,6 +3558,11 @@
       "latestClose": 8.75,
       "changePercent": -0.34168564920272626,
       "currentDividendYield": 3.5462857142857143,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "上轨以上"
+      },
       "turnoverRate": 0.16007236316773737,
       "financialReports": [
         {
@@ -3503,6 +3668,11 @@
       "latestClose": 16.13,
       "changePercent": -0.6773399014778291,
       "currentDividendYield": 3.1500309981401116,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.3268944090912166,
       "financialReports": [
         {
@@ -3608,6 +3778,11 @@
       "latestClose": 11.64,
       "changePercent": 0.8665511265164769,
       "currentDividendYield": 5.120274914089347,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.9606695516621044,
       "financialReports": [
         {
@@ -3713,6 +3888,11 @@
       "latestClose": 7.01,
       "changePercent": 0.28612303290414265,
       "currentDividendYield": 3.8801711840228252,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.11675749293346116,
       "financialReports": [
         {
@@ -3818,6 +3998,11 @@
       "latestClose": 51.99,
       "changePercent": 0.7167764432390634,
       "currentDividendYield": 3.866128101557991,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "上轨以上"
+      },
       "turnoverRate": 0.1795448799799308,
       "financialReports": [
         {
@@ -3923,6 +4108,11 @@
       "latestClose": 13.84,
       "changePercent": 1.0956902848794767,
       "currentDividendYield": 3.395953757225433,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "上轨以上",
+        "monthly": "上轨以上"
+      },
       "turnoverRate": 0.10177120144494661,
       "financialReports": [
         {
@@ -4028,6 +4218,11 @@
       "latestClose": 5.35,
       "changePercent": -0.5576208178438709,
       "currentDividendYield": 4.5046728971962615,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.7284409831959204,
       "financialReports": [
         {
@@ -4133,6 +4328,11 @@
       "latestClose": 4.39,
       "changePercent": -0.22727272727274261,
       "currentDividendYield": 3.7243735763097954,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "中上",
+        "monthly": "中下"
+      },
       "turnoverRate": 0.42023249632248033,
       "financialReports": [
         {
@@ -4238,6 +4438,11 @@
       "latestClose": 9.8,
       "changePercent": -1.40845070422534,
       "currentDividendYield": 1.8367346938775508,
+      "bollPositions": {
+        "daily": "中上",
+        "weekly": "上轨以上",
+        "monthly": "上轨以上"
+      },
       "turnoverRate": 0.5294447057498812,
       "financialReports": [
         {
@@ -4343,6 +4548,11 @@
       "latestClose": 5.9,
       "changePercent": 4.982206405693955,
       "currentDividendYield": 3.389830508474576,
+      "bollPositions": {
+        "daily": "上轨以上",
+        "weekly": "上轨以上",
+        "monthly": "中上"
+      },
       "turnoverRate": 0.5682981301909257,
       "financialReports": [
         {

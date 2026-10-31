@@ -61,6 +61,10 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /选择股票排名方式/);
   assert.match(dashboard, /评分从高到低/);
   assert.match(dashboard, /股息率从高到低/);
+  assert.match(dashboard, /日BOLL/);
+  assert.match(dashboard, /周BOLL/);
+  assert.match(dashboard, /月BOLL/);
+  assert.match(dashboard, /getBollPositionClass/);
   assert.match(dashboard, /useState<StockSort>\("score"\)/);
   assert.match(dashboard, /sortStocks/);
   assert.match(dashboard, /STOCK_PAGE_SIZES/);
@@ -144,6 +148,7 @@ test("includes the GitHub Pages update workflow", async () => {
   assert.match(updater, /mergeDividendRecords/);
   assert.match(updater, /calculateAnnualDividend/);
   assert.match(updater, /calculateFundamentalScore/);
+  assert.match(updater, /calculateBollPositions/);
   assert.match(updater, /BPSTZ/);
   assert.match(updater, /calculateDividendYearCount/);
   assert.match(updater, /NONPERLOAN/);
