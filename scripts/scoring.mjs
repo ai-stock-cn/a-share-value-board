@@ -1,5 +1,13 @@
 const CURRENT_REPORT_WEIGHT = 0.45;
 
+export const SCORE_WEIGHTS = Object.freeze({
+  dividend: 30,
+  profitability: 25,
+  stability: 20,
+  quality: 15,
+  growth: 10,
+});
+
 const SCORE_PROFILES = {
   default: {
     roeHigh: 20,
@@ -60,23 +68,28 @@ export function calculateFundamentalScore({
     (report) => report.netProfitGrowth,
   );
 
-  const profitability = scaleScore(blendedRoe, 0, profile.roeHigh, 25);
+  const profitability = scaleScore(
+    blendedRoe,
+    0,
+    profile.roeHigh,
+    SCORE_WEIGHTS.profitability,
+  );
   const growth =
     scaleScore(
       blendedRevenueGrowth,
       profile.revenueGrowth[0],
       profile.revenueGrowth[1],
-      8,
+      SCORE_WEIGHTS.growth * 0.4,
     ) +
     scaleScore(
       blendedProfitGrowth,
       profile.profitGrowth[0],
       profile.profitGrowth[1],
-      12,
+      SCORE_WEIGHTS.growth * 0.6,
     );
   const dividend =
-    scaleScore(currentDividendYield, 0, 6.5, 20) +
-    scaleScore(dividendYearCount, 0, 3, 5);
+    scaleScore(currentDividendYield, 0, 6.5, SCORE_WEIGHTS.dividend * 0.8) +
+    scaleScore(dividendYearCount, 0, 3, SCORE_WEIGHTS.dividend * 0.2);
   const quality = calculateQualityScore(category, reports, profile);
   const stability = calculateStabilityScore(category, reports);
   const total = Math.round(
@@ -108,8 +121,18 @@ export function calculateQualityScore(category, reports, profileOverride) {
 
   if (category === "银行") {
     return (
-      inverseScaleScore(latestReport.nonPerformingLoanRatio, 0.8, 2, 10) +
-      scaleScore(latestReport.provisionCoverageRatio, 100, 300, 10)
+      inverseScaleScore(
+        latestReport.nonPerformingLoanRatio,
+        0.8,
+        2,
+        SCORE_WEIGHTS.quality * 0.5,
+      ) +
+      scaleScore(
+        latestReport.provisionCoverageRatio,
+        100,
+        300,
+        SCORE_WEIGHTS.quality * 0.5,
+      )
     );
   }
 
@@ -125,8 +148,13 @@ export function calculateQualityScore(category, reports, profileOverride) {
     );
 
     return (
-      scaleScore(blendedNetMargin, 0, 15, 8) +
-      scaleScore(blendedBookValueGrowth, -5, 15, 12)
+      scaleScore(blendedNetMargin, 0, 15, SCORE_WEIGHTS.quality * 0.4) +
+      scaleScore(
+        blendedBookValueGrowth,
+        -5,
+        15,
+        SCORE_WEIGHTS.quality * 0.6,
+      )
     );
   }
 
@@ -136,12 +164,17 @@ export function calculateQualityScore(category, reports, profileOverride) {
   );
 
   return (
-    scaleScore(blendedNetMargin, 0, profile.marginHigh, 10) +
+    scaleScore(
+      blendedNetMargin,
+      0,
+      profile.marginHigh,
+      SCORE_WEIGHTS.quality * 0.5,
+    ) +
     inverseScaleScore(
       blendedDebtRatio,
       profile.debtBest,
       profile.debtWorst,
-      10,
+      SCORE_WEIGHTS.quality * 0.5,
     )
   );
 }
@@ -152,12 +185,12 @@ function calculateStabilityScore(category, reports) {
       calculatePositiveShareScore(
         reports,
         (report, index) => calculateBookValueGrowth(reports, report, index),
-        4,
+        SCORE_WEIGHTS.stability * 0.4,
       ) +
       calculatePositiveShareScore(
         reports,
         (report) => report.netProfitGrowth,
-        6,
+        SCORE_WEIGHTS.stability * 0.6,
       )
     );
   }
@@ -166,12 +199,12 @@ function calculateStabilityScore(category, reports) {
     calculatePositiveShareScore(
       reports,
       (report) => report.revenueGrowth,
-      4,
+      SCORE_WEIGHTS.stability * 0.4,
     ) +
     calculatePositiveShareScore(
       reports,
       (report) => report.netProfitGrowth,
-      6,
+      SCORE_WEIGHTS.stability * 0.6,
     )
   );
 }

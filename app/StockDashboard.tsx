@@ -164,11 +164,11 @@ const SCORE_DIMENSIONS: Array<{
   label: string;
   max: number;
 }> = [
+  { key: "dividend", label: "分红回报", max: 30 },
   { key: "profitability", label: "盈利能力", max: 25 },
-  { key: "growth", label: "成长表现", max: 20 },
-  { key: "dividend", label: "分红回报", max: 25 },
-  { key: "quality", label: "财务质量", max: 20 },
-  { key: "stability", label: "经营稳定", max: 10 },
+  { key: "stability", label: "经营稳定", max: 20 },
+  { key: "quality", label: "财务质量", max: 15 },
+  { key: "growth", label: "成长表现", max: 10 },
 ];
 const MARKET_FILTERS: Array<{ value: MarketFilter; label: string }> = [
   { value: "all", label: "全部" },
@@ -861,7 +861,7 @@ export default function StockDashboard() {
                       ))}
                     </div>
                     <p className="score-method-note">
-                      评分满分 100：盈利 25、成长 20、分红 25、财务质量 20、稳定性 10。
+                      评分满分 100：分红 30、盈利 25、稳定性 20、财务质量 15、成长 10。
                       盈利和成长采用最新报告与近三年年报加权，降低单季波动；分红按当前股息率（6.5% 为满档）及近三年持续分红；稳定性按各报告期增长为正的比例计算。
                       {isBank
                         ? "银行的财务质量分由不良贷款率与拨备覆盖率共同计算。"

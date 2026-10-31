@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   calculateFundamentalScore,
   calculateQualityScore,
+  SCORE_WEIGHTS,
 } from "../scripts/scoring.mjs";
 
 const baseReports = [
@@ -64,6 +65,17 @@ const baseReports = [
     provisionCoverageRatio: null,
   },
 ];
+
+test("score weights prioritize dividends, profitability, and stability", () => {
+  assert.deepEqual(SCORE_WEIGHTS, {
+    dividend: 30,
+    profitability: 25,
+    stability: 20,
+    quality: 15,
+    growth: 10,
+  });
+  assert.equal(Object.values(SCORE_WEIGHTS).reduce((sum, value) => sum + value, 0), 100);
+});
 
 test("insurance quality does not penalize normal insurance liabilities", () => {
   const highDebtScore = calculateQualityScore("金融", baseReports);

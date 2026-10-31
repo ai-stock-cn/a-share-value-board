@@ -50,6 +50,7 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /基本面综合评分/);
   assert.match(dashboard, /SCORE_DIMENSIONS/);
   assert.match(dashboard, /分红回报/);
+  assert.match(dashboard, /分红 30、盈利 25、稳定性 20、财务质量 15、成长 10/);
   assert.match(dashboard, /fundamental-insights/);
   assert.match(dashboard, /quote-metrics/);
   assert.match(dashboard, /quote-metric-dividend/);
