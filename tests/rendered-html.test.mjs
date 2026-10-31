@@ -130,6 +130,18 @@ test("defines the stock dashboard product content", async () => {
   );
 });
 
+test("keeps the desktop hero vertically balanced", async () => {
+  const styles = await readFile(
+    new URL("../app/globals.css", import.meta.url),
+    "utf8",
+  );
+
+  assert.match(
+    styles,
+    /\.dashboard-main \.hero \{[\s\S]*?align-items: center;[\s\S]*?padding: 30px 0 32px;/,
+  );
+});
+
 test("includes the GitHub Pages update workflow", async () => {
   const [workflow, updater, nextConfig] = await Promise.all([
     readFile(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8"),

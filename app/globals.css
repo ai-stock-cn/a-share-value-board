@@ -2356,8 +2356,9 @@ footer {
 }
 
 .dashboard-main .hero {
+  align-items: center;
   gap: 36px;
-  padding: 54px 0 44px;
+  padding: 30px 0 32px;
 }
 
 .dashboard-main .hero h1 {
