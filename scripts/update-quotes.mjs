@@ -460,6 +460,12 @@ const quotesBySymbol = Object.fromEntries(
     stockData.quotes,
   ]),
 );
+const periodQuotesBySymbol = Object.fromEntries(
+  Object.entries(stockDataBySymbol).map(([symbol, stockData]) => [
+    symbol,
+    stockData.periodQuotes,
+  ]),
+);
 const syncedAt = new Date().toISOString();
 
 const stocks = STOCKS.map(({ sourceSymbol, ...stock }) => {
@@ -525,6 +531,7 @@ const payload = {
   syncedAt,
   stocks,
   quotesBySymbol,
+  periodQuotesBySymbol,
 };
 
 await mkdir(dirname(outputPath), { recursive: true });
@@ -532,7 +539,7 @@ await writeFile(outputPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 console.log(`Updated ${stocks.length} stocks at ${syncedAt}`);
 
 async function fetchStockData(stock) {
-  const { quotes, bollPositions } = await fetchRecentQuotes(stock);
+  const { quotes, periodQuotes, bollPositions } = await fetchRecentQuotes(stock);
   const [{ financialReports, freeFloatShares }, dividendRecords] =
     await Promise.all([
       fetchFinancialData(stock),
@@ -561,6 +568,7 @@ async function fetchStockData(stock) {
     stock.symbol,
     {
       quotes,
+      periodQuotes,
       turnoverRate,
       financialReports,
       annualDividend,
@@ -579,7 +587,7 @@ async function fetchRecentQuotes(stock) {
     symbol: stock.sourceSymbol,
     scale: "240",
     ma: "no",
-    datalen: "520",
+    datalen: "760",
   }).toString();
 
   const { response, payload } = await fetchJsonWithRetry(url, {
@@ -616,8 +624,51 @@ async function fetchRecentQuotes(stock) {
 
   return {
     quotes: historyQuotes.slice(0, 120),
+    periodQuotes: {
+      weekly: aggregateQuotes(
+        historyQuotes,
+        (quote) => getQuoteWeekKey(quote.tradeDate),
+      ).slice(0, 60),
+      monthly: aggregateQuotes(
+        historyQuotes,
+        (quote) => quote.tradeDate.slice(0, 7),
+      ).slice(0, 60),
+    },
     bollPositions: calculateBollPositions(historyQuotes),
   };
+}
+
+function aggregateQuotes(quotes, getPeriodKey) {
+  const periods = new Map();
+
+  [...quotes]
+    .sort((left, right) => left.tradeDate.localeCompare(right.tradeDate))
+    .forEach((quote) => {
+      const periodKey = getPeriodKey(quote);
+      const period = periods.get(periodKey);
+
+      if (!period) {
+        periods.set(periodKey, { ...quote });
+        return;
+      }
+
+      period.tradeDate = quote.tradeDate;
+      period.close = quote.close;
+      period.high = Math.max(period.high, quote.high);
+      period.low = Math.min(period.low, quote.low);
+      period.volume += quote.volume;
+    });
+
+  return [...periods.values()].sort((left, right) =>
+    right.tradeDate.localeCompare(left.tradeDate),
+  );
+}
+
+function getQuoteWeekKey(tradeDate) {
+  const date = new Date(`${tradeDate}T00:00:00Z`);
+  const day = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() - day + 1);
+  return date.toISOString().slice(0, 10);
 }
 
 async function fetchFinancialData(stock) {

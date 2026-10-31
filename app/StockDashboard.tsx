@@ -52,6 +52,13 @@ type BollPositions = {
   monthly: BollPosition;
 };
 
+type ChartPeriod = keyof BollPositions;
+
+type PeriodQuotes = {
+  weekly: DailyQuote[];
+  monthly: DailyQuote[];
+};
+
 type BollPoint = {
   tradeDate: string;
   upper: number;
@@ -108,6 +115,7 @@ type QuoteResponse = StockSummary & {
   syncedAt: string;
   stocks: StockSummary[];
   quotes: DailyQuote[];
+  periodQuotes: PeriodQuotes;
 };
 
 type QuoteDataset = {
@@ -118,6 +126,7 @@ type QuoteDataset = {
   syncedAt: string;
   stocks: StockSummary[];
   quotesBySymbol: Record<string, DailyQuote[]>;
+  periodQuotesBySymbol?: Record<string, PeriodQuotes>;
 };
 
 const FALLBACK_STOCKS: StockSummary[] = [
@@ -233,6 +242,16 @@ const BOLL_FILTERS: Array<{ value: BollFilter; label: string }> = [
   { value: "下轨以下", label: "下轨以下" },
   { value: "数据不足", label: "数据不足" },
 ];
+const KLINE_PERIODS: Array<{
+  value: ChartPeriod;
+  label: string;
+  unit: string;
+  limit: number;
+}> = [
+  { value: "daily", label: "日线", unit: "个交易日", limit: 30 },
+  { value: "weekly", label: "周线", unit: "周", limit: 30 },
+  { value: "monthly", label: "月线", unit: "个月", limit: 24 },
+];
 const DATA_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/quotes.json`;
 
 const numberFormatter = new Intl.NumberFormat("zh-CN", {
@@ -266,6 +285,7 @@ export default function StockDashboard() {
   const [stockSort, setStockSort] = useState<StockSort>("score");
   const [stockPageSize, setStockPageSize] = useState<StockPageSize>(10);
   const [stockPage, setStockPage] = useState(1);
+  const [chartPeriod, setChartPeriod] = useState<ChartPeriod>("daily");
   const initialRankSelectionRef = useRef(false);
 
   const loadQuotes = useCallback(async (manual = false) => {
@@ -311,6 +331,11 @@ export default function StockDashboard() {
         syncedAt: payload.syncedAt,
         stocks: payload.stocks,
         quotes,
+        periodQuotes:
+          payload.periodQuotesBySymbol?.[effectiveSymbol] ?? {
+            weekly: aggregateQuotesForChart(quotes, "weekly"),
+            monthly: aggregateQuotesForChart(quotes, "monthly"),
+          },
       });
       setStocks(payload.stocks);
       setError(null);
@@ -406,23 +431,34 @@ export default function StockDashboard() {
       )
     : null;
 
+  const chartPeriodConfig =
+    KLINE_PERIODS.find((period) => period.value === chartPeriod) ??
+    KLINE_PERIODS[0];
+  const selectedPeriodQuotes = useMemo(() => {
+    if (!data) return [];
+    if (chartPeriod === "daily") return data.quotes;
+    return data.periodQuotes[chartPeriod];
+  }, [chartPeriod, data]);
   const chartQuotes = useMemo(
-    () => data?.quotes.slice(0, 30).reverse() ?? [],
-    [data],
+    () =>
+      selectedPeriodQuotes
+        .slice(0, chartPeriodConfig.limit)
+        .reverse(),
+    [chartPeriodConfig.limit, selectedPeriodQuotes],
   );
-  const dailyBollPoints = useMemo(
-    () => buildBollSeries(data?.quotes ?? []),
-    [data],
+  const periodBollPoints = useMemo(
+    () => buildBollSeries(selectedPeriodQuotes),
+    [selectedPeriodQuotes],
   );
   const chartBollPoints = useMemo(() => {
     const pointsByDate = new Map(
-      dailyBollPoints.map((point) => [point.tradeDate, point]),
+      periodBollPoints.map((point) => [point.tradeDate, point]),
     );
     return chartQuotes.map((quote) => pointsByDate.get(quote.tradeDate) ?? null);
-  }, [chartQuotes, dailyBollPoints]);
-  const latestDailyBoll = chartBollPoints.at(-1) ?? null;
-  const dailyBollPosition =
-    data?.bollPositions.daily ?? selectedStock.bollPositions.daily;
+  }, [chartQuotes, periodBollPoints]);
+  const latestPeriodBoll = chartBollPoints.at(-1) ?? null;
+  const currentBollPosition =
+    data?.bollPositions[chartPeriod] ?? selectedStock.bollPositions[chartPeriod];
   const recentDays = useMemo(
     () => buildRecentDays(data?.quotes ?? []),
     [data],
@@ -986,42 +1022,64 @@ export default function StockDashboard() {
                 <article className="trend-card kline-card">
                   <div className="section-heading">
                     <div>
-                      <span className="section-kicker">30 个交易日</span>
+                      <span className="section-kicker">
+                        {chartQuotes.length} {chartPeriodConfig.unit}
+                      </span>
                       <h2>K 线走势</h2>
                     </div>
-                    {chartQuotes.length > 0 && (
-                      <div className="trend-range">
-                        <span>收盘区间</span>
-                        <strong>
-                          {numberFormatter.format(
-                            Math.min(...chartQuotes.map((item) => item.close)),
-                          )}{" "}
-                          —{" "}
-                          {numberFormatter.format(
-                            Math.max(...chartQuotes.map((item) => item.close)),
-                          )}
-                        </strong>
+                    <div className="kline-heading-controls">
+                      <div className="kline-period-toggle" aria-label="切换K线周期">
+                        {KLINE_PERIODS.map((period) => (
+                          <button
+                            type="button"
+                            className={chartPeriod === period.value ? "is-active" : ""}
+                            aria-pressed={chartPeriod === period.value}
+                            onClick={() => setChartPeriod(period.value)}
+                            key={period.value}
+                          >
+                            {period.label}
+                          </button>
+                        ))}
                       </div>
-                    )}
+                      {chartQuotes.length > 0 && (
+                        <div className="trend-range">
+                          <span>收盘区间</span>
+                          <strong>
+                            {numberFormatter.format(
+                              Math.min(...chartQuotes.map((item) => item.close)),
+                            )}{" "}
+                            —{" "}
+                            {numberFormatter.format(
+                              Math.max(...chartQuotes.map((item) => item.close)),
+                            )}
+                          </strong>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  {latestDailyBoll && (
-                    <div className="kline-boll-summary" aria-label="最新日线BOLL轨道">
-                      <span>BOLL(20, 2) · 日线</span>
+                  {latestPeriodBoll && (
+                    <div className="kline-boll-summary" aria-label={`最新${chartPeriodConfig.label}BOLL轨道`}>
+                      <span>BOLL(20, 2) · {chartPeriodConfig.label}</span>
                       <strong className="boll-upper-value">
-                        上 {numberFormatter.format(latestDailyBoll.upper)}
+                        上 {numberFormatter.format(latestPeriodBoll.upper)}
                       </strong>
                       <strong className="boll-middle-value">
-                        中 {numberFormatter.format(latestDailyBoll.middle)}
+                        中 {numberFormatter.format(latestPeriodBoll.middle)}
                       </strong>
                       <strong className="boll-lower-value">
-                        下 {numberFormatter.format(latestDailyBoll.lower)}
+                        下 {numberFormatter.format(latestPeriodBoll.lower)}
                       </strong>
-                      <mark className={`boll-${getBollPositionClass(dailyBollPosition)}`}>
-                        当前 {dailyBollPosition}
+                      <mark className={`boll-${getBollPositionClass(currentBollPosition)}`}>
+                        当前 {currentBollPosition}
                       </mark>
                     </div>
                   )}
-                  <KLineChart quotes={chartQuotes} bollPoints={chartBollPoints} />
+                  <KLineChart
+                    quotes={chartQuotes}
+                    bollPoints={chartBollPoints}
+                    period={chartPeriod}
+                    periodLabel={chartPeriodConfig.label}
+                  />
                   <div className="kline-legend" aria-label="K线颜色说明">
                     <span><i className="up" />红涨</span>
                     <span><i className="down" />绿跌</span>
@@ -1434,9 +1492,13 @@ export default function StockDashboard() {
 function KLineChart({
   quotes,
   bollPoints,
+  period,
+  periodLabel,
 }: {
   quotes: DailyQuote[];
   bollPoints: Array<BollPoint | null>;
+  period: ChartPeriod;
+  periodLabel: string;
 }) {
   if (quotes.length === 0) {
     return (
@@ -1520,7 +1582,7 @@ function KLineChart({
         className="kline-chart"
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label="近30个交易日K线图，红色上涨，绿色下跌"
+        aria-label={`${periodLabel}K线图，红色上涨，绿色下跌`}
       >
         {gridLines.map((line) => (
           <g key={line.value}>
@@ -1651,13 +1713,59 @@ function KLineChart({
               y={height - 10}
               key={quote.tradeDate}
             >
-              {quote.tradeDate.slice(5).replace("-", ".")}
+              {formatChartDate(quote.tradeDate, period)}
             </text>
           );
         })}
       </svg>
     </div>
   );
+}
+
+function aggregateQuotesForChart(
+  quotes: DailyQuote[],
+  period: Exclude<ChartPeriod, "daily">,
+): DailyQuote[] {
+  const periods = new Map<string, DailyQuote>();
+
+  [...quotes]
+    .sort((left, right) => left.tradeDate.localeCompare(right.tradeDate))
+    .forEach((quote) => {
+      const periodKey =
+        period === "weekly"
+          ? getChartWeekKey(quote.tradeDate)
+          : quote.tradeDate.slice(0, 7);
+      const existing = periods.get(periodKey);
+
+      if (!existing) {
+        periods.set(periodKey, { ...quote });
+        return;
+      }
+
+      existing.tradeDate = quote.tradeDate;
+      existing.close = quote.close;
+      existing.high = Math.max(existing.high, quote.high);
+      existing.low = Math.min(existing.low, quote.low);
+      existing.volume += quote.volume;
+    });
+
+  return [...periods.values()].sort((left, right) =>
+    right.tradeDate.localeCompare(left.tradeDate),
+  );
+}
+
+function getChartWeekKey(tradeDate: string) {
+  const date = new Date(`${tradeDate}T00:00:00Z`);
+  const day = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() - day + 1);
+  return date.toISOString().slice(0, 10);
+}
+
+function formatChartDate(tradeDate: string, period: ChartPeriod) {
+  if (period === "monthly") {
+    return tradeDate.slice(0, 7).replace("-", ".");
+  }
+  return tradeDate.slice(5).replace("-", ".");
 }
 
 function buildBollSeries(quotes: DailyQuote[], period = 20): BollPoint[] {

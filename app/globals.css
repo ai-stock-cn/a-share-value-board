@@ -2369,6 +2369,44 @@ footer {
   min-width: 0;
 }
 
+.kline-heading-controls {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.kline-period-toggle {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid rgba(10, 18, 34, 0.1);
+  border-radius: 999px;
+  background: #f1f3f4;
+}
+
+.kline-period-toggle button {
+  min-width: 50px;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #6e7888;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.kline-period-toggle button:hover {
+  color: var(--ink);
+}
+
+.kline-period-toggle button.is-active {
+  background: var(--ink);
+  box-shadow: 0 5px 12px rgba(10, 18, 34, 0.16);
+  color: #fff;
+}
+
 .kline-scroll {
   margin-top: 14px;
   overflow-x: auto;
@@ -2837,6 +2875,21 @@ footer {
 
   .dashboard-main .hero h1 {
     font-size: 58px;
+  }
+
+  .kline-card .section-heading {
+    align-items: flex-start;
+  }
+
+  .kline-heading-controls {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .kline-period-toggle button {
+    min-width: 44px;
+    padding-inline: 10px;
   }
 
   .kline-scroll {
