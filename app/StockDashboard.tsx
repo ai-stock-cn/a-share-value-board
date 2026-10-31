@@ -52,6 +52,13 @@ type BollPositions = {
   monthly: BollPosition;
 };
 
+type BollPoint = {
+  tradeDate: string;
+  upper: number;
+  middle: number;
+  lower: number;
+};
+
 type StockCategory =
   | "金融"
   | "银行"
@@ -403,6 +410,19 @@ export default function StockDashboard() {
     () => data?.quotes.slice(0, 30).reverse() ?? [],
     [data],
   );
+  const dailyBollPoints = useMemo(
+    () => buildBollSeries(data?.quotes ?? []),
+    [data],
+  );
+  const chartBollPoints = useMemo(() => {
+    const pointsByDate = new Map(
+      dailyBollPoints.map((point) => [point.tradeDate, point]),
+    );
+    return chartQuotes.map((quote) => pointsByDate.get(quote.tradeDate) ?? null);
+  }, [chartQuotes, dailyBollPoints]);
+  const latestDailyBoll = chartBollPoints.at(-1) ?? null;
+  const dailyBollPosition =
+    data?.bollPositions.daily ?? selectedStock.bollPositions.daily;
   const recentDays = useMemo(
     () => buildRecentDays(data?.quotes ?? []),
     [data],
@@ -984,12 +1004,32 @@ export default function StockDashboard() {
                       </div>
                     )}
                   </div>
-                  <KLineChart quotes={chartQuotes} />
+                  {latestDailyBoll && (
+                    <div className="kline-boll-summary" aria-label="最新日线BOLL轨道">
+                      <span>BOLL(20, 2) · 日线</span>
+                      <strong className="boll-upper-value">
+                        上 {numberFormatter.format(latestDailyBoll.upper)}
+                      </strong>
+                      <strong className="boll-middle-value">
+                        中 {numberFormatter.format(latestDailyBoll.middle)}
+                      </strong>
+                      <strong className="boll-lower-value">
+                        下 {numberFormatter.format(latestDailyBoll.lower)}
+                      </strong>
+                      <mark className={`boll-${getBollPositionClass(dailyBollPosition)}`}>
+                        当前 {dailyBollPosition}
+                      </mark>
+                    </div>
+                  )}
+                  <KLineChart quotes={chartQuotes} bollPoints={chartBollPoints} />
                   <div className="kline-legend" aria-label="K线颜色说明">
                     <span><i className="up" />红涨</span>
                     <span><i className="down" />绿跌</span>
                     <span><i className="close-line" />收盘连线</span>
-                    <small>隔日标注收盘价，最新交易日始终显示</small>
+                    <span><i className="boll-upper" />BOLL 上轨</span>
+                    <span><i className="boll-middle" />BOLL 中轨</span>
+                    <span><i className="boll-lower" />BOLL 下轨</span>
+                    <small>隔日标注收盘价；BOLL 按 20 日收盘价与 2 倍标准差计算</small>
                   </div>
                 </article>
               </section>
@@ -1391,7 +1431,13 @@ export default function StockDashboard() {
   );
 }
 
-function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
+function KLineChart({
+  quotes,
+  bollPoints,
+}: {
+  quotes: DailyQuote[];
+  bollPoints: Array<BollPoint | null>;
+}) {
   if (quotes.length === 0) {
     return (
       <div className="kline-loading" aria-label="K线数据加载中">
@@ -1405,8 +1451,17 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
   const padding = { top: 34, right: 72, bottom: 48, left: 14 };
   const plotWidth = width - padding.left - padding.right;
   const plotHeight = height - padding.top - padding.bottom;
-  const rawMin = Math.min(...quotes.map((quote) => quote.low));
-  const rawMax = Math.max(...quotes.map((quote) => quote.high));
+  const availableBollPoints = bollPoints.filter(
+    (point): point is BollPoint => point !== null,
+  );
+  const rawMin = Math.min(
+    ...quotes.map((quote) => quote.low),
+    ...availableBollPoints.map((point) => point.lower),
+  );
+  const rawMax = Math.max(
+    ...quotes.map((quote) => quote.high),
+    ...availableBollPoints.map((point) => point.upper),
+  );
   const paddingValue = Math.max((rawMax - rawMin) * 0.08, 0.5);
   const chartMin = rawMin - paddingValue;
   const chartMax = rawMax + paddingValue;
@@ -1427,6 +1482,36 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
       const centerX = padding.left + step * index + step / 2;
       return `${centerX},${toY(quote.close)}`;
     })
+    .join(" ");
+  const toBollPolyline = (key: "upper" | "middle" | "lower") =>
+    bollPoints
+      .map((point, index) => {
+        if (!point) {
+          return null;
+        }
+        const centerX = padding.left + step * index + step / 2;
+        return `${centerX},${toY(point[key])}`;
+      })
+      .filter((point): point is string => point !== null)
+      .join(" ");
+  const upperBollPoints = toBollPolyline("upper");
+  const middleBollPoints = toBollPolyline("middle");
+  const lowerBollPoints = toBollPolyline("lower");
+  const bollBandPoints = [
+    ...bollPoints.map((point, index) =>
+      point
+        ? `${padding.left + step * index + step / 2},${toY(point.upper)}`
+        : null,
+    ),
+    ...bollPoints
+      .map((point, index) =>
+        point
+          ? `${padding.left + step * index + step / 2},${toY(point.lower)}`
+          : null,
+      )
+      .reverse(),
+  ]
+    .filter((point): point is string => point !== null)
     .join(" ");
 
   return (
@@ -1455,6 +1540,29 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
             </text>
           </g>
         ))}
+
+        {bollBandPoints && (
+          <polygon
+            className="kline-boll-band"
+            points={bollBandPoints}
+            aria-hidden="true"
+          />
+        )}
+        <polyline
+          className="kline-boll-line kline-boll-upper"
+          points={upperBollPoints}
+          aria-hidden="true"
+        />
+        <polyline
+          className="kline-boll-line kline-boll-middle"
+          points={middleBollPoints}
+          aria-hidden="true"
+        />
+        <polyline
+          className="kline-boll-line kline-boll-lower"
+          points={lowerBollPoints}
+          aria-hidden="true"
+        />
 
         <polyline
           className="kline-close-line"
@@ -1550,6 +1658,40 @@ function KLineChart({ quotes }: { quotes: DailyQuote[] }) {
       </svg>
     </div>
   );
+}
+
+function buildBollSeries(quotes: DailyQuote[], period = 20): BollPoint[] {
+  const chronologicalQuotes = [...quotes].sort((left, right) =>
+    left.tradeDate.localeCompare(right.tradeDate),
+  );
+
+  return chronologicalQuotes.flatMap((quote, index) => {
+    if (index < period - 1) {
+      return [];
+    }
+
+    const closingPrices = chronologicalQuotes
+      .slice(index - period + 1, index + 1)
+      .map((item) => item.close);
+    const middle =
+      closingPrices.reduce((total, close) => total + close, 0) / period;
+    const variance =
+      closingPrices.reduce(
+        (total, close) => total + (close - middle) ** 2,
+        0,
+      ) /
+      (period - 1);
+    const standardDeviation = Math.sqrt(variance);
+
+    return [
+      {
+        tradeDate: quote.tradeDate,
+        upper: middle + standardDeviation * 2,
+        middle,
+        lower: middle - standardDeviation * 2,
+      },
+    ];
+  });
 }
 
 function FinancialMetric({

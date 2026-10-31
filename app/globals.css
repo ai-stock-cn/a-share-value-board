@@ -2370,10 +2370,45 @@ footer {
 }
 
 .kline-scroll {
-  margin-top: 22px;
+  margin-top: 14px;
   overflow-x: auto;
   border-bottom: 1px solid var(--line);
   scrollbar-width: thin;
+}
+
+.kline-boll-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 18px;
+  padding: 10px 14px;
+  border: 1px solid rgba(10, 18, 34, 0.08);
+  border-radius: 12px;
+  background: rgba(244, 247, 250, 0.82);
+  font-size: 12px;
+}
+
+.kline-boll-summary > span {
+  color: #667085;
+  font-weight: 700;
+}
+
+.kline-boll-summary strong {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+.kline-boll-summary .boll-upper-value { color: #c95549; }
+.kline-boll-summary .boll-middle-value { color: #4e66a6; }
+.kline-boll-summary .boll-lower-value { color: #25825f; }
+
+.kline-boll-summary mark {
+  margin-left: auto;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
 }
 
 .kline-chart {
@@ -2397,6 +2432,34 @@ footer {
   stroke-width: 2.4;
   opacity: 0.72;
   vector-effect: non-scaling-stroke;
+}
+
+.kline-boll-band {
+  fill: rgba(116, 136, 184, 0.055);
+  stroke: none;
+}
+
+.kline-boll-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+  opacity: 0.88;
+  vector-effect: non-scaling-stroke;
+}
+
+.kline-boll-upper {
+  stroke: #d66a5c;
+  stroke-dasharray: 7 4;
+}
+
+.kline-boll-middle {
+  stroke: #6578b3;
+}
+
+.kline-boll-lower {
+  stroke: #31916d;
+  stroke-dasharray: 7 4;
 }
 
 .candle-close-point {
@@ -2502,6 +2565,24 @@ footer {
   height: 2px;
   border-radius: 999px;
   background: #315d9b;
+}
+
+.kline-legend i.boll-upper,
+.kline-legend i.boll-middle,
+.kline-legend i.boll-lower {
+  width: 18px;
+  height: 2px;
+  border-radius: 999px;
+}
+
+.kline-legend i.boll-upper {
+  background: repeating-linear-gradient(90deg, #d66a5c 0 6px, transparent 6px 9px);
+}
+
+.kline-legend i.boll-middle { background: #6578b3; }
+
+.kline-legend i.boll-lower {
+  background: repeating-linear-gradient(90deg, #31916d 0 6px, transparent 6px 9px);
 }
 
 .kline-legend small {
