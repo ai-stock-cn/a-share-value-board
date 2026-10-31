@@ -211,7 +211,7 @@ export default function StockDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [marketFilter, setMarketFilter] = useState<MarketFilter>("all");
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all");
-  const [stockPageSize, setStockPageSize] = useState<StockPageSize>(5);
+  const [stockPageSize, setStockPageSize] = useState<StockPageSize>(10);
   const [stockPage, setStockPage] = useState(1);
   const initialRankSelectionRef = useRef(false);
 

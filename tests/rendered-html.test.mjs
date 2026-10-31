@@ -58,6 +58,7 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /按评分选择股票/);
   assert.match(dashboard, /STOCK_PAGE_SIZES/);
   assert.match(dashboard, /\[5, 10, 20\]/);
+  assert.match(dashboard, /useState<StockPageSize>\(10\)/);
   assert.match(dashboard, /设置每页股票数量/);
   assert.match(dashboard, /股票列表分页/);
   assert.match(dashboard, /每页最多显示 20 条/);
