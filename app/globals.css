@@ -1896,6 +1896,79 @@ footer {
   margin-top: 10px;
 }
 
+.boll-filter-panel {
+  padding: 9px 10px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(231, 240, 255, 0.5);
+}
+
+.boll-filter-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #667085;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.boll-filter-heading small {
+  color: #98a2b3;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.boll-filter-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+}
+
+.boll-period-filter {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.boll-period-filter > span:first-child {
+  display: block;
+  margin: 0 0 0 2px;
+  color: #667085;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.boll-period-filter .market-select-control {
+  min-width: 0;
+}
+
+.boll-period-filter select {
+  width: 100%;
+  padding: 7px 18px 7px 6px;
+  border: 1px solid rgba(10, 18, 34, 0.1);
+  border-radius: 8px;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--ink);
+  font-size: 9px;
+  font-weight: 800;
+  outline: none;
+  cursor: pointer;
+}
+
+.boll-period-filter select:focus-visible {
+  box-shadow: 0 0 0 3px rgba(121, 168, 255, 0.28);
+}
+
+.boll-period-filter .market-select-control i {
+  right: 6px;
+  color: #547000;
+  font-size: 10px;
+}
+
 .stock-option {
   display: grid;
   grid-template-areas:
@@ -1970,6 +2043,38 @@ footer {
 .stock-option-list {
   display: grid;
   gap: 6px;
+}
+
+.stock-filter-empty {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  padding: 22px 12px;
+  border: 1px dashed rgba(10, 18, 34, 0.18);
+  border-radius: 14px;
+  color: #667085;
+  text-align: center;
+}
+
+.stock-filter-empty strong {
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.stock-filter-empty span {
+  font-size: 9px;
+}
+
+.stock-filter-empty button {
+  margin-top: 3px;
+  padding: 7px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--lime);
+  font-size: 9px;
+  font-weight: 800;
+  cursor: pointer;
 }
 
 .stock-option {
@@ -2584,6 +2689,18 @@ footer {
 
   .stock-selector {
     max-width: 520px;
+  }
+
+  .boll-filter-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .boll-period-filter {
+    display: block;
+  }
+
+  .boll-period-filter > span:first-child {
+    margin: 0 0 5px 2px;
   }
 
   .stock-rail-note {

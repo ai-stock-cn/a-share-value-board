@@ -87,6 +87,9 @@ type StockSummary = {
 
 type MarketFilter = "all" | "上交所" | "深交所";
 type CategoryFilter = "all" | StockCategory;
+type BollPeriod = keyof BollPositions;
+type BollFilter = "all" | BollPosition;
+type BollFilterState = Record<BollPeriod, BollFilter>;
 type StockPageSize = 5 | 10 | 20;
 type StockSort = "score" | "dividend";
 
@@ -206,6 +209,23 @@ const CATEGORY_FILTERS: Array<{ value: CategoryFilter; label: string }> = [
   { value: "中药", label: "中药" },
   { value: "资源", label: "资源" },
 ];
+const BOLL_PERIOD_FILTERS: Array<{
+  period: BollPeriod;
+  label: string;
+  ariaLabel: string;
+}> = [
+  { period: "daily", label: "日线", ariaLabel: "按日线BOLL轨道筛选股票" },
+  { period: "weekly", label: "周线", ariaLabel: "按周线BOLL轨道筛选股票" },
+  { period: "monthly", label: "月线", ariaLabel: "按月线BOLL轨道筛选股票" },
+];
+const BOLL_FILTERS: Array<{ value: BollFilter; label: string }> = [
+  { value: "all", label: "全部" },
+  { value: "上轨以上", label: "上轨以上" },
+  { value: "中上", label: "中上" },
+  { value: "中下", label: "中下" },
+  { value: "下轨以下", label: "下轨以下" },
+  { value: "数据不足", label: "数据不足" },
+];
 const DATA_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/quotes.json`;
 
 const numberFormatter = new Intl.NumberFormat("zh-CN", {
@@ -231,6 +251,11 @@ export default function StockDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [marketFilter, setMarketFilter] = useState<MarketFilter>("all");
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all");
+  const [bollFilters, setBollFilters] = useState<BollFilterState>({
+    daily: "all",
+    weekly: "all",
+    monthly: "all",
+  });
   const [stockSort, setStockSort] = useState<StockSort>("score");
   const [stockPageSize, setStockPageSize] = useState<StockPageSize>(10);
   const [stockPage, setStockPage] = useState(1);
@@ -310,11 +335,23 @@ export default function StockDashboard() {
     () =>
       rankedStocks.filter(
         (stock) =>
-          (marketFilter === "all" || stock.market === marketFilter) &&
-          (categoryFilter === "all" || stock.category === categoryFilter),
+          stockMatchesFilters(
+            stock,
+            marketFilter,
+            categoryFilter,
+            bollFilters,
+          ),
       ),
-    [categoryFilter, marketFilter, rankedStocks],
+    [bollFilters, categoryFilter, marketFilter, rankedStocks],
   );
+  useEffect(() => {
+    if (
+      filteredStocks.length > 0 &&
+      !filteredStocks.some((stock) => stock.symbol === selectedSymbol)
+    ) {
+      setSelectedSymbol(filteredStocks[0].symbol);
+    }
+  }, [filteredStocks, selectedSymbol]);
   const stockPageCount = Math.max(
     1,
     Math.ceil(filteredStocks.length / stockPageSize),
@@ -436,28 +473,19 @@ export default function StockDashboard() {
                   value={marketFilter}
                   onChange={(event) => {
                     const nextFilter = event.target.value as MarketFilter;
-                    let firstMatch = rankedStocks.find(
-                      (stock) =>
-                        (nextFilter === "all" || stock.market === nextFilter) &&
-                        (categoryFilter === "all" || stock.category === categoryFilter),
-                    );
-
                     setMarketFilter(nextFilter);
-                    if (!firstMatch && categoryFilter !== "all") {
-                      setCategoryFilter("all");
-                      firstMatch = rankedStocks.find(
-                        (stock) => nextFilter === "all" || stock.market === nextFilter,
-                      );
-                    }
-                    if (firstMatch) setSelectedSymbol(firstMatch.symbol);
                     setStockPage(1);
                   }}
                 >
                   {MARKET_FILTERS.map((filter) => {
                     const count = rankedStocks.filter(
                       (stock) =>
-                        (filter.value === "all" || stock.market === filter.value) &&
-                        (categoryFilter === "all" || stock.category === categoryFilter),
+                        stockMatchesFilters(
+                          stock,
+                          filter.value,
+                          categoryFilter,
+                          bollFilters,
+                        ),
                     ).length;
 
                     return (
@@ -478,28 +506,19 @@ export default function StockDashboard() {
                   value={categoryFilter}
                   onChange={(event) => {
                     const nextFilter = event.target.value as CategoryFilter;
-                    let firstMatch = rankedStocks.find(
-                      (stock) =>
-                        (nextFilter === "all" || stock.category === nextFilter) &&
-                        (marketFilter === "all" || stock.market === marketFilter),
-                    );
-
                     setCategoryFilter(nextFilter);
-                    if (!firstMatch && marketFilter !== "all") {
-                      setMarketFilter("all");
-                      firstMatch = rankedStocks.find(
-                        (stock) => nextFilter === "all" || stock.category === nextFilter,
-                      );
-                    }
-                    if (firstMatch) setSelectedSymbol(firstMatch.symbol);
                     setStockPage(1);
                   }}
                 >
                   {CATEGORY_FILTERS.map((filter) => {
                     const count = rankedStocks.filter(
                       (stock) =>
-                        (filter.value === "all" || stock.category === filter.value) &&
-                        (marketFilter === "all" || stock.market === marketFilter),
+                        stockMatchesFilters(
+                          stock,
+                          marketFilter,
+                          filter.value,
+                          bollFilters,
+                        ),
                     ).length;
 
                     return (
@@ -512,6 +531,54 @@ export default function StockDashboard() {
                 <i aria-hidden="true">⌄</i>
               </span>
             </label>
+            <div className="boll-filter-panel">
+              <div className="boll-filter-heading">
+                <span>BOLL 轨道</span>
+                <small>日 · 周 · 月</small>
+              </div>
+              <div className="boll-filter-grid">
+                {BOLL_PERIOD_FILTERS.map(({ period, label, ariaLabel }) => (
+                  <label className="boll-period-filter" key={period}>
+                    <span>{label}</span>
+                    <span className="market-select-control">
+                      <select
+                        aria-label={ariaLabel}
+                        value={bollFilters[period]}
+                        onChange={(event) => {
+                          setBollFilters((current) => ({
+                            ...current,
+                            [period]: event.target.value as BollFilter,
+                          }));
+                          setStockPage(1);
+                        }}
+                      >
+                        {BOLL_FILTERS.map((filter) => {
+                          const nextBollFilters = {
+                            ...bollFilters,
+                            [period]: filter.value,
+                          };
+                          const count = rankedStocks.filter((stock) =>
+                            stockMatchesFilters(
+                              stock,
+                              marketFilter,
+                              categoryFilter,
+                              nextBollFilters,
+                            ),
+                          ).length;
+
+                          return (
+                            <option value={filter.value} key={filter.value}>
+                              {filter.label} · {count}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <i aria-hidden="true">⌄</i>
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
             <label className="market-select stock-sort-select">
               <span>排名</span>
               <span className="market-select-control">
@@ -522,8 +589,12 @@ export default function StockDashboard() {
                     const nextSort = event.target.value as StockSort;
                     const firstMatch = sortStocks(stocks, nextSort).find(
                       (stock) =>
-                        (marketFilter === "all" || stock.market === marketFilter) &&
-                        (categoryFilter === "all" || stock.category === categoryFilter),
+                        stockMatchesFilters(
+                          stock,
+                          marketFilter,
+                          categoryFilter,
+                          bollFilters,
+                        ),
                     );
 
                     setStockSort(nextSort);
@@ -609,6 +680,27 @@ export default function StockDashboard() {
                   </button>
                 );
               })}
+              {filteredStocks.length === 0 ? (
+                <div className="stock-filter-empty">
+                  <strong>没有符合条件的股票</strong>
+                  <span>可调整日、周、月轨道条件后再试。</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMarketFilter("all");
+                      setCategoryFilter("all");
+                      setBollFilters({
+                        daily: "all",
+                        weekly: "all",
+                        monthly: "all",
+                      });
+                      setStockPage(1);
+                    }}
+                  >
+                    清除筛选
+                  </button>
+                </div>
+              ) : null}
             </div>
             <div className="stock-pagination">
               <label className="stock-page-size">
@@ -1529,6 +1621,23 @@ function formatMarketName(market: string) {
   if (market === "上交所") return "沪市A股";
   if (market === "深交所") return "深市A股";
   return market;
+}
+
+function stockMatchesFilters(
+  stock: StockSummary,
+  marketFilter: MarketFilter,
+  categoryFilter: CategoryFilter,
+  bollFilters: BollFilterState,
+) {
+  return (
+    (marketFilter === "all" || stock.market === marketFilter) &&
+    (categoryFilter === "all" || stock.category === categoryFilter) &&
+    BOLL_PERIOD_FILTERS.every(
+      ({ period }) =>
+        bollFilters[period] === "all" ||
+        stock.bollPositions[period] === bollFilters[period],
+    )
+  );
 }
 
 function sortStocks(stocks: StockSummary[], sortMode: StockSort) {

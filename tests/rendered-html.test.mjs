@@ -76,6 +76,11 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /股票列表分页/);
   assert.match(dashboard, /每页最多显示 20 条/);
   assert.match(dashboard, /按市场筛选股票/);
+  assert.match(dashboard, /按日线BOLL轨道筛选股票/);
+  assert.match(dashboard, /按周线BOLL轨道筛选股票/);
+  assert.match(dashboard, /按月线BOLL轨道筛选股票/);
+  assert.match(dashboard, /boll-filter-panel/);
+  assert.match(dashboard, /stockMatchesFilters/);
   assert.match(dashboard, /market-select/);
   assert.match(dashboard, /<select/);
   assert.doesNotMatch(dashboard, /className="market-filter"/);
