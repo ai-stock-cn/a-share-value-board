@@ -64,6 +64,8 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /日BOLL/);
   assert.match(dashboard, /周BOLL/);
   assert.match(dashboard, /月BOLL/);
+  assert.match(dashboard, /quote-boll/);
+  assert.match(dashboard, /行情卡BOLL位置/);
   assert.match(dashboard, /getBollPositionClass/);
   assert.match(dashboard, /useState<StockSort>\("score"\)/);
   assert.match(dashboard, /sortStocks/);

@@ -763,6 +763,23 @@ export default function StockDashboard() {
                       </strong>
                     </div>
                   </div>
+                  <div
+                    className="quote-boll"
+                    aria-label={`${selectedStock.name} 行情卡BOLL位置`}
+                  >
+                    {([
+                      ["日BOLL", selectedStock.bollPositions.daily],
+                      ["周BOLL", selectedStock.bollPositions.weekly],
+                      ["月BOLL", selectedStock.bollPositions.monthly],
+                    ] as const).map(([label, position]) => (
+                      <div key={label}>
+                        <span>{label}</span>
+                        <strong className={`boll-${getBollPositionClass(position)}`}>
+                          {position}
+                        </strong>
+                      </div>
+                    ))}
+                  </div>
                   {(watchPrice !== null || dailyDropAlertPercent !== null) && (
                     <div className="quote-alert-panel">
                       <div className="quote-alert-heading">
