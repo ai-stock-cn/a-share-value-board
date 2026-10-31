@@ -338,21 +338,21 @@ footer {
 }
 
 .hero-alert-item.is-near {
-  border-color: rgba(214, 139, 31, 0.2);
-  background: #fff4d9;
+  border-color: rgba(201, 85, 73, 0.2);
+  background: #fff0ec;
 }
 
 .hero-alert-item.is-near strong {
-  color: #a75f00;
+  color: #b45342;
 }
 
 .hero-alert-item.is-below {
-  border-color: rgba(35, 131, 97, 0.2);
-  background: #e5f7ec;
+  border-color: rgba(194, 61, 47, 0.22);
+  background: #ffe2dd;
 }
 
 .hero-alert-item.is-below strong {
-  color: #1e7957;
+  color: #c23d2f;
 }
 
 .hero-alert-item.is-unset,
@@ -1515,9 +1515,9 @@ td small {
 .close-change-positive { color: #d95543; }
 .close-change-negative { color: #3e75d7; }
 .range-difference-cell { color: #667085; }
-.boll-table-upper { color: #c95549; }
+.boll-table-upper { color: #25825f; }
 .boll-table-middle { color: #4e66a6; }
-.boll-table-lower { color: #25825f; }
+.boll-table-lower { color: #c95549; }
 
 .error-panel {
   display: flex;
@@ -2309,31 +2309,36 @@ footer {
 }
 
 .stock-boll .boll-above,
-.quote-boll .boll-above {
-  background: #ffe6df;
-  color: #c84c3a;
-}
-
-.stock-boll .boll-upper-middle,
-.quote-boll .boll-upper-middle {
-  background: #eef0f4;
-  color: #263247;
-}
-
-.stock-boll .boll-lower-middle,
-.quote-boll .boll-lower-middle {
-  background: #e8f0ff;
-  color: #3e6db7;
-}
-
-.stock-boll .boll-below,
-.quote-boll .boll-below {
+.quote-boll .boll-above,
+.kline-boll-summary .boll-above {
   background: #ddf7e4;
   color: #24784f;
 }
 
+.stock-boll .boll-upper-middle,
+.quote-boll .boll-upper-middle,
+.kline-boll-summary .boll-upper-middle {
+  background: #edf8e9;
+  color: #3d754c;
+}
+
+.stock-boll .boll-lower-middle,
+.quote-boll .boll-lower-middle,
+.kline-boll-summary .boll-lower-middle {
+  background: #fff0ec;
+  color: #b45342;
+}
+
+.stock-boll .boll-below,
+.quote-boll .boll-below,
+.kline-boll-summary .boll-below {
+  background: #ffe2dd;
+  color: #c23d2f;
+}
+
 .stock-boll .boll-unavailable,
-.quote-boll .boll-unavailable {
+.quote-boll .boll-unavailable,
+.kline-boll-summary .boll-unavailable {
   background: #f2f2ef;
   color: #98a0ad;
 }
@@ -2522,9 +2527,9 @@ footer {
   font-size: 12px;
 }
 
-.kline-boll-summary .boll-upper-value { color: #c95549; }
+.kline-boll-summary .boll-upper-value { color: #25825f; }
 .kline-boll-summary .boll-middle-value { color: #4e66a6; }
-.kline-boll-summary .boll-lower-value { color: #25825f; }
+.kline-boll-summary .boll-lower-value { color: #c95549; }
 
 .boll-summary-status {
   display: inline-flex;
@@ -2546,15 +2551,15 @@ footer {
 }
 
 .kline-boll-summary .boll-lower-alert.is-near {
-  background: #fff0c7;
-  box-shadow: 0 0 0 1px rgba(214, 139, 31, 0.18);
-  color: #a75f00;
+  background: #fff0ec;
+  box-shadow: 0 0 0 1px rgba(201, 85, 73, 0.18);
+  color: #b45342;
 }
 
 .kline-boll-summary .boll-lower-alert.is-below {
-  background: #dff5e8;
-  box-shadow: 0 0 0 1px rgba(35, 131, 97, 0.18);
-  color: #1e7957;
+  background: #ffe2dd;
+  box-shadow: 0 0 0 1px rgba(194, 61, 47, 0.18);
+  color: #c23d2f;
 }
 
 .kline-macd-summary {
@@ -2646,7 +2651,7 @@ footer {
 }
 
 .kline-boll-upper {
-  stroke: #d66a5c;
+  stroke: #31916d;
   stroke-dasharray: 7 4;
 }
 
@@ -2655,7 +2660,7 @@ footer {
 }
 
 .kline-boll-lower {
-  stroke: #31916d;
+  stroke: #d66a5c;
   stroke-dasharray: 7 4;
 }
 
@@ -2773,13 +2778,13 @@ footer {
 }
 
 .kline-legend i.boll-upper {
-  background: repeating-linear-gradient(90deg, #d66a5c 0 6px, transparent 6px 9px);
+  background: repeating-linear-gradient(90deg, #31916d 0 6px, transparent 6px 9px);
 }
 
 .kline-legend i.boll-middle { background: #6578b3; }
 
 .kline-legend i.boll-lower {
-  background: repeating-linear-gradient(90deg, #31916d 0 6px, transparent 6px 9px);
+  background: repeating-linear-gradient(90deg, #d66a5c 0 6px, transparent 6px 9px);
 }
 
 .kline-legend small {

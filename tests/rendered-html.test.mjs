@@ -165,6 +165,16 @@ test("keeps the desktop hero vertically balanced", async () => {
     styles,
     /\.dashboard-main \.hero \{[\s\S]*?align-items: center;[\s\S]*?padding: 30px 0 32px;/,
   );
+  assert.match(
+    styles,
+    /\.stock-boll \.boll-above,[\s\S]*?background: #ddf7e4;[\s\S]*?color: #24784f;/,
+  );
+  assert.match(
+    styles,
+    /\.stock-boll \.boll-below,[\s\S]*?background: #ffe2dd;[\s\S]*?color: #c23d2f;/,
+  );
+  assert.match(styles, /\.kline-boll-upper \{[\s\S]*?stroke: #31916d;/);
+  assert.match(styles, /\.kline-boll-lower \{[\s\S]*?stroke: #d66a5c;/);
 });
 
 test("includes the GitHub Pages update workflow", async () => {
