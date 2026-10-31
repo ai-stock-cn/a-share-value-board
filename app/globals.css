@@ -235,6 +235,138 @@ footer {
   padding: 82px 0 58px;
 }
 
+.hero-copy {
+  display: flex;
+  align-self: stretch;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.hero-alert-center {
+  margin-bottom: auto;
+  padding: 15px;
+  border: 1px solid rgba(10, 18, 34, 0.1);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: 0 14px 36px rgba(33, 47, 68, 0.07);
+}
+
+.hero-alert-center-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.hero-alert-center-heading > div {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.hero-alert-center-heading span {
+  color: #8a94a5;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.hero-alert-center-heading strong {
+  font-family: "Songti SC", STSong, serif;
+  font-size: 19px;
+}
+
+.hero-alert-center-heading mark {
+  padding: 5px 8px;
+  border-radius: 999px;
+  background: #edf0f3;
+  color: #697487;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.hero-alert-center-heading mark.is-active {
+  background: #e8ffad;
+  color: #526f00;
+}
+
+.hero-alert-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.hero-alert-item {
+  display: grid;
+  min-height: 72px;
+  padding: 9px 10px;
+  border: 1px solid rgba(10, 18, 34, 0.07);
+  border-radius: 12px;
+  background: rgba(247, 248, 245, 0.86);
+}
+
+.hero-alert-item span {
+  color: #7c8799;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.hero-alert-item strong {
+  align-self: end;
+  margin-top: 5px;
+  color: #273246;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+.hero-alert-item small {
+  margin-top: 3px;
+  color: #8a94a5;
+  font-size: 8px;
+}
+
+.hero-alert-item.is-triggered,
+.hero-alert-item.is-positive {
+  border-color: rgba(105, 140, 0, 0.18);
+  background: rgba(232, 255, 173, 0.55);
+}
+
+.hero-alert-item.is-triggered strong,
+.hero-alert-item.is-positive strong {
+  color: #567300;
+}
+
+.hero-alert-item.is-near {
+  border-color: rgba(214, 139, 31, 0.2);
+  background: #fff4d9;
+}
+
+.hero-alert-item.is-near strong {
+  color: #a75f00;
+}
+
+.hero-alert-item.is-below {
+  border-color: rgba(35, 131, 97, 0.2);
+  background: #e5f7ec;
+}
+
+.hero-alert-item.is-below strong {
+  color: #1e7957;
+}
+
+.hero-alert-item.is-unset,
+.hero-alert-item.is-waiting {
+  background: rgba(242, 243, 240, 0.68);
+}
+
+.hero-copy .hero-alert-center > p {
+  margin: 9px 1px 0;
+  color: #98a2b3;
+  font-family: "PingFang SC", sans-serif;
+  font-size: 8px;
+}
+
 .eyebrow {
   display: flex;
   flex-wrap: wrap;
@@ -439,67 +571,6 @@ footer {
   font-size: 10px;
   line-height: 1;
   text-align: center;
-}
-
-.quote-alert-panel {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 14px;
-  align-items: center;
-  padding-top: 4px;
-}
-
-.quote-alert-heading {
-  display: grid;
-  gap: 3px;
-  min-width: 92px;
-}
-
-.quote-alert-heading span {
-  color: #526176;
-  font-size: 10px;
-  font-weight: 800;
-}
-
-.quote-alert-heading small {
-  color: #8a94a5;
-  font-size: 8px;
-}
-
-.quote-alert-rules {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.quote-alert-rules > div {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 3px 8px;
-  align-items: baseline;
-  padding: 9px 11px;
-  border: 1px solid rgba(105, 140, 0, 0.16);
-  border-radius: 11px;
-  background: rgba(235, 255, 181, 0.56);
-}
-
-.quote-alert-rules span {
-  color: #66758a;
-  font-size: 8px;
-  font-weight: 800;
-}
-
-.quote-alert-rules strong {
-  color: #24320f;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 12px;
-}
-
-.quote-alert-rules small {
-  grid-column: 1 / -1;
-  color: #70805c;
-  font-size: 8px;
 }
 
 .quote-metrics {
@@ -1522,6 +1593,10 @@ footer span {
     font-size: clamp(68px, 15vw, 100px);
   }
 
+  .hero-alert-center {
+    margin-bottom: 28px;
+  }
+
   .price-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1747,11 +1822,7 @@ footer span {
     grid-template-columns: 1fr;
   }
 
-  .quote-alert-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .quote-alert-rules {
+  .hero-alert-grid {
     grid-template-columns: 1fr;
   }
 

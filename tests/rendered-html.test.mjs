@@ -59,6 +59,13 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /当前股息率/);
   assert.match(dashboard, /换手率/);
   assert.match(dashboard, /建仓起点提醒/);
+  assert.match(dashboard, /当前提醒中心/);
+  assert.match(dashboard, /hero-alert-center/);
+  assert.match(dashboard, /目标点位/);
+  assert.match(dashboard, /日线下轨/);
+  assert.match(dashboard, /日线 MACD/);
+  assert.match(dashboard, /activeReminderCount/);
+  assert.match(dashboard, /buildTargetPriceReminder/);
   assert.match(dashboard, /建仓起点/);
   assert.match(dashboard, /单日跌幅提醒/);
   assert.match(dashboard, /每日收盘后检查/);

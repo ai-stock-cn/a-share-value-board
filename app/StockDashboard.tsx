@@ -442,6 +442,36 @@ export default function StockDashboard() {
     latest && watchPrice
       ? ((latest.close - watchPrice) / latest.close) * 100
       : null;
+  const dailyBollPoints = useMemo(
+    () => buildBollSeries(data?.quotes ?? []),
+    [data],
+  );
+  const latestDailyBoll = dailyBollPoints.at(-1) ?? null;
+  const dailyLowerRailSignal =
+    latest && latestDailyBoll
+      ? getBollLowerRailSignal(latest.close, latestDailyBoll.lower)
+      : null;
+  const dailyMacdSummary = useMemo(
+    () => calculateMacdSummary(data?.quotes ?? []),
+    [data],
+  );
+  const targetPriceReminder = buildTargetPriceReminder(
+    latest?.close ?? null,
+    watchPrice,
+    watchPriceDistancePercent,
+  );
+  const dailyDropTriggered =
+    dailyDropAlertPercent !== null &&
+    latest !== undefined &&
+    changePercent <= dailyDropAlertPercent;
+  const activeReminderCount = [
+    targetPriceReminder.status === "triggered",
+    dailyLowerRailSignal?.status === "near" ||
+      dailyLowerRailSignal?.status === "below",
+    dailyMacdSummary?.status === "刚形成金叉" ||
+      dailyMacdSummary?.status === "刚形成死叉",
+    dailyDropTriggered,
+  ].filter(Boolean).length;
   const nearestYieldTier = currentDividendYield
     ? DIVIDEND_YIELD_TIERS.reduce((nearest, value) =>
         Math.abs(value - currentDividendYield) <
@@ -860,6 +890,68 @@ export default function StockDashboard() {
         <div className="dashboard-main" id="top">
           <section className="hero">
             <div className="hero-copy">
+              <div className="hero-alert-center" aria-label="当前提醒中心">
+                <div className="hero-alert-center-heading">
+                  <div>
+                    <span>提醒中心</span>
+                    <strong>当前提醒</strong>
+                  </div>
+                  <mark className={activeReminderCount ? "is-active" : ""}>
+                    {activeReminderCount
+                      ? `${activeReminderCount} 项已触发`
+                      : "持续监控"}
+                  </mark>
+                </div>
+                <div className="hero-alert-grid">
+                  <article className={`hero-alert-item is-${targetPriceReminder.status}`}>
+                    <span>目标点位</span>
+                    <strong>{targetPriceReminder.value}</strong>
+                    <small>{targetPriceReminder.detail}</small>
+                  </article>
+                  <article
+                    className={`hero-alert-item is-${dailyLowerRailSignal?.status ?? "waiting"}`}
+                  >
+                    <span>日线下轨</span>
+                    <strong>
+                      {dailyLowerRailSignal?.label ?? "等待行情"}
+                    </strong>
+                    <small>
+                      {latestDailyBoll
+                        ? `下轨 ¥${numberFormatter.format(latestDailyBoll.lower)}`
+                        : "BOLL(20, 2)"}
+                    </small>
+                  </article>
+                  <article
+                    className={`hero-alert-item ${dailyMacdSummary?.direction === "bullish" ? "is-positive" : "is-monitoring"}`}
+                  >
+                    <span>日线 MACD</span>
+                    <strong>{dailyMacdSummary?.status ?? "等待行情"}</strong>
+                    <small>
+                      {dailyMacdSummary?.lastCross
+                        ? `最近${dailyMacdSummary.lastCross.type === "golden" ? "金叉" : "死叉"} ${formatChartDate(dailyMacdSummary.lastCross.tradeDate, "daily")}`
+                        : "MACD(12, 26, 9)"}
+                    </small>
+                  </article>
+                  <article
+                    className={`hero-alert-item ${dailyDropTriggered ? "is-triggered" : "is-monitoring"}`}
+                  >
+                    <span>单日跌幅提醒</span>
+                    <strong>
+                      {dailyDropAlertPercent === null
+                        ? "未设置"
+                        : `≤ ${dailyDropAlertPercent.toFixed(2)}%`}
+                    </strong>
+                    <small>
+                      {dailyDropAlertPercent === null
+                        ? "可后续补充提醒阈值"
+                        : latest
+                          ? `当前 ${changePercent >= 0 ? "+" : ""}${changePercent.toFixed(2)}%`
+                          : "等待行情"}
+                    </small>
+                  </article>
+                </div>
+                <p>每日收盘后检查；提醒仅作观察标记。</p>
+              </div>
               <div className="eyebrow">
                 <span>{selectedStock.market}</span>
                 <span>{selectedStock.category}</span>
@@ -967,36 +1059,6 @@ export default function StockDashboard() {
                       </div>
                     ))}
                   </div>
-                  {(watchPrice !== null || dailyDropAlertPercent !== null) && (
-                    <div className="quote-alert-panel">
-                      <div className="quote-alert-heading">
-                        <span>建仓起点提醒</span>
-                        <small>每日收盘后检查</small>
-                      </div>
-                      <div className="quote-alert-rules">
-                        {watchPrice !== null && (
-                          <div>
-                            <span>建仓起点</span>
-                            <strong>≤ ¥{numberFormatter.format(watchPrice)}</strong>
-                            <small>
-                              {watchPriceDistancePercent === null
-                                ? "等待行情"
-                                : watchPriceDistancePercent <= 0
-                                  ? "已进入建仓观察区间"
-                                  : `距建仓起点还需下跌 ${watchPriceDistancePercent.toFixed(2)}%`}
-                            </small>
-                          </div>
-                        )}
-                        {dailyDropAlertPercent !== null && (
-                          <div>
-                            <span>单日跌幅提醒</span>
-                            <strong>≤ {dailyDropAlertPercent.toFixed(2)}%</strong>
-                            <small>触发后推送微信消息</small>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
                 </div>
               ) : (
                 <div className="hero-skeleton">
@@ -1923,6 +1985,42 @@ function getBollLowerRailSignal(
     status: "normal",
     label: `距下轨 +${distancePercent.toFixed(2)}%`,
   };
+}
+
+function buildTargetPriceReminder(
+  close: number | null,
+  watchPrice: number | null,
+  distancePercent: number | null,
+) {
+  if (watchPrice === null) {
+    return {
+      status: "unset",
+      value: "未设置",
+      detail: "建仓起点提醒暂未设置",
+    } as const;
+  }
+
+  if (close === null || distancePercent === null) {
+    return {
+      status: "waiting",
+      value: `¥${numberFormatter.format(watchPrice)}`,
+      detail: "等待最新行情",
+    } as const;
+  }
+
+  if (close <= watchPrice) {
+    return {
+      status: "triggered",
+      value: "已到目标",
+      detail: `目标 ≤ ¥${numberFormatter.format(watchPrice)}`,
+    } as const;
+  }
+
+  return {
+    status: "monitoring",
+    value: `¥${numberFormatter.format(watchPrice)}`,
+    detail: `还需下跌 ${distancePercent.toFixed(2)}%`,
+  } as const;
 }
 
 function calculateMacdSummary(quotes: DailyQuote[]): MacdSummary | null {
