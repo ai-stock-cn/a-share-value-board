@@ -79,6 +79,7 @@ type StockSummary = {
 type MarketFilter = "all" | "上交所" | "深交所";
 type CategoryFilter = "all" | StockCategory;
 type StockPageSize = 5 | 10 | 20;
+type StockSort = "score" | "dividend";
 
 type QuoteResponse = StockSummary & {
   currency: string;
@@ -211,6 +212,7 @@ export default function StockDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [marketFilter, setMarketFilter] = useState<MarketFilter>("all");
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all");
+  const [stockSort, setStockSort] = useState<StockSort>("score");
   const [stockPageSize, setStockPageSize] = useState<StockPageSize>(10);
   const [stockPage, setStockPage] = useState(1);
   const initialRankSelectionRef = useRef(false);
@@ -233,11 +235,7 @@ export default function StockDashboard() {
 
       let effectiveSymbol = selectedSymbol;
       if (!initialRankSelectionRef.current && payload.stocks.length > 0) {
-        effectiveSymbol = [...payload.stocks].sort(
-          (left, right) =>
-            right.score - left.score ||
-            left.name.localeCompare(right.name, "zh-CN"),
-        )[0].symbol;
+        effectiveSymbol = sortStocks(payload.stocks, "score")[0].symbol;
         initialRankSelectionRef.current = true;
         if (effectiveSymbol !== selectedSymbol) {
           setSelectedSymbol(effectiveSymbol);
@@ -283,12 +281,8 @@ export default function StockDashboard() {
   }, [loadQuotes]);
 
   const rankedStocks = useMemo(
-    () =>
-      [...stocks].sort(
-        (left, right) =>
-          right.score - left.score || left.name.localeCompare(right.name, "zh-CN"),
-      ),
-    [stocks],
+    () => sortStocks(stocks, stockSort),
+    [stockSort, stocks],
   );
   const selectedStock =
     rankedStocks.find((stock) => stock.symbol === selectedSymbol) ??
@@ -499,12 +493,39 @@ export default function StockDashboard() {
                 <i aria-hidden="true">⌄</i>
               </span>
             </label>
+            <label className="market-select stock-sort-select">
+              <span>排名</span>
+              <span className="market-select-control">
+                <select
+                  aria-label="选择股票排名方式"
+                  value={stockSort}
+                  onChange={(event) => {
+                    const nextSort = event.target.value as StockSort;
+                    const firstMatch = sortStocks(stocks, nextSort).find(
+                      (stock) =>
+                        (marketFilter === "all" || stock.market === marketFilter) &&
+                        (categoryFilter === "all" || stock.category === categoryFilter),
+                    );
+
+                    setStockSort(nextSort);
+                    if (firstMatch) setSelectedSymbol(firstMatch.symbol);
+                    setStockPage(1);
+                  }}
+                >
+                  <option value="score">评分从高到低</option>
+                  <option value="dividend">股息率从高到低</option>
+                </select>
+                <i aria-hidden="true">⌄</i>
+              </span>
+            </label>
           </div>
           <div className="stock-selector">
             <div
               className="stock-option-list"
               role="listbox"
-              aria-label="按评分选择股票"
+              aria-label={
+                stockSort === "score" ? "按评分选择股票" : "按股息率选择股票"
+              }
             >
               {visibleStocks.map((stock) => {
                 const rank = rankedStocks.indexOf(stock) + 1;
@@ -609,7 +630,10 @@ export default function StockDashboard() {
             </div>
           </div>
           <p className="stock-rail-note">
-            按评分从高到低排列；每页最多显示 20 条。
+            {stockSort === "score"
+              ? "按评分从高到低排列"
+              : "按当前股息率从高到低排列"}
+            ；每页最多显示 20 条。
           </p>
         </aside>
 
@@ -1455,6 +1479,21 @@ function formatMarketName(market: string) {
   if (market === "上交所") return "沪市A股";
   if (market === "深交所") return "深市A股";
   return market;
+}
+
+function sortStocks(stocks: StockSummary[], sortMode: StockSort) {
+  return [...stocks].sort((left, right) => {
+    if (sortMode === "dividend") {
+      const dividendDifference =
+        (right.currentDividendYield ?? Number.NEGATIVE_INFINITY) -
+        (left.currentDividendYield ?? Number.NEGATIVE_INFINITY);
+      if (dividendDifference !== 0) return dividendDifference;
+    }
+
+    return (
+      right.score - left.score || left.name.localeCompare(right.name, "zh-CN")
+    );
+  });
 }
 
 function formatTableDate(value: string) {

@@ -1925,6 +1925,10 @@ footer {
   pointer-events: none;
 }
 
+.stock-sort-select .market-select-control {
+  min-width: 126px;
+}
+
 .stock-option-list {
   display: grid;
   gap: 6px;

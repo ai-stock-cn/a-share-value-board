@@ -57,6 +57,12 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /价格与股息摘要/);
   assert.match(dashboard, /stock-selector/);
   assert.match(dashboard, /按评分选择股票/);
+  assert.match(dashboard, /按股息率选择股票/);
+  assert.match(dashboard, /选择股票排名方式/);
+  assert.match(dashboard, /评分从高到低/);
+  assert.match(dashboard, /股息率从高到低/);
+  assert.match(dashboard, /useState<StockSort>\("score"\)/);
+  assert.match(dashboard, /sortStocks/);
   assert.match(dashboard, /STOCK_PAGE_SIZES/);
   assert.match(dashboard, /\[5, 10, 20\]/);
   assert.match(dashboard, /useState<StockPageSize>\(10\)/);
