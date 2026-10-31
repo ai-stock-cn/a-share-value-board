@@ -507,6 +507,16 @@ export default function StockDashboard() {
       })),
     ];
   }, [data, recentDays]);
+  const dailyBollByDate = useMemo(
+    () =>
+      new Map(
+        buildBollSeries(data?.quotes ?? []).map((point) => [
+          point.tradeDate,
+          point,
+        ]),
+      ),
+    [data],
+  );
 
   return (
     <main className="site-shell">
@@ -1354,11 +1364,11 @@ export default function StockDashboard() {
                   <span>价格单位：人民币</span>
                 </div>
                 <p className="comparison-formula">
-                  日内价差 = 最高 − 最低；振幅 = 日内价差 ÷ 前一交易日收盘价；收盘涨跌幅 =（当日收盘 − 前一交易日收盘）÷ 前一交易日收盘价
+                  日内价差 = 最高 − 最低；振幅 = 日内价差 ÷ 前一交易日收盘价；收盘涨跌幅 =（当日收盘 − 前一交易日收盘）÷ 前一交易日收盘价；BOLL 按 20 日收盘价与 2 倍标准差计算
                 </p>
 
                 <div className="table-wrap">
-                  <table>
+                  <table className="comparison-price-table">
                     <thead>
                       <tr>
                         <th>日期</th>
@@ -1368,6 +1378,9 @@ export default function StockDashboard() {
                         <th>开盘</th>
                         <th>最高</th>
                         <th>最低</th>
+                        <th>BOLL上轨</th>
+                        <th>BOLL中轨</th>
+                        <th>BOLL下轨</th>
                         <th>开盘→最低</th>
                         <th>开盘→最高</th>
                         <th>日内振幅</th>
@@ -1383,7 +1396,7 @@ export default function StockDashboard() {
                                   <span className="date-cell">{formatTableDate(row.date)}</span>
                                   <span className="day-context">{formatWeekday(row.date)}</span>
                                 </td>
-                                <td colSpan={9}>
+                                <td colSpan={12}>
                                   <span className="market-closed-label">休市</span>
                                 </td>
                               </tr>
@@ -1395,6 +1408,7 @@ export default function StockDashboard() {
                             quote,
                             data.quotes,
                           );
+                          const dailyBoll = dailyBollByDate.get(quote.tradeDate);
 
                           return (
                             <tr className={row.isRecent ? "is-recent-row" : ""} key={row.date}>
@@ -1428,6 +1442,21 @@ export default function StockDashboard() {
                               <td>{numberFormatter.format(quote.open)}</td>
                               <td className="high-cell">{numberFormatter.format(quote.high)}</td>
                               <td className="low-cell">{numberFormatter.format(quote.low)}</td>
+                              <td className="boll-table-upper">
+                                {dailyBoll
+                                  ? numberFormatter.format(dailyBoll.upper)
+                                  : "—"}
+                              </td>
+                              <td className="boll-table-middle">
+                                {dailyBoll
+                                  ? numberFormatter.format(dailyBoll.middle)
+                                  : "—"}
+                              </td>
+                              <td className="boll-table-lower">
+                                {dailyBoll
+                                  ? numberFormatter.format(dailyBoll.lower)
+                                  : "—"}
+                              </td>
                               <td className="open-low-cell">
                                 {formatSignedDifference(quote.low - quote.open)}
                               </td>
@@ -1440,7 +1469,7 @@ export default function StockDashboard() {
                         }) :
                         Array.from({ length: 6 }).map((_, index) => (
                           <tr key={index}>
-                            {Array.from({ length: 10 }).map((__, cell) => (
+                            {Array.from({ length: 13 }).map((__, cell) => (
                               <td key={cell}><Skeleton baseColor="#f0f1eb" highlightColor="#ffffff" /></td>
                             ))}
                           </tr>

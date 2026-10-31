@@ -1331,6 +1331,10 @@ footer {
   margin-top: 12px;
 }
 
+.comparison-price-table {
+  min-width: 1480px;
+}
+
 .comparison-section tbody tr.is-recent-row td {
   background: rgba(255, 255, 255, 0.35);
 }
@@ -1440,6 +1444,9 @@ td small {
 .close-change-positive { color: #d95543; }
 .close-change-negative { color: #3e75d7; }
 .range-difference-cell { color: #667085; }
+.boll-table-upper { color: #c95549; }
+.boll-table-middle { color: #4e66a6; }
+.boll-table-lower { color: #25825f; }
 
 .error-panel {
   display: flex;

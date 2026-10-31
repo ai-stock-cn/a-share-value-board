@@ -111,6 +111,11 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /开盘→最高/);
   assert.match(dashboard, /收盘涨跌幅/);
   assert.match(dashboard, /日内价差/);
+  assert.match(dashboard, /BOLL上轨/);
+  assert.match(dashboard, /BOLL中轨/);
+  assert.match(dashboard, /BOLL下轨/);
+  assert.match(dashboard, /dailyBollByDate/);
+  assert.match(dashboard, /boll-table-upper/);
   assert.ok(
     dashboard.indexOf("<th>收盘</th>") < dashboard.indexOf("<th>开盘</th>"),
   );
