@@ -37,6 +37,14 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /kline-boll-middle/);
   assert.match(dashboard, /kline-boll-lower/);
   assert.match(dashboard, /buildBollSeries/);
+  assert.match(dashboard, /MACD\(12, 26, 9\)/);
+  assert.match(dashboard, /calculateMacdSummary/);
+  assert.match(dashboard, /kline-macd-summary/);
+  assert.match(dashboard, /刚形成金叉/);
+  assert.match(dashboard, /刚形成死叉/);
+  assert.match(dashboard, /金叉区间/);
+  assert.match(dashboard, /死叉区间/);
+  assert.match(dashboard, /最近.*金叉/);
   assert.match(dashboard, /切换K线周期/);
   assert.match(dashboard, /KLINE_PERIODS/);
   assert.match(dashboard, /aggregateQuotesForChart/);

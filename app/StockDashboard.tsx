@@ -66,6 +66,20 @@ type BollPoint = {
   lower: number;
 };
 
+type MacdCross = {
+  type: "golden" | "death";
+  tradeDate: string;
+};
+
+type MacdSummary = {
+  dif: number;
+  dea: number;
+  histogram: number;
+  direction: "bullish" | "bearish";
+  status: "刚形成金叉" | "刚形成死叉" | "金叉区间" | "死叉区间";
+  lastCross: MacdCross | null;
+};
+
 type StockCategory =
   | "金融"
   | "银行"
@@ -459,6 +473,10 @@ export default function StockDashboard() {
   const latestPeriodBoll = chartBollPoints.at(-1) ?? null;
   const currentBollPosition =
     data?.bollPositions[chartPeriod] ?? selectedStock.bollPositions[chartPeriod];
+  const macdSummary = useMemo(
+    () => calculateMacdSummary(selectedPeriodQuotes),
+    [selectedPeriodQuotes],
+  );
   const recentDays = useMemo(
     () => buildRecentDays(data?.quotes ?? []),
     [data],
@@ -1057,23 +1075,52 @@ export default function StockDashboard() {
                       )}
                     </div>
                   </div>
-                  {latestPeriodBoll && (
-                    <div className="kline-boll-summary" aria-label={`最新${chartPeriodConfig.label}BOLL轨道`}>
-                      <span>BOLL(20, 2) · {chartPeriodConfig.label}</span>
-                      <strong className="boll-upper-value">
-                        上 {numberFormatter.format(latestPeriodBoll.upper)}
-                      </strong>
-                      <strong className="boll-middle-value">
-                        中 {numberFormatter.format(latestPeriodBoll.middle)}
-                      </strong>
-                      <strong className="boll-lower-value">
-                        下 {numberFormatter.format(latestPeriodBoll.lower)}
-                      </strong>
-                      <mark className={`boll-${getBollPositionClass(currentBollPosition)}`}>
-                        当前 {currentBollPosition}
-                      </mark>
-                    </div>
-                  )}
+                  <div className="kline-indicator-summaries">
+                    {latestPeriodBoll && (
+                      <div
+                        className="kline-boll-summary"
+                        aria-label={`最新${chartPeriodConfig.label}BOLL轨道`}
+                      >
+                        <span>BOLL(20, 2) · {chartPeriodConfig.label}</span>
+                        <strong className="boll-upper-value">
+                          上 {numberFormatter.format(latestPeriodBoll.upper)}
+                        </strong>
+                        <strong className="boll-middle-value">
+                          中 {numberFormatter.format(latestPeriodBoll.middle)}
+                        </strong>
+                        <strong className="boll-lower-value">
+                          下 {numberFormatter.format(latestPeriodBoll.lower)}
+                        </strong>
+                        <mark
+                          className={`boll-${getBollPositionClass(currentBollPosition)}`}
+                        >
+                          当前 {currentBollPosition}
+                        </mark>
+                      </div>
+                    )}
+                    {macdSummary && (
+                      <div
+                        className={`kline-macd-summary macd-${macdSummary.direction}`}
+                        aria-label={`最新${chartPeriodConfig.label}MACD状态`}
+                      >
+                        <div>
+                          <span>
+                            MACD(12, 26, 9) · {chartPeriodConfig.label}
+                          </span>
+                          <small>
+                            DIF {formatIndicatorValue(macdSummary.dif)} · DEA{" "}
+                            {formatIndicatorValue(macdSummary.dea)}
+                          </small>
+                        </div>
+                        <strong>{macdSummary.status}</strong>
+                        <mark>
+                          {macdSummary.lastCross
+                            ? `最近${macdSummary.lastCross.type === "golden" ? "金叉" : "死叉"} ${formatChartDate(macdSummary.lastCross.tradeDate, chartPeriod)}`
+                            : "暂无交叉记录"}
+                        </mark>
+                      </div>
+                    )}
+                  </div>
                   <KLineChart
                     quotes={chartQuotes}
                     bollPoints={chartBollPoints}
@@ -1800,6 +1847,80 @@ function buildBollSeries(quotes: DailyQuote[], period = 20): BollPoint[] {
       },
     ];
   });
+}
+
+function calculateMacdSummary(quotes: DailyQuote[]): MacdSummary | null {
+  const chronologicalQuotes = [...quotes].sort((left, right) =>
+    left.tradeDate.localeCompare(right.tradeDate),
+  );
+
+  if (chronologicalQuotes.length < 2) return null;
+
+  const fastMultiplier = 2 / (12 + 1);
+  const slowMultiplier = 2 / (26 + 1);
+  const signalMultiplier = 2 / (9 + 1);
+  let fastEma = chronologicalQuotes[0].close;
+  let slowEma = chronologicalQuotes[0].close;
+  let dea = 0;
+
+  const points = chronologicalQuotes.map((quote, index) => {
+    if (index > 0) {
+      fastEma = quote.close * fastMultiplier + fastEma * (1 - fastMultiplier);
+      slowEma = quote.close * slowMultiplier + slowEma * (1 - slowMultiplier);
+    }
+
+    const dif = fastEma - slowEma;
+    dea = index === 0 ? dif : dif * signalMultiplier + dea * (1 - signalMultiplier);
+
+    return {
+      tradeDate: quote.tradeDate,
+      dif,
+      dea,
+      histogram: 2 * (dif - dea),
+    };
+  });
+
+  let lastCross: MacdCross | null = null;
+  for (let index = points.length - 1; index > 0; index -= 1) {
+    const previousGap = points[index - 1].dif - points[index - 1].dea;
+    const currentGap = points[index].dif - points[index].dea;
+
+    if (previousGap <= 0 && currentGap > 0) {
+      lastCross = { type: "golden", tradeDate: points[index].tradeDate };
+      break;
+    }
+
+    if (previousGap >= 0 && currentGap < 0) {
+      lastCross = { type: "death", tradeDate: points[index].tradeDate };
+      break;
+    }
+  }
+
+  const latest = points.at(-1);
+  if (!latest) return null;
+
+  const direction = latest.dif >= latest.dea ? "bullish" : "bearish";
+  const latestCross = lastCross?.tradeDate === latest.tradeDate ? lastCross : null;
+  const status = latestCross
+    ? latestCross.type === "golden"
+      ? "刚形成金叉"
+      : "刚形成死叉"
+    : direction === "bullish"
+      ? "金叉区间"
+      : "死叉区间";
+
+  return {
+    dif: latest.dif,
+    dea: latest.dea,
+    histogram: latest.histogram,
+    direction,
+    status,
+    lastCross,
+  };
+}
+
+function formatIndicatorValue(value: number) {
+  return `${value >= 0 ? "+" : ""}${value.toFixed(2)}`;
 }
 
 function FinancialMetric({

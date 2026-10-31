@@ -2415,12 +2415,18 @@ footer {
   scrollbar-width: thin;
 }
 
+.kline-indicator-summaries {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.72fr);
+  gap: 10px;
+  margin-top: 18px;
+}
+
 .kline-boll-summary {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 14px;
-  margin-top: 18px;
   padding: 10px 14px;
   border: 1px solid rgba(10, 18, 34, 0.08);
   border-radius: 12px;
@@ -2447,6 +2453,57 @@ footer {
   padding: 5px 10px;
   border-radius: 999px;
   font-size: 11px;
+  font-weight: 800;
+}
+
+.kline-macd-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 9px 12px 9px 14px;
+  border: 1px solid rgba(10, 18, 34, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: inset 3px 0 0 var(--macd-color);
+  font-size: 11px;
+}
+
+.kline-macd-summary.macd-bullish { --macd-color: #cf5547; }
+.kline-macd-summary.macd-bearish { --macd-color: #238361; }
+
+.kline-macd-summary > div {
+  min-width: 0;
+}
+
+.kline-macd-summary span,
+.kline-macd-summary small {
+  display: block;
+}
+
+.kline-macd-summary span {
+  color: #667085;
+  font-weight: 800;
+}
+
+.kline-macd-summary small {
+  margin-top: 3px;
+  color: #8892a3;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.kline-macd-summary > strong {
+  color: var(--macd-color);
+  font-size: 14px;
+}
+
+.kline-macd-summary mark {
+  grid-column: 1 / -1;
+  width: max-content;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--macd-color) 10%, white);
+  color: var(--macd-color);
   font-weight: 800;
 }
 
@@ -2830,6 +2887,10 @@ footer {
   .yield-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  .kline-indicator-summaries {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {
@@ -2900,6 +2961,10 @@ footer {
 
   .kline-chart {
     min-width: 960px;
+  }
+
+  .kline-boll-summary mark {
+    margin-left: 0;
   }
 
   .kline-legend small {
