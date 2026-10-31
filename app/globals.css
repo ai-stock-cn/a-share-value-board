@@ -360,6 +360,61 @@ footer {
   background: rgba(242, 243, 240, 0.68);
 }
 
+.hero-macd-overview {
+  grid-column: 1 / -1;
+  min-height: 0;
+}
+
+.hero-macd-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-top: 7px;
+}
+
+.hero-macd-period {
+  min-width: 0;
+  padding: 8px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: inset 2px 0 0 var(--macd-color);
+}
+
+.hero-macd-period.macd-bullish { --macd-color: #cf5547; }
+.hero-macd-period.macd-bearish { --macd-color: #238361; }
+.hero-macd-period.macd-waiting { --macd-color: #98a2b3; }
+
+.hero-macd-period small,
+.hero-macd-period strong,
+.hero-macd-period em {
+  display: block;
+}
+
+.hero-macd-period small {
+  color: #7c8799;
+  font-size: 8px;
+  font-weight: 800;
+}
+
+.hero-macd-period strong {
+  overflow: hidden;
+  margin-top: 5px;
+  color: var(--macd-color);
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hero-macd-period em {
+  overflow: hidden;
+  margin-top: 4px;
+  color: #8a94a5;
+  font-size: 7px;
+  font-style: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .hero-copy .hero-alert-center > p {
   margin: 9px 1px 0;
   color: #98a2b3;
@@ -1823,6 +1878,14 @@ footer span {
   }
 
   .hero-alert-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-macd-overview {
+    grid-column: auto;
+  }
+
+  .hero-macd-grid {
     grid-template-columns: 1fr;
   }
 

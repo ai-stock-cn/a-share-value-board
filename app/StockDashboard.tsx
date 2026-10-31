@@ -82,6 +82,8 @@ type MacdSummary = {
   histogram: number;
   direction: "bullish" | "bearish";
   status: "刚形成金叉" | "刚形成死叉" | "金叉区间" | "死叉区间";
+  axisPosition: "零轴上" | "零轴下" | "零轴附近";
+  momentum: "红柱放大" | "红柱缩短" | "绿柱放大" | "绿柱缩短";
   lastCross: MacdCross | null;
 };
 
@@ -451,8 +453,12 @@ export default function StockDashboard() {
     latest && latestDailyBoll
       ? getBollLowerRailSignal(latest.close, latestDailyBoll.lower)
       : null;
-  const dailyMacdSummary = useMemo(
-    () => calculateMacdSummary(data?.quotes ?? []),
+  const macdSummaries = useMemo<Record<ChartPeriod, MacdSummary | null>>(
+    () => ({
+      daily: calculateMacdSummary(data?.quotes ?? []),
+      weekly: calculateMacdSummary(data?.periodQuotes.weekly ?? []),
+      monthly: calculateMacdSummary(data?.periodQuotes.monthly ?? []),
+    }),
     [data],
   );
   const targetPriceReminder = buildTargetPriceReminder(
@@ -468,8 +474,11 @@ export default function StockDashboard() {
     targetPriceReminder.status === "triggered",
     dailyLowerRailSignal?.status === "near" ||
       dailyLowerRailSignal?.status === "below",
-    dailyMacdSummary?.status === "刚形成金叉" ||
-      dailyMacdSummary?.status === "刚形成死叉",
+    Object.values(macdSummaries).some(
+      (summary) =>
+        summary?.status === "刚形成金叉" ||
+        summary?.status === "刚形成死叉",
+    ),
     dailyDropTriggered,
   ].filter(Boolean).length;
   const nearestYieldTier = currentDividendYield
@@ -921,16 +930,32 @@ export default function StockDashboard() {
                         : "BOLL(20, 2)"}
                     </small>
                   </article>
-                  <article
-                    className={`hero-alert-item ${dailyMacdSummary?.direction === "bullish" ? "is-positive" : "is-monitoring"}`}
-                  >
-                    <span>日线 MACD</span>
-                    <strong>{dailyMacdSummary?.status ?? "等待行情"}</strong>
-                    <small>
-                      {dailyMacdSummary?.lastCross
-                        ? `最近${dailyMacdSummary.lastCross.type === "golden" ? "金叉" : "死叉"} ${formatChartDate(dailyMacdSummary.lastCross.tradeDate, "daily")}`
-                        : "MACD(12, 26, 9)"}
-                    </small>
+                  <article className="hero-alert-item hero-macd-overview">
+                    <span>日 / 周 / 月 MACD 当前状态</span>
+                    <div className="hero-macd-grid">
+                      {KLINE_PERIODS.map((period) => {
+                        const summary = macdSummaries[period.value];
+
+                        return (
+                          <div
+                            className={`hero-macd-period macd-${summary?.direction ?? "waiting"}`}
+                            key={period.value}
+                          >
+                            <small>{period.label}</small>
+                            <strong>
+                              {summary
+                                ? `${summary.status} · ${summary.axisPosition}`
+                                : "等待行情"}
+                            </strong>
+                            <em>
+                              {summary
+                                ? `${summary.momentum} · ${formatMacdCross(summary, period.value)}`
+                                : "MACD(12, 26, 9)"}
+                            </em>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </article>
                   <article
                     className={`hero-alert-item ${dailyDropTriggered ? "is-triggered" : "is-monitoring"}`}
@@ -1202,14 +1227,13 @@ export default function StockDashboard() {
                           </span>
                           <small>
                             DIF {formatIndicatorValue(macdSummary.dif)} · DEA{" "}
-                            {formatIndicatorValue(macdSummary.dea)}
+                            {formatIndicatorValue(macdSummary.dea)} · {macdSummary.axisPosition} ·{" "}
+                            {macdSummary.momentum}
                           </small>
                         </div>
                         <strong>{macdSummary.status}</strong>
                         <mark>
-                          {macdSummary.lastCross
-                            ? `最近${macdSummary.lastCross.type === "golden" ? "金叉" : "死叉"} ${formatChartDate(macdSummary.lastCross.tradeDate, chartPeriod)}`
-                            : "暂无交叉记录"}
+                          {formatMacdCross(macdSummary, chartPeriod)}
                         </mark>
                       </div>
                     )}
@@ -2072,6 +2096,7 @@ function calculateMacdSummary(quotes: DailyQuote[]): MacdSummary | null {
 
   const latest = points.at(-1);
   if (!latest) return null;
+  const previous = points.at(-2) ?? latest;
 
   const direction = latest.dif >= latest.dea ? "bullish" : "bearish";
   const latestCross = lastCross?.tradeDate === latest.tradeDate ? lastCross : null;
@@ -2082,6 +2107,22 @@ function calculateMacdSummary(quotes: DailyQuote[]): MacdSummary | null {
     : direction === "bullish"
       ? "金叉区间"
       : "死叉区间";
+  const axisPosition =
+    latest.dif >= 0 && latest.dea >= 0
+      ? "零轴上"
+      : latest.dif < 0 && latest.dea < 0
+        ? "零轴下"
+        : "零轴附近";
+  const histogramExpanding =
+    Math.abs(latest.histogram) >= Math.abs(previous.histogram);
+  const momentum =
+    latest.histogram >= 0
+      ? histogramExpanding
+        ? "红柱放大"
+        : "红柱缩短"
+      : histogramExpanding
+        ? "绿柱放大"
+        : "绿柱缩短";
 
   return {
     dif: latest.dif,
@@ -2089,8 +2130,16 @@ function calculateMacdSummary(quotes: DailyQuote[]): MacdSummary | null {
     histogram: latest.histogram,
     direction,
     status,
+    axisPosition,
+    momentum,
     lastCross,
   };
+}
+
+function formatMacdCross(summary: MacdSummary, period: ChartPeriod) {
+  if (!summary.lastCross) return "暂无交叉记录";
+
+  return `最近${summary.lastCross.type === "golden" ? "金叉" : "死叉"} ${formatChartDate(summary.lastCross.tradeDate, period)}`;
 }
 
 function formatIndicatorValue(value: number) {

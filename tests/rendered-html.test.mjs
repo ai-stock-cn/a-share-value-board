@@ -49,6 +49,13 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /刚形成死叉/);
   assert.match(dashboard, /金叉区间/);
   assert.match(dashboard, /死叉区间/);
+  assert.match(dashboard, /零轴上/);
+  assert.match(dashboard, /零轴下/);
+  assert.match(dashboard, /红柱放大/);
+  assert.match(dashboard, /绿柱缩短/);
+  assert.match(dashboard, /MACD 当前状态/);
+  assert.match(dashboard, /hero-macd-grid/);
+  assert.match(dashboard, /macdSummaries/);
   assert.match(dashboard, /最近.*金叉/);
   assert.match(dashboard, /切换K线周期/);
   assert.match(dashboard, /KLINE_PERIODS/);
@@ -63,7 +70,7 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /hero-alert-center/);
   assert.match(dashboard, /目标点位/);
   assert.match(dashboard, /日线下轨/);
-  assert.match(dashboard, /日线 MACD/);
+  assert.match(dashboard, /日 \/ 周 \/ 月 MACD 当前状态/);
   assert.match(dashboard, /activeReminderCount/);
   assert.match(dashboard, /buildTargetPriceReminder/);
   assert.match(dashboard, /建仓起点/);
