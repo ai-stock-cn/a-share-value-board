@@ -37,6 +37,11 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /kline-boll-middle/);
   assert.match(dashboard, /kline-boll-lower/);
   assert.match(dashboard, /buildBollSeries/);
+  assert.match(dashboard, /getBollLowerRailSignal/);
+  assert.match(dashboard, /BOLL_LOWER_ALERT_THRESHOLD_PERCENT = 2/);
+  assert.match(dashboard, /接近下轨/);
+  assert.match(dashboard, /已跌破下轨/);
+  assert.match(dashboard, /boll-lower-alert/);
   assert.match(dashboard, /MACD\(12, 26, 9\)/);
   assert.match(dashboard, /calculateMacdSummary/);
   assert.match(dashboard, /kline-macd-summary/);

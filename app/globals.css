@@ -2455,12 +2455,35 @@ footer {
 .kline-boll-summary .boll-middle-value { color: #4e66a6; }
 .kline-boll-summary .boll-lower-value { color: #25825f; }
 
-.kline-boll-summary mark {
+.boll-summary-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   margin-left: auto;
+}
+
+.kline-boll-summary mark {
   padding: 5px 10px;
   border-radius: 999px;
   font-size: 11px;
   font-weight: 800;
+}
+
+.kline-boll-summary .boll-lower-alert {
+  background: #edf0f3;
+  color: #687386;
+}
+
+.kline-boll-summary .boll-lower-alert.is-near {
+  background: #fff0c7;
+  box-shadow: 0 0 0 1px rgba(214, 139, 31, 0.18);
+  color: #a75f00;
+}
+
+.kline-boll-summary .boll-lower-alert.is-below {
+  background: #dff5e8;
+  box-shadow: 0 0 0 1px rgba(35, 131, 97, 0.18);
+  color: #1e7957;
 }
 
 .kline-macd-summary {
@@ -2970,7 +2993,8 @@ footer {
     min-width: 960px;
   }
 
-  .kline-boll-summary mark {
+  .boll-summary-status {
+    flex-wrap: wrap;
     margin-left: 0;
   }
 

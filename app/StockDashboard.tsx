@@ -66,6 +66,11 @@ type BollPoint = {
   lower: number;
 };
 
+type BollLowerRailSignal = {
+  status: "normal" | "near" | "below";
+  label: string;
+};
+
 type MacdCross = {
   type: "golden" | "death";
   tradeDate: string;
@@ -266,6 +271,7 @@ const KLINE_PERIODS: Array<{
   { value: "weekly", label: "周线", unit: "周", limit: 30 },
   { value: "monthly", label: "月线", unit: "个月", limit: 24 },
 ];
+const BOLL_LOWER_ALERT_THRESHOLD_PERCENT = 2;
 const DATA_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/data/quotes.json`;
 
 const numberFormatter = new Intl.NumberFormat("zh-CN", {
@@ -471,8 +477,13 @@ export default function StockDashboard() {
     return chartQuotes.map((quote) => pointsByDate.get(quote.tradeDate) ?? null);
   }, [chartQuotes, periodBollPoints]);
   const latestPeriodBoll = chartBollPoints.at(-1) ?? null;
+  const latestChartQuote = chartQuotes.at(-1) ?? null;
   const currentBollPosition =
     data?.bollPositions[chartPeriod] ?? selectedStock.bollPositions[chartPeriod];
+  const lowerRailSignal =
+    latestPeriodBoll && latestChartQuote
+      ? getBollLowerRailSignal(latestChartQuote.close, latestPeriodBoll.lower)
+      : null;
   const macdSummary = useMemo(
     () => calculateMacdSummary(selectedPeriodQuotes),
     [selectedPeriodQuotes],
@@ -1101,11 +1112,21 @@ export default function StockDashboard() {
                         <strong className="boll-lower-value">
                           下 {numberFormatter.format(latestPeriodBoll.lower)}
                         </strong>
-                        <mark
-                          className={`boll-${getBollPositionClass(currentBollPosition)}`}
-                        >
-                          当前 {currentBollPosition}
-                        </mark>
+                        <div className="boll-summary-status">
+                          <mark
+                            className={`boll-${getBollPositionClass(currentBollPosition)}`}
+                          >
+                            当前 {currentBollPosition}
+                          </mark>
+                          {lowerRailSignal && (
+                            <mark
+                              className={`boll-lower-alert is-${lowerRailSignal.status}`}
+                              aria-label={`${chartPeriodConfig.label}下轨提醒`}
+                            >
+                              {lowerRailSignal.label}
+                            </mark>
+                          )}
+                        </div>
                       </div>
                     )}
                     {macdSummary && (
@@ -1144,7 +1165,7 @@ export default function StockDashboard() {
                     <span><i className="boll-upper" />BOLL 上轨</span>
                     <span><i className="boll-middle" />BOLL 中轨</span>
                     <span><i className="boll-lower" />BOLL 下轨</span>
-                    <small>隔日标注收盘价；BOLL 按 20 日收盘价与 2 倍标准差计算</small>
+                    <small>隔日标注收盘价；BOLL 按 20 日收盘价与 2 倍标准差计算；距下轨不超过 2% 时提醒</small>
                   </div>
                 </article>
               </section>
@@ -1876,6 +1897,32 @@ function buildBollSeries(quotes: DailyQuote[], period = 20): BollPoint[] {
       },
     ];
   });
+}
+
+function getBollLowerRailSignal(
+  close: number,
+  lowerRail: number,
+): BollLowerRailSignal {
+  const distancePercent = ((close - lowerRail) / lowerRail) * 100;
+
+  if (distancePercent < 0) {
+    return {
+      status: "below",
+      label: `已跌破下轨 ${distancePercent.toFixed(2)}%`,
+    };
+  }
+
+  if (distancePercent <= BOLL_LOWER_ALERT_THRESHOLD_PERCENT) {
+    return {
+      status: "near",
+      label: `接近下轨 +${distancePercent.toFixed(2)}%`,
+    };
+  }
+
+  return {
+    status: "normal",
+    label: `距下轨 +${distancePercent.toFixed(2)}%`,
+  };
 }
 
 function calculateMacdSummary(quotes: DailyQuote[]): MacdSummary | null {
