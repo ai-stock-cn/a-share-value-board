@@ -3,7 +3,7 @@
   "source": "新浪财经公开行情及分红 · 东方财富公开财务及分红数据 · GitHub 每日更新",
   "sourceStatus": "fresh",
   "sourceMessage": null,
-  "syncedAt": "2026-10-31T02:28:09.883Z",
+  "syncedAt": "2026-10-31T02:44:08.453Z",
   "stocks": [
     {
       "symbol": "000423.SZ",
@@ -260,7 +260,7 @@
       "currentDividendYield": 4.352623456790123,
       "bollPositions": {
         "daily": "上轨以上",
-        "weekly": "上轨以上",
+        "weekly": "中上",
         "monthly": "上轨以上"
       },
       "turnoverRate": 0.7260417321302092,

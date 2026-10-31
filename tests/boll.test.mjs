@@ -2,9 +2,19 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  calculateBollBands,
   calculateBollPosition,
   calculateBollPositions,
 } from "../scripts/boll.mjs";
+
+test("BOLL bands use sample standard deviation like Tonghuashun", () => {
+  const bands = calculateBollBands([...Array(19).fill(10), 30]);
+
+  assert.ok(bands);
+  assert.equal(bands.middle, 11);
+  assert.ok(Math.abs(bands.upper - 19.94427191) < 0.000001);
+  assert.ok(Math.abs(bands.lower - 2.05572809) < 0.000001);
+});
 
 test("BOLL position identifies upper and lower rail breaks", () => {
   assert.equal(calculateBollPosition([...Array(19).fill(10), 30]), "上轨以上");

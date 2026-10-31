@@ -16,23 +16,34 @@ export function calculateBollPositions(quotes) {
 }
 
 export function calculateBollPosition(closes) {
-  const finiteCloses = closes.filter(Number.isFinite);
-  if (finiteCloses.length < BOLL_PERIOD) return "数据不足";
+  const bands = calculateBollBands(closes);
+  if (!bands) return "数据不足";
 
-  const window = finiteCloses.slice(-BOLL_PERIOD);
-  const middle = window.reduce((sum, value) => sum + value, 0) / BOLL_PERIOD;
-  const variance =
-    window.reduce((sum, value) => sum + (value - middle) ** 2, 0) /
-    BOLL_PERIOD;
-  const standardDeviation = Math.sqrt(variance);
-  const upper = middle + BOLL_MULTIPLIER * standardDeviation;
-  const lower = middle - BOLL_MULTIPLIER * standardDeviation;
-  const latest = window.at(-1);
+  const { latest, upper, middle, lower } = bands;
 
   if (latest > upper) return "上轨以上";
   if (latest >= middle) return "中上";
   if (latest >= lower) return "中下";
   return "下轨以下";
+}
+
+export function calculateBollBands(closes) {
+  const finiteCloses = closes.filter(Number.isFinite);
+  if (finiteCloses.length < BOLL_PERIOD) return null;
+
+  const window = finiteCloses.slice(-BOLL_PERIOD);
+  const middle = window.reduce((sum, value) => sum + value, 0) / BOLL_PERIOD;
+  const variance =
+    window.reduce((sum, value) => sum + (value - middle) ** 2, 0) /
+    (BOLL_PERIOD - 1);
+  const standardDeviation = Math.sqrt(variance);
+
+  return {
+    latest: window.at(-1),
+    upper: middle + BOLL_MULTIPLIER * standardDeviation,
+    middle,
+    lower: middle - BOLL_MULTIPLIER * standardDeviation,
+  };
 }
 
 function aggregatePeriodCloses(quotes, getPeriodKey) {
