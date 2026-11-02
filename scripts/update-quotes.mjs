@@ -366,6 +366,16 @@ const STOCKS = [
     score: 65,
   },
   {
+    symbol: "601229.SH",
+    sourceSymbol: "sh601229",
+    name: "上海银行",
+    code: "601229",
+    market: "上交所",
+    category: "银行",
+    mark: "上",
+    score: 65,
+  },
+  {
     symbol: "600028.SH",
     sourceSymbol: "sh600028",
     name: "中国石化",
