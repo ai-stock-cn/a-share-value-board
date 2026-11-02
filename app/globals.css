@@ -70,6 +70,7 @@ button {
 .topbar,
 .stock-switcher,
 .hero,
+.stock-analysis,
 .price-grid,
 .week-section,
 .insight-grid,
@@ -469,6 +470,152 @@ footer {
     linear-gradient(145deg, #e7f0fc 0%, #f2f6f1 100%);
   box-shadow: 0 24px 60px rgba(51, 80, 116, 0.13);
   color: var(--ink);
+}
+
+.stock-analysis {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.72fr) minmax(0, 2.28fr);
+  gap: 28px;
+  padding: 26px 0 28px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.stock-analysis-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.stock-analysis-heading h2 {
+  margin: 8px 0 0;
+  font-family: "Songti SC", STSong, serif;
+  font-size: 28px;
+}
+
+.stock-analysis-heading mark {
+  padding: 7px 10px;
+  border-radius: 6px;
+  background: #eef1ec;
+  color: #5f6977;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.stock-analysis.is-positive .stock-analysis-heading mark {
+  background: #e8ffad;
+  color: #526f00;
+}
+
+.stock-analysis.is-caution .stock-analysis-heading mark {
+  background: #ffe2dd;
+  color: #a84335;
+}
+
+.stock-analysis-content {
+  min-width: 0;
+}
+
+.stock-analysis-lead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 18px;
+}
+
+.stock-analysis-lead strong {
+  max-width: 590px;
+  font-family: "Songti SC", STSong, serif;
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.stock-analysis-lead p {
+  max-width: 330px;
+  margin: 0;
+  color: #667085;
+  font-size: 10px;
+  line-height: 1.7;
+  text-align: right;
+}
+
+.stock-analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid rgba(10, 18, 34, 0.1);
+  border-bottom: 1px solid rgba(10, 18, 34, 0.1);
+}
+
+.stock-analysis-item {
+  min-width: 0;
+  padding: 18px 18px 17px;
+  border-left: 3px solid var(--analysis-color);
+}
+
+.stock-analysis-item + .stock-analysis-item {
+  border-left-width: 1px;
+  border-left-color: rgba(10, 18, 34, 0.1);
+  box-shadow: inset 3px 0 0 var(--analysis-color);
+}
+
+.stock-analysis-item.is-positive { --analysis-color: #6e9820; }
+.stock-analysis-item.is-neutral { --analysis-color: #6f7a8f; }
+.stock-analysis-item.is-caution { --analysis-color: #c95d4e; }
+
+.stock-analysis-item span,
+.stock-analysis-item strong,
+.stock-analysis-item p {
+  display: block;
+}
+
+.stock-analysis-item span {
+  color: #7c8799;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.stock-analysis-item strong {
+  margin-top: 8px;
+  color: #273246;
+  font-size: 14px;
+}
+
+.stock-analysis-item p {
+  margin: 7px 0 0;
+  color: #7c8799;
+  font-size: 9px;
+  line-height: 1.65;
+}
+
+.stock-analysis-watch {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.stock-analysis-watch span {
+  color: #9b4b3f;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.stock-analysis-watch p {
+  margin: 0;
+  color: #667085;
+  font-size: 10px;
+  line-height: 1.65;
+}
+
+.stock-analysis-note {
+  display: block;
+  margin: 10px 0 0 88px;
+  color: #98a2b3;
+  font-size: 8px;
 }
 
 .quote-heading {
@@ -1645,6 +1792,16 @@ footer span {
     padding-top: 58px;
   }
 
+  .stock-analysis {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .stock-analysis-heading {
+    flex-direction: row;
+    align-items: center;
+  }
+
   .hero h1 {
     font-size: clamp(68px, 15vw, 100px);
   }
@@ -1688,6 +1845,7 @@ footer span {
   .topbar,
   .stock-switcher,
   .hero,
+  .stock-analysis,
   .price-grid,
   .week-section,
   .insight-grid,
@@ -1737,6 +1895,30 @@ footer span {
   .quote-hero {
     padding: 22px;
     border-radius: 22px;
+  }
+
+  .stock-analysis-lead {
+    display: block;
+  }
+
+  .stock-analysis-lead p {
+    max-width: none;
+    margin-top: 8px;
+    text-align: left;
+  }
+
+  .stock-analysis-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stock-analysis-item + .stock-analysis-item {
+    border-top: 1px solid rgba(10, 18, 34, 0.1);
+    border-left: 3px solid var(--analysis-color);
+    box-shadow: none;
+  }
+
+  .stock-analysis-note {
+    margin-left: 0;
   }
 
   .quote-overview {
@@ -1975,6 +2157,7 @@ footer {
 }
 
 .dashboard-main .hero,
+.dashboard-main .stock-analysis,
 .dashboard-main .price-grid,
 .dashboard-main .week-section,
 .dashboard-main .insight-grid,
@@ -3093,6 +3276,7 @@ footer {
   }
 
   .dashboard-main .hero,
+  .dashboard-main .stock-analysis,
   .dashboard-main .price-grid,
   .dashboard-main .week-section,
   .dashboard-main .insight-grid,

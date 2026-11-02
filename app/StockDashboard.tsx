@@ -87,6 +87,22 @@ type MacdSummary = {
   lastCross: MacdCross | null;
 };
 
+type AnalysisTone = "positive" | "neutral" | "caution";
+
+type StockAnalysis = {
+  tone: AnalysisTone;
+  verdict: string;
+  headline: string;
+  summary: string;
+  items: Array<{
+    label: string;
+    value: string;
+    detail: string;
+    tone: AnalysisTone;
+  }>;
+  watchPoint: string;
+};
+
 type StockCategory =
   | "金融"
   | "银行"
@@ -481,6 +497,18 @@ export default function StockDashboard() {
     ),
     dailyDropTriggered,
   ].filter(Boolean).length;
+  const currentStockAnalysis = buildCurrentStockAnalysis({
+    name: data?.name ?? selectedStock.name,
+    category: selectedStock.category,
+    score: data?.score ?? selectedStock.score,
+    annualDividend,
+    latestClose: latest?.close ?? null,
+    currentDividendYield,
+    latestFinancialReport,
+    bollPositions: data?.bollPositions ?? selectedStock.bollPositions,
+    macdSummaries,
+    dailyLowerRailSignal,
+  });
   const nearestYieldTier = currentDividendYield
     ? DIVIDEND_YIELD_TIERS.reduce((nearest, value) =>
         Math.abs(value - currentDividendYield) <
@@ -1095,6 +1123,44 @@ export default function StockDashboard() {
                   />
                 </div>
               )}
+            </div>
+          </section>
+
+          <section
+            className={`stock-analysis is-${currentStockAnalysis.tone}`}
+            aria-label="当前股票解析"
+          >
+            <div className="stock-analysis-heading">
+              <div>
+                <span className="section-kicker">数据解读</span>
+                <h2>当前股票解析</h2>
+              </div>
+              <mark>{currentStockAnalysis.verdict}</mark>
+            </div>
+            <div className="stock-analysis-content">
+              <div className="stock-analysis-lead">
+                <strong>{currentStockAnalysis.headline}</strong>
+                <p>{currentStockAnalysis.summary}</p>
+              </div>
+              <div className="stock-analysis-grid">
+                {currentStockAnalysis.items.map((item) => (
+                  <article
+                    className={`stock-analysis-item is-${item.tone}`}
+                    key={item.label}
+                  >
+                    <span>{item.label}</span>
+                    <strong>{item.value}</strong>
+                    <p>{item.detail}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="stock-analysis-watch">
+                <span>重点观察</span>
+                <p>{currentStockAnalysis.watchPoint}</p>
+              </div>
+              <small className="stock-analysis-note">
+                根据当前收盘行情、最新财报、静态股息率及日周月技术指标自动生成，仅作信息整理。
+              </small>
             </div>
           </section>
 
@@ -2045,6 +2111,183 @@ function buildTargetPriceReminder(
     value: `¥${numberFormatter.format(watchPrice)}`,
     detail: `还需下跌 ${distancePercent.toFixed(2)}%`,
   } as const;
+}
+
+function buildCurrentStockAnalysis({
+  name,
+  category,
+  score,
+  annualDividend,
+  latestClose,
+  currentDividendYield,
+  latestFinancialReport,
+  bollPositions,
+  macdSummaries,
+  dailyLowerRailSignal,
+}: {
+  name: string;
+  category: StockCategory;
+  score: number;
+  annualDividend: number;
+  latestClose: number | null;
+  currentDividendYield: number | null;
+  latestFinancialReport: FinancialReport | undefined;
+  bollPositions: BollPositions;
+  macdSummaries: Record<ChartPeriod, MacdSummary | null>;
+  dailyLowerRailSignal: BollLowerRailSignal | null;
+}): StockAnalysis {
+  const bullishPeriods = KLINE_PERIODS.filter(
+    ({ value }) => macdSummaries[value]?.direction === "bullish",
+  );
+  const bearishPeriods = KLINE_PERIODS.filter(
+    ({ value }) => macdSummaries[value]?.direction === "bearish",
+  );
+  const latestReportLabel = latestFinancialReport
+    ? `${latestFinancialReport.year} ${latestFinancialReport.reportType}`
+    : "最新报告";
+  const financialValue =
+    score >= 85 ? "基本面较强" : score >= 70 ? "基本面稳健" : score >= 55 ? "基本面中等" : "基本面偏弱";
+  const financialTone: AnalysisTone =
+    score >= 70 ? "positive" : score >= 55 ? "neutral" : "caution";
+  const financialDetail = latestFinancialReport
+    ? category === "银行"
+      ? `${latestReportLabel} ROE ${formatAnalysisPercent(latestFinancialReport.roe)}，不良率 ${formatAnalysisPercent(latestFinancialReport.nonPerformingLoanRatio)}，拨备覆盖率 ${formatAnalysisPercent(latestFinancialReport.provisionCoverageRatio)}`
+      : `${latestReportLabel} ROE ${formatAnalysisPercent(latestFinancialReport.roe)}，净利润同比 ${formatSignedPercent(latestFinancialReport.netProfitGrowth)}，营收同比 ${formatSignedPercent(latestFinancialReport.revenueGrowth)}`
+    : "暂缺可用于解读的最新财报数据";
+
+  const dividendValue =
+    currentDividendYield === null
+      ? "等待股息数据"
+      : currentDividendYield >= 5.5
+        ? "高股息区"
+        : currentDividendYield >= 4
+          ? "股息率尚可"
+          : currentDividendYield >= 3
+            ? "股息率中等"
+            : "股息保护较弱";
+  const dividendTone: AnalysisTone =
+    currentDividendYield !== null && currentDividendYield >= 4
+      ? "positive"
+      : currentDividendYield !== null && currentDividendYield >= 3
+        ? "neutral"
+        : "caution";
+  const targetYieldPrice = annualDividend > 0 ? annualDividend / 0.065 : null;
+  const dividendDetail =
+    currentDividendYield === null
+      ? "等待最新收盘价与分红数据"
+      : `静态股息率 ${currentDividendYield.toFixed(2)}%，每股分红 ¥${dividendFormatter.format(annualDividend)}；6.5% 股息率对应 ¥${targetYieldPrice === null ? "--" : numberFormatter.format(targetYieldPrice)}`;
+
+  const trendValue =
+    bullishPeriods.length >= 2
+      ? `${bullishPeriods.length}/3 周期偏强`
+      : bearishPeriods.length >= 2
+        ? `${bearishPeriods.length}/3 周期偏弱`
+        : "日周月信号分化";
+  const trendTone: AnalysisTone =
+    bullishPeriods.length >= 2
+      ? "positive"
+      : bearishPeriods.length >= 2
+        ? "caution"
+        : "neutral";
+  const dailyMacd = macdSummaries.daily;
+  const trendDetail = `BOLL：日${bollPositions.daily} / 周${bollPositions.weekly} / 月${bollPositions.monthly}；日线 MACD ${dailyMacd ? `${dailyMacd.status}、${dailyMacd.axisPosition}` : "等待数据"}`;
+
+  let compositeScore = 0;
+  compositeScore += score >= 85 ? 2 : score >= 70 ? 1 : score < 55 ? -1 : 0;
+  compositeScore +=
+    currentDividendYield === null
+      ? 0
+      : currentDividendYield >= 5.5
+        ? 2
+        : currentDividendYield >= 4
+          ? 1
+          : currentDividendYield < 2.5
+            ? -1
+            : 0;
+  compositeScore += bullishPeriods.length >= 2 ? 1 : bearishPeriods.length >= 2 ? -1 : 0;
+  compositeScore +=
+    latestFinancialReport?.netProfitGrowth === null ||
+    latestFinancialReport?.netProfitGrowth === undefined
+      ? 0
+      : latestFinancialReport.netProfitGrowth >= 0
+        ? 1
+        : -1;
+  if (bollPositions.daily === "上轨以上") compositeScore -= 1;
+
+  const tone: AnalysisTone =
+    compositeScore >= 4 ? "positive" : compositeScore >= 1 ? "neutral" : "caution";
+  const verdict =
+    tone === "positive" ? "价值条件较好" : tone === "neutral" ? "继续跟踪" : "风险优先";
+  const headline =
+    tone === "positive"
+      ? `${name}的基本面与股息具备支撑，等待价格信号配合。`
+      : tone === "neutral"
+        ? `${name}的价值与趋势信号并不完全一致，当前以跟踪为主。`
+        : `${name}当前保护垫或趋势偏弱，应先核对风险变化。`;
+  const summary = `综合评分 ${score}/100，${financialValue}；${dividendValue}；${trendValue}。${latestClose === null ? "等待最新价格。" : `最新收盘 ¥${numberFormatter.format(latestClose)}。`}`;
+
+  const watchPoints: string[] = [];
+  if (
+    latestFinancialReport?.netProfitGrowth !== null &&
+    latestFinancialReport?.netProfitGrowth !== undefined &&
+    latestFinancialReport.netProfitGrowth < 0
+  ) {
+    watchPoints.push(`最新报告净利润同比下降 ${Math.abs(latestFinancialReport.netProfitGrowth).toFixed(2)}%`);
+  }
+  if (
+    latestFinancialReport?.revenueGrowth !== null &&
+    latestFinancialReport?.revenueGrowth !== undefined &&
+    latestFinancialReport.revenueGrowth < 0
+  ) {
+    watchPoints.push(`营收同比下降 ${Math.abs(latestFinancialReport.revenueGrowth).toFixed(2)}%`);
+  }
+  if (currentDividendYield !== null && currentDividendYield < 3) {
+    watchPoints.push("当前静态股息率低于 3%");
+  }
+  if (bearishPeriods.length >= 2) {
+    watchPoints.push(`${bearishPeriods.map((period) => period.label).join("、")} MACD 处于死叉区间`);
+  }
+  if (bollPositions.daily === "上轨以上") {
+    watchPoints.push("日线价格位于 BOLL 上轨以上，短线位置偏高");
+  }
+  if (dailyLowerRailSignal?.status === "below") {
+    watchPoints.push("价格已跌破日线 BOLL 下轨，需留意波动放大");
+  }
+
+  return {
+    tone,
+    verdict,
+    headline,
+    summary,
+    items: [
+      {
+        label: "财务质量",
+        value: `${financialValue} · ${score} 分`,
+        detail: financialDetail,
+        tone: financialTone,
+      },
+      {
+        label: "股息位置",
+        value: dividendValue,
+        detail: dividendDetail,
+        tone: dividendTone,
+      },
+      {
+        label: "趋势状态",
+        value: trendValue,
+        detail: trendDetail,
+        tone: trendTone,
+      },
+    ],
+    watchPoint:
+      watchPoints.length > 0
+        ? `${watchPoints.join("；")}。`
+        : "当前未出现突出的单项预警，仍需持续核对分红可持续性、财报变化与价格波动。",
+  };
+}
+
+function formatAnalysisPercent(value: number | null) {
+  return value === null ? "--" : `${value.toFixed(2)}%`;
 }
 
 function calculateMacdSummary(quotes: DailyQuote[]): MacdSummary | null {

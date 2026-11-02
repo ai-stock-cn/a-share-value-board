@@ -76,6 +76,14 @@ test("defines the stock dashboard product content", async () => {
   assert.match(dashboard, /建仓起点/);
   assert.match(dashboard, /单日跌幅提醒/);
   assert.match(dashboard, /每日收盘后检查/);
+  assert.match(dashboard, /当前股票解析/);
+  assert.match(dashboard, /buildCurrentStockAnalysis/);
+  assert.match(dashboard, /价值条件较好/);
+  assert.match(dashboard, /财务质量/);
+  assert.match(dashboard, /股息位置/);
+  assert.match(dashboard, /趋势状态/);
+  assert.match(dashboard, /重点观察/);
+  assert.match(dashboard, /根据当前收盘行情、最新财报、静态股息率及日周月技术指标自动生成/);
   assert.match(dashboard, /基本面分析/);
   assert.match(dashboard, /2026 最新报告/);
   assert.match(dashboard, /近三年年报/);
